@@ -1,0 +1,355 @@
+/* ==========================================================================
+   AWARD-WINNING PREMIUM DESIGN SYSTEM v3 (Linear/Vercel/Apple)
+   ========================================================================== */
+
+:root {
+  /* Colors */
+  --bg-color: #000000;
+  --bg-elevated: #0a0a0a;
+  
+  --card-bg: rgba(15, 15, 15, 0.4);
+  --card-bg-hover: rgba(25, 25, 25, 0.6);
+  
+  /* Linear-style layered depth */
+  --shadow-inset: inset 0 1px 1px rgba(255, 255, 255, 0.15);
+  --shadow-border: 0 0 0 1px rgba(255, 255, 255, 0.05);
+  --shadow-drop: 0 10px 40px rgba(0, 0, 0, 0.5);
+  --shadow-apple: 0 40px 80px rgba(0, 0, 0, 0.6);
+
+  --text-primary: #ffffff;
+  --text-secondary: #a1a1aa;
+  --text-tertiary: #71717a;
+
+  /* Typography */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+  
+  /* Fluid Spacing & Layout */
+  --radius-sm: clamp(8px, 1vw, 12px);
+  --radius-md: clamp(16px, 2vw, 20px);
+  --radius-lg: clamp(24px, 3vw, 32px);
+  --radius-full: 9999px;
+  
+  /* Motion */
+  --transition-fast: 0.15s cubic-bezier(0.2, 0.8, 0.2, 1);
+  --transition-smooth: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ==========================================================================
+   RESET & ACCESSIBILITY
+   ========================================================================== */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-family: var(--font-sans);
+  background-color: var(--bg-color);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* Strict Focus-Visible for 100% Accessibility */
+*:focus {
+  outline: none;
+}
+*:focus-visible {
+  outline: 2px solid var(--text-primary);
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+.ds-btn:focus-visible, .ds-nav-link:focus-visible {
+  outline-offset: 2px;
+  border-radius: var(--radius-full);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+button, input, textarea {
+  font-family: inherit;
+}
+
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 clamp(1rem, 5vw, 2rem);
+}
+
+/* ==========================================================================
+   AMBIANCE & LIGHTING
+   ========================================================================== */
+
+.ambient-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(120px);
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.4;
+  animation: orbFloat 20s infinite alternate ease-in-out;
+}
+
+.orb-primary {
+  width: 60vw;
+  height: 60vw;
+  background: radial-gradient(circle, rgba(99, 102, 241, 0.3) 0%, transparent 70%);
+  top: -10%;
+  left: -10%;
+}
+
+.orb-secondary {
+  width: 50vw;
+  height: 50vw;
+  background: radial-gradient(circle, rgba(168, 85, 247, 0.25) 0%, transparent 70%);
+  bottom: 20%;
+  right: -5%;
+  animation-delay: -5s;
+}
+
+@keyframes orbFloat {
+  0% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(5%, 5%) scale(1.1); }
+  100% { transform: translate(-5%, 10%) scale(0.9); }
+}
+
+/* Vercel Style Animated Gradients */
+.text-gradient {
+  background: linear-gradient(180deg, #ffffff 0%, #a1a1aa 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.text-gradient-animated {
+  background: linear-gradient(135deg, #ffffff 0%, #a1a1aa 50%, #ffffff 100%);
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer 5s infinite linear;
+}
+
+@keyframes shimmer {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+
+/* ==========================================================================
+   LAYOUT UTILITIES (BENTO GRID)
+   ========================================================================== */
+.bento-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: clamp(1rem, 2vw, 1.5rem); /* Fluid gaps */
+  width: 100%;
+}
+
+.bento-span-4 { grid-column: span 4; }
+.bento-span-6 { grid-column: span 6; }
+.bento-span-8 { grid-column: span 8; }
+.bento-span-12 { grid-column: span 12; }
+
+@media (max-width: 1024px) {
+  .bento-span-4 { grid-column: span 6; }
+  .bento-span-8 { grid-column: span 12; }
+}
+
+@media (max-width: 768px) {
+  .bento-span-4, .bento-span-6, .bento-span-8 { grid-column: span 12; }
+}
+
+/* ==========================================================================
+   COMPONENTS
+   ========================================================================== */
+
+/* Button */
+.ds-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-size: clamp(0.875rem, 1.5vw, 1rem); /* Fluid text */
+  font-weight: 500;
+  border-radius: var(--radius-full);
+  transition: all var(--transition-fast);
+  padding: clamp(0.6rem, 2vw, 0.8rem) clamp(1.2rem, 3vw, 1.6rem);
+  position: relative;
+  border: none;
+  cursor: pointer;
+}
+
+.ds-btn-primary {
+  background: var(--text-primary);
+  color: var(--bg-color);
+  box-shadow: inset 0 -2px 4px rgba(0,0,0,0.2), 0 4px 14px rgba(255,255,255,0.25);
+}
+.ds-btn-primary:hover {
+  background: #e4e4e7;
+  box-shadow: inset 0 -2px 4px rgba(0,0,0,0.2), 0 6px 20px rgba(255,255,255,0.3);
+}
+
+.ds-btn-secondary {
+  background: rgba(255,255,255,0.05);
+  color: var(--text-primary);
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.1), 0 2px 8px rgba(0,0,0,0.2);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+.ds-btn-secondary:hover {
+  background: rgba(255,255,255,0.08);
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.2), 0 4px 12px rgba(0,0,0,0.3);
+}
+
+/* Linear-style Card */
+.ds-card {
+  position: relative;
+  background: var(--card-bg);
+  border-radius: var(--radius-lg);
+  padding: clamp(1.5rem, 4vw, 2.5rem);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  transition: all var(--transition-smooth);
+  
+  /* The Linear magic multi-shadow */
+  box-shadow: var(--shadow-inset), var(--shadow-border), var(--shadow-drop);
+}
+
+/* Dynamic Lighting Elements */
+.ds-card-dynamic-glow {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none;
+  z-index: 0;
+  border-radius: inherit;
+  transition: opacity var(--transition-smooth);
+}
+
+.ds-card-border-glow {
+  position: absolute;
+  top: -1px; left: -1px; right: -1px; bottom: -1px;
+  z-index: 0;
+  opacity: 0;
+  transition: opacity var(--transition-smooth);
+  border-radius: inherit;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+.ds-card-content {
+  position: relative;
+  z-index: 1;
+}
+
+/* Apple Style Project Cards */
+.ds-card-apple {
+  padding: 0;
+  background: #000;
+  border-radius: var(--radius-lg);
+  box-shadow: inset 0 1px 1px rgba(255,255,255,0.2), 0 0 0 1px rgba(255,255,255,0.1);
+  overflow: hidden;
+}
+.ds-card-hover:hover {
+  box-shadow: inset 0 1px 1px rgba(255,255,255,0.2), 0 0 0 1px rgba(255,255,255,0.1), var(--shadow-apple);
+}
+
+.ds-card-apple-content {
+  padding: clamp(2rem, 5vw, 4rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+}
+.ds-card-apple-title {
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  margin-bottom: 0.5rem;
+}
+
+/* Badge */
+.ds-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.35rem 0.75rem;
+  font-size: clamp(0.7rem, 1vw, 0.75rem);
+  font-weight: 600;
+  font-family: var(--font-mono);
+  border-radius: var(--radius-full);
+  background: rgba(255,255,255,0.05);
+  color: var(--text-secondary);
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.1);
+  backdrop-filter: blur(8px);
+}
+
+/* Section */
+.ds-section {
+  padding: clamp(4rem, 10vw, 8rem) 0;
+  position: relative;
+  z-index: 1;
+}
+.ds-section-title {
+  font-size: clamp(2.5rem, 5vw, 3.5rem);
+  font-weight: 800;
+  letter-spacing: -0.05em;
+  margin-bottom: clamp(2rem, 5vw, 4rem);
+  color: var(--text-primary);
+}
+
+/* Linear Style Nav */
+.ds-nav {
+  position: fixed;
+  top: clamp(1rem, 2vw, 1.5rem);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  background: rgba(15, 15, 15, 0.7);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  box-shadow: inset 0 1px 1px rgba(255,255,255,0.1), 0 0 0 1px rgba(255,255,255,0.05), 0 10px 30px rgba(0,0,0,0.5);
+  border-radius: var(--radius-full);
+  padding: 0.5rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  transition: all var(--transition-smooth);
+}
+.ds-nav-link {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-full);
+  transition: all var(--transition-fast);
+}
+.ds-nav-link:hover, .ds-nav-link.active {
+  color: var(--text-primary);
+  background: rgba(255,255,255,0.08);
+}
+
+/* Scroll Progress Tracker */
+.scroll-progress {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #6366f1, #a855f7);
+  transform-origin: 0%;
+  z-index: 1001;
+}
