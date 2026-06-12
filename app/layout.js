@@ -63,7 +63,7 @@ export default function RootLayout({ children }) {
         },
         "sameAs": [
           "https://github.com/alimehdikhan",
-          "https://linkedin.com/in/ali-mehdi-khan-b4062b2a3"
+          "https://www.linkedin.com/in/ali-mehdi-khan-b4062b2a3/"
         ]
       },
       {

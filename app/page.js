@@ -137,13 +137,16 @@ export default function Home() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.3 }}
-              style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}
+              style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}
             >
               <MagneticButton variant="primary" onClick={(e) => smoothScroll(e, '#projects')} aria-label="View Projects">
                 View Projects
               </MagneticButton>
               <MagneticButton variant="secondary" as="a" href="https://github.com/alimehdikhan" target="_blank" aria-label="Visit GitHub Profile" rel="noopener noreferrer">
                 GitHub Profile
+              </MagneticButton>
+              <MagneticButton variant="secondary" as="a" href="https://www.linkedin.com/in/ali-mehdi-khan-b4062b2a3/" target="_blank" aria-label="Visit LinkedIn Profile" rel="noopener noreferrer">
+                LinkedIn Profile
               </MagneticButton>
             </motion.div>
           </div>
@@ -322,6 +325,10 @@ export default function Home() {
 
       <footer style={{ borderTop: '1px solid var(--shadow-border)', padding: '3rem 0', textAlign: 'center', color: 'var(--text-tertiary)', fontSize: '0.875rem', background: 'rgba(0,0,0,0.8)' }}>
         <p>© 2026 Ali Mehdi Khan. Architected with Next.js & Framer Motion.</p>
+        <div style={{ marginTop: '1rem', display: 'flex', gap: '1rem', justifyContent: 'center' }}>
+          <a href="https://github.com/alimehdikhan" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--text-secondary)', textDecoration: 'none' }} aria-label="GitHub">GitHub</a>
+          <a href="https://www.linkedin.com/in/ali-mehdi-khan-b4062b2a3/" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--text-secondary)', textDecoration: 'none' }} aria-label="LinkedIn">LinkedIn</a>
+        </div>
       </footer>
     </>
   );
