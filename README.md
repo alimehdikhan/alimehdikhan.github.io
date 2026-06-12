@@ -5,7 +5,7 @@
   <a href="https://alimehdikhan.github.io" target="_blank">
     <img src="https://img.shields.io/badge/Portfolio-Visit_Website-000000?style=for-the-badge&logo=vercel&logoColor=white" alt="Portfolio" />
   </a>
-  <a href="https://www.linkedin.com/in/alimehdikhan" target="_blank">
+  <a href="https://www.linkedin.com/in/ali-mehdi-khan-b4062b2a3/" target="_blank">
     <img src="https://img.shields.io/badge/LinkedIn-Connect-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn" />
   </a>
 </div>
