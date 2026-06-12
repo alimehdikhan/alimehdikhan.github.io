@@ -35,6 +35,23 @@
   --transition-smooth: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+[data-theme='light'] {
+  --bg-color: #f9fafb;
+  --bg-elevated: #ffffff;
+  
+  --card-bg: rgba(255, 255, 255, 0.7);
+  --card-bg-hover: rgba(255, 255, 255, 0.9);
+  
+  --shadow-inset: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+  --shadow-border: 0 0 0 1px rgba(0, 0, 0, 0.05);
+  --shadow-drop: 0 10px 40px rgba(0, 0, 0, 0.05);
+  --shadow-apple: 0 40px 80px rgba(0, 0, 0, 0.08);
+
+  --text-primary: #111827;
+  --text-secondary: #4b5563;
+  --text-tertiary: #6b7280;
+}
+
 /* ==========================================================================
    RESET & ACCESSIBILITY
    ========================================================================== */

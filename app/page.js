@@ -6,6 +6,7 @@ import { MagneticButton } from '../components/ui/MagneticButton';
 import { Card } from '../components/ui/Card';
 import { Badge } from '../components/ui/Badge';
 import { Section } from '../components/ui/Section';
+import { ThemeToggle } from '../components/ui/ThemeToggle';
 
 export default function Home() {
   const [activeSection, setActiveSection] = useState('hero');
@@ -100,6 +101,7 @@ export default function Home() {
         <MagneticButton variant="primary" as="a" href="/assets/resume/AliMehdiKhan%20Resume%20Optimized.pdf" target="_blank" download style={{ marginLeft: '1rem' }} aria-label="Download Resume">
           Resume
         </MagneticButton>
+        <ThemeToggle />
       </motion.nav>
 
       <main>
@@ -142,10 +144,12 @@ export default function Home() {
               <MagneticButton variant="primary" onClick={(e) => smoothScroll(e, '#projects')} aria-label="View Projects">
                 View Projects
               </MagneticButton>
-              <MagneticButton variant="secondary" as="a" href="https://github.com/alimehdikhan" target="_blank" aria-label="Visit GitHub Profile" rel="noopener noreferrer">
+              <MagneticButton variant="secondary" as="a" href="https://github.com/alimehdikhan" target="_blank" aria-label="Visit GitHub Profile" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.56v-2c-3.2.7-3.87-1.37-3.87-1.37-.52-1.33-1.28-1.68-1.28-1.68-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.7 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.47.11-3.06 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.79 0c2.21-1.49 3.18-1.18 3.18-1.18.63 1.59.23 2.77.11 3.06.74.81 1.19 1.84 1.19 3.1 0 4.43-2.69 5.41-5.25 5.69.41.36.78 1.06.78 2.14v3.17c0 .31.21.68.8.56A11.5 11.5 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5z"/></svg>
                 GitHub Profile
               </MagneticButton>
-              <MagneticButton variant="secondary" as="a" href="https://www.linkedin.com/in/ali-mehdi-khan-b4062b2a3/" target="_blank" aria-label="Visit LinkedIn Profile" rel="noopener noreferrer">
+              <MagneticButton variant="secondary" as="a" href="https://www.linkedin.com/in/ali-mehdi-khan-b4062b2a3/" target="_blank" aria-label="Visit LinkedIn Profile" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.225 0z"/></svg>
                 LinkedIn Profile
               </MagneticButton>
             </motion.div>
@@ -325,9 +329,15 @@ export default function Home() {
 
       <footer style={{ borderTop: '1px solid var(--shadow-border)', padding: '3rem 0', textAlign: 'center', color: 'var(--text-tertiary)', fontSize: '0.875rem', background: 'rgba(0,0,0,0.8)' }}>
         <p>© 2026 Ali Mehdi Khan. Architected with Next.js & Framer Motion.</p>
-        <div style={{ marginTop: '1rem', display: 'flex', gap: '1rem', justifyContent: 'center' }}>
-          <a href="https://github.com/alimehdikhan" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--text-secondary)', textDecoration: 'none' }} aria-label="GitHub">GitHub</a>
-          <a href="https://www.linkedin.com/in/ali-mehdi-khan-b4062b2a3/" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--text-secondary)', textDecoration: 'none' }} aria-label="LinkedIn">LinkedIn</a>
+        <div style={{ marginTop: '1rem', display: 'flex', gap: '1.5rem', justifyContent: 'center' }}>
+          <a href="https://github.com/alimehdikhan" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--text-secondary)', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.375rem' }} aria-label="GitHub">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.56v-2c-3.2.7-3.87-1.37-3.87-1.37-.52-1.33-1.28-1.68-1.28-1.68-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.7 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.47.11-3.06 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.79 0c2.21-1.49 3.18-1.18 3.18-1.18.63 1.59.23 2.77.11 3.06.74.81 1.19 1.84 1.19 3.1 0 4.43-2.69 5.41-5.25 5.69.41.36.78 1.06.78 2.14v3.17c0 .31.21.68.8.56A11.5 11.5 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5z"/></svg>
+            GitHub
+          </a>
+          <a href="https://www.linkedin.com/in/ali-mehdi-khan-b4062b2a3/" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--text-secondary)', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.375rem' }} aria-label="LinkedIn">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.225 0z"/></svg>
+            LinkedIn
+          </a>
         </div>
       </footer>
     </>
