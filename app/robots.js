@@ -4,6 +4,6 @@ export default function robots() {
       userAgent: '*',
       allow: '/',
     },
-    sitemap: 'https://alimehdikhan.dev/sitemap.xml',
+    sitemap: 'https://alimehdikhan.github.io/sitemap.xml',
   }
 }

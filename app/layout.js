@@ -1,7 +1,7 @@
 import '../styles/globals.css';
 
 export const metadata = {
-  metadataBase: new URL('https://alimehdikhan.dev'),
+  metadataBase: new URL('https://alimehdikhan.github.io'),
   title: {
     default: 'Ali Mehdi Khan | AI Engineer & Full Stack Developer',
     template: '%s | Ali Mehdi Khan',
@@ -24,7 +24,7 @@ export const metadata = {
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: 'https://alimehdikhan.dev/',
+    url: 'https://alimehdikhan.github.io/',
     title: 'Ali Mehdi Khan | AI Engineer & Full Stack Developer',
     description: 'Explore the portfolio of Ali Mehdi Khan, an expert in Agentic AI, Machine Learning, and Full Stack Engineering.',
     siteName: 'Ali Mehdi Khan Portfolio',
@@ -42,7 +42,7 @@ export const metadata = {
     images: ['/assets/images/og-image.jpg'],
   },
   alternates: {
-    canonical: 'https://alimehdikhan.dev/',
+    canonical: 'https://alimehdikhan.github.io/',
   },
 };
 
@@ -52,9 +52,9 @@ export default function RootLayout({ children }) {
     "@graph": [
       {
         "@type": "Person",
-        "@id": "https://alimehdikhan.dev/#person",
+        "@id": "https://alimehdikhan.github.io/#person",
         "name": "Ali Mehdi Khan",
-        "url": "https://alimehdikhan.dev/",
+        "url": "https://alimehdikhan.github.io/",
         "jobTitle": ["AI Engineer", "Machine Learning Engineer", "Full Stack Developer", "Agentic AI Developer"],
         "alumniOf": {
           "@type": "CollegeOrUniversity",
@@ -68,10 +68,33 @@ export default function RootLayout({ children }) {
       },
       {
         "@type": "ProfilePage",
-        "@id": "https://alimehdikhan.dev/#webpage",
-        "url": "https://alimehdikhan.dev/",
+        "@id": "https://alimehdikhan.github.io/#webpage",
+        "url": "https://alimehdikhan.github.io/",
         "name": "Ali Mehdi Khan Portfolio",
-        "about": {"@id": "https://alimehdikhan.dev/#person"}
+        "about": {"@id": "https://alimehdikhan.github.io/#person"},
+        "mainEntity": {
+          "@type": "ItemList",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "item": {
+                "@type": "SoftwareApplication",
+                "name": "AI Pronunciation Coach",
+                "applicationCategory": "EducationalApplication"
+              }
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "item": {
+                "@type": "SoftwareApplication",
+                "name": "Cancer Detection Diagnostic Pipeline",
+                "applicationCategory": "HealthApplication"
+              }
+            }
+          ]
+        }
       }
     ]
   };
@@ -85,19 +108,6 @@ export default function RootLayout({ children }) {
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-        />
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              try {
-                let theme = localStorage.getItem('theme');
-                if (!theme) {
-                  theme = 'dark';
-                }
-                document.documentElement.setAttribute('data-theme', theme);
-              } catch (e) {}
-            `,
-          }}
         />
       </head>
       <body className="antialiased">

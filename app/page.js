@@ -6,7 +6,7 @@ import { MagneticButton } from '../components/ui/MagneticButton';
 import { Card } from '../components/ui/Card';
 import { Badge } from '../components/ui/Badge';
 import { Section } from '../components/ui/Section';
-import { ThemeToggle } from '../components/ui/ThemeToggle';
+import { Section } from '../components/ui/Section';
 
 export default function Home() {
   const [activeSection, setActiveSection] = useState('hero');
@@ -25,7 +25,9 @@ export default function Home() {
           current = section.getAttribute('id');
         }
       });
-      if (current) setActiveSection(current);
+      if (current) {
+        setActiveSection((prev) => prev !== current ? current : prev);
+      }
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
@@ -80,7 +82,7 @@ export default function Home() {
         initial={{ y: -100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ type: 'spring', damping: 20, stiffness: 100 }}
-        className="ds-nav hidden md:flex"
+        className="ds-nav"
         aria-label="Main Navigation"
       >
         <a href="#hero" onClick={(e) => smoothScroll(e, '#hero')} style={{ fontWeight: 700, marginRight: '1rem', color: '#fff' }} aria-label="Go to top">
@@ -101,7 +103,6 @@ export default function Home() {
         <MagneticButton variant="primary" as="a" href="/assets/resume/AliMehdiKhan%20Resume%20Optimized.pdf" target="_blank" download style={{ marginLeft: '1rem' }} aria-label="Download Resume">
           Resume
         </MagneticButton>
-        <ThemeToggle />
       </motion.nav>
 
       <main>
@@ -145,12 +146,12 @@ export default function Home() {
                 View Projects
               </MagneticButton>
               <MagneticButton variant="secondary" as="a" href="https://github.com/alimehdikhan" target="_blank" aria-label="Visit GitHub Profile" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.56v-2c-3.2.7-3.87-1.37-3.87-1.37-.52-1.33-1.28-1.68-1.28-1.68-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.7 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.47.11-3.06 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.79 0c2.21-1.49 3.18-1.18 3.18-1.18.63 1.59.23 2.77.11 3.06.74.81 1.19 1.84 1.19 3.1 0 4.43-2.69 5.41-5.25 5.69.41.36.78 1.06.78 2.14v3.17c0 .31.21.68.8.56A11.5 11.5 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5z"/></svg>
-                GitHub Profile
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" role="img" aria-hidden="true"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.56v-2c-3.2.7-3.87-1.37-3.87-1.37-.52-1.33-1.28-1.68-1.28-1.68-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.7 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.47.11-3.06 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.79 0c2.21-1.49 3.18-1.18 3.18-1.18.63 1.59.23 2.77.11 3.06.74.81 1.19 1.84 1.19 3.1 0 4.43-2.69 5.41-5.25 5.69.41.36.78 1.06.78 2.14v3.17c0 .31.21.68.8.56A11.5 11.5 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5z"/></svg>
+                <span className="btn-text">GitHub Profile</span>
               </MagneticButton>
               <MagneticButton variant="secondary" as="a" href="https://www.linkedin.com/in/ali-mehdi-khan-b4062b2a3/" target="_blank" aria-label="Visit LinkedIn Profile" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.225 0z"/></svg>
-                LinkedIn Profile
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" role="img" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.225 0z"/></svg>
+                <span className="btn-text">LinkedIn Profile</span>
               </MagneticButton>
             </motion.div>
           </div>
@@ -168,7 +169,9 @@ export default function Home() {
 
             <Card dynamicGlow hoverable className="bento-span-4" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'center' }}>
               <h3 style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '0.5rem', letterSpacing: '-0.05em' }}>30+</h3>
-              <p style={{ color: 'var(--text-secondary)' }}>Students Mentored in Python & Git</p>
+              <p style={{ color: 'var(--text-secondary)', fontSize: 'clamp(0.875rem, 1vw, 1rem)', lineHeight: 1.5 }}>
+                Elevated digital literacy for underprivileged students, guiding 30+ participants to successfully build their first functional applications by delivering a comprehensive 3-month programming training curriculum.
+              </p>
             </Card>
 
             <Card dynamicGlow hoverable className="bento-span-6">
@@ -191,14 +194,14 @@ export default function Home() {
         <Section id="projects" title="Featured Work">
           <div className="bento-grid">
             
-            <div className="bento-span-12 ds-card-apple ds-card-hover" style={{ position: 'relative', minHeight: 'clamp(400px, 50vw, 600px)' }}>
+            <article className="bento-span-12 ds-card-apple ds-card-hover" style={{ position: 'relative', minHeight: 'clamp(400px, 50vw, 600px)' }}>
               <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(135deg, rgba(0,112,243,0.3), rgba(121,40,202,0.3))', zIndex: 0 }}></div>
               <div className="ds-card-apple-content" style={{ zIndex: 1, position: 'relative' }}>
                 <div>
                   <Badge style={{ marginBottom: '1rem' }}>Backend / Audio NLP</Badge>
                   <h3 className="ds-card-apple-title">AI Pronunciation Coach</h3>
                   <p style={{ color: 'var(--text-secondary)', fontSize: 'clamp(1rem, 1.5vw, 1.25rem)', maxWidth: '600px', lineHeight: 1.6 }}>
-                    A real-time audio scoring API that evaluates speech pronunciation utilizing OpenAI's Whisper models and custom scoring algorithms via FastAPI.
+                    Engineered an AI-driven coaching platform enabling real-time spoken English feedback by integrating OpenAI Whisper, NLP processing, and low-latency FastAPI scoring pipelines.
                   </p>
                 </div>
                 <div style={{ display: 'flex', gap: '1rem', marginTop: '2rem' }}>
@@ -206,25 +209,25 @@ export default function Home() {
                   <MagneticButton variant="secondary" as="a" href="https://github.com/alimehdikhan/A.I-Pronunciation-Coach" target="_blank" rel="noopener noreferrer" aria-label="View AI Pronunciation Coach Source Code">Source Code</MagneticButton>
                 </div>
               </div>
-            </div>
+            </article>
 
-            <div className="bento-span-6 ds-card-apple ds-card-hover" style={{ position: 'relative', minHeight: 'clamp(300px, 40vw, 400px)' }}>
+            <article className="bento-span-6 ds-card-apple ds-card-hover" style={{ position: 'relative', minHeight: 'clamp(300px, 40vw, 400px)' }}>
               <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(135deg, rgba(80,227,194,0.2), rgba(0,0,0,0))', zIndex: 0 }}></div>
               <div className="ds-card-apple-content" style={{ zIndex: 1, position: 'relative' }}>
                 <div>
                   <Badge style={{ marginBottom: '1rem' }}>Computer Vision</Badge>
                   <h3 className="ds-card-apple-title" style={{ fontSize: 'clamp(1.5rem, 3vw, 2rem)' }}>Diagnostic Pipeline</h3>
                   <p style={{ color: 'var(--text-secondary)', fontSize: 'clamp(1rem, 1.2vw, 1.125rem)', lineHeight: 1.6 }}>
-                    Binary classification model trained on medical datasets utilizing Keras architectures, yielding 90%+ validation accuracy.
+                    Built a binary classification system for early-stage cancer prediction, achieving over 90% accuracy by training custom Keras deep learning architectures on real-world medical datasets.
                   </p>
                 </div>
                 <div style={{ marginTop: '2rem' }}>
                   <MagneticButton variant="secondary" as="a" href="https://github.com/alimehdikhan/Cancer-Detection-Model" target="_blank" rel="noopener noreferrer" aria-label="View Cancer Detection Model Source Code">View on GitHub</MagneticButton>
                 </div>
               </div>
-            </div>
+            </article>
 
-            <div className="bento-span-6 ds-card-apple ds-card-hover" style={{ position: 'relative', minHeight: 'clamp(300px, 40vw, 400px)' }}>
+            <article className="bento-span-6 ds-card-apple ds-card-hover" style={{ position: 'relative', minHeight: 'clamp(300px, 40vw, 400px)' }}>
               <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(135deg, rgba(255,255,255,0.08), rgba(0,0,0,0))', zIndex: 0 }}></div>
               <div className="ds-card-apple-content" style={{ zIndex: 1, position: 'relative' }}>
                 <div>
@@ -235,7 +238,7 @@ export default function Home() {
                   </p>
                 </div>
               </div>
-            </div>
+            </article>
 
           </div>
         </Section>
@@ -249,7 +252,7 @@ export default function Home() {
               <h3 style={{ fontSize: '1.25rem', fontWeight: 600, margin: '0.5rem 0' }}>Machine Learning Intern</h3>
               <p style={{ color: 'var(--text-secondary)', marginBottom: '1rem' }}>BBD University · Jun 2025 – Jul 2025</p>
               <p style={{ color: 'var(--text-tertiary)', lineHeight: 1.6 }}>
-                Developed diagnostic classification models. Applied heavy data augmentation and hyperparameter tuning to ensure robust validation accuracy across batch-processed medical datasets.
+                Developed predictive models for skin cancer and diabetes, maximizing diagnostic accuracy by implementing supervised deep learning algorithms, rigorous feature engineering, and hyperparameter tuning in Python.
               </p>
             </Card>
 
@@ -308,16 +311,16 @@ export default function Home() {
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.5rem' }}>
                 <div>
                   <label htmlFor="name" style={{ display: 'block', fontSize: '0.875rem', color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>Name</label>
-                  <input type="text" id="name" name="name" required aria-required="true" style={{ width: '100%', padding: '0.875rem', borderRadius: 'var(--radius-sm)', background: 'rgba(255,255,255,0.03)', border: '1px solid var(--card-border)', color: 'white', outline: 'none', transition: 'border-color 0.2s' }} />
+                  <input type="text" id="name" name="name" autoComplete="name" required aria-required="true" style={{ width: '100%', padding: '0.875rem', borderRadius: 'var(--radius-sm)', background: 'rgba(255,255,255,0.03)', border: '1px solid var(--card-border)', color: 'white', outline: 'none', transition: 'border-color 0.2s' }} />
                 </div>
                 <div>
                   <label htmlFor="email" style={{ display: 'block', fontSize: '0.875rem', color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>Email</label>
-                  <input type="email" id="email" name="email" required aria-required="true" style={{ width: '100%', padding: '0.875rem', borderRadius: 'var(--radius-sm)', background: 'rgba(255,255,255,0.03)', border: '1px solid var(--card-border)', color: 'white', outline: 'none', transition: 'border-color 0.2s' }} />
+                  <input type="email" id="email" name="email" autoComplete="email" required aria-required="true" style={{ width: '100%', padding: '0.875rem', borderRadius: 'var(--radius-sm)', background: 'rgba(255,255,255,0.03)', border: '1px solid var(--card-border)', color: 'white', outline: 'none', transition: 'border-color 0.2s' }} />
                 </div>
               </div>
               <div>
                 <label htmlFor="message" style={{ display: 'block', fontSize: '0.875rem', color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>Message</label>
-                <textarea id="message" name="message" rows="5" required aria-required="true" style={{ width: '100%', padding: '0.875rem', borderRadius: 'var(--radius-sm)', background: 'rgba(255,255,255,0.03)', border: '1px solid var(--card-border)', color: 'white', outline: 'none', resize: 'vertical', transition: 'border-color 0.2s' }}></textarea>
+                <textarea id="message" name="message" autoComplete="off" rows="5" required aria-required="true" style={{ width: '100%', padding: '0.875rem', borderRadius: 'var(--radius-sm)', background: 'rgba(255,255,255,0.03)', border: '1px solid var(--card-border)', color: 'white', outline: 'none', resize: 'vertical', transition: 'border-color 0.2s' }}></textarea>
               </div>
               <MagneticButton type="submit" variant="primary" style={{ width: '100%', marginTop: '1rem' }} disabled={contactStatus === 'sending'} aria-label="Submit Contact Form">
                 {contactStatus === 'sending' ? 'Transmitting...' : contactStatus === 'success' ? 'Message Sent!' : 'Send Message'}
@@ -331,11 +334,11 @@ export default function Home() {
         <p>© 2026 Ali Mehdi Khan. Architected with Next.js & Framer Motion.</p>
         <div style={{ marginTop: '1rem', display: 'flex', gap: '1.5rem', justifyContent: 'center' }}>
           <a href="https://github.com/alimehdikhan" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--text-secondary)', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.375rem' }} aria-label="GitHub">
-            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.56v-2c-3.2.7-3.87-1.37-3.87-1.37-.52-1.33-1.28-1.68-1.28-1.68-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.7 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.47.11-3.06 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.79 0c2.21-1.49 3.18-1.18 3.18-1.18.63 1.59.23 2.77.11 3.06.74.81 1.19 1.84 1.19 3.1 0 4.43-2.69 5.41-5.25 5.69.41.36.78 1.06.78 2.14v3.17c0 .31.21.68.8.56A11.5 11.5 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5z"/></svg>
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" role="img" aria-hidden="true"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.56v-2c-3.2.7-3.87-1.37-3.87-1.37-.52-1.33-1.28-1.68-1.28-1.68-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.7 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.47.11-3.06 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.79 0c2.21-1.49 3.18-1.18 3.18-1.18.63 1.59.23 2.77.11 3.06.74.81 1.19 1.84 1.19 3.1 0 4.43-2.69 5.41-5.25 5.69.41.36.78 1.06.78 2.14v3.17c0 .31.21.68.8.56A11.5 11.5 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5z"/></svg>
             GitHub
           </a>
           <a href="https://www.linkedin.com/in/ali-mehdi-khan-b4062b2a3/" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--text-secondary)', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.375rem' }} aria-label="LinkedIn">
-            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.225 0z"/></svg>
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" role="img" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.225 0z"/></svg>
             LinkedIn
           </a>
         </div>
