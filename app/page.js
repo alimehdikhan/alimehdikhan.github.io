@@ -86,7 +86,7 @@ export default function Home() {
         className="ds-nav"
         aria-label="Main Navigation"
       >
-        <a href="#hero" onClick={(e) => smoothScroll(e, '#hero')} style={{ fontWeight: 700, marginRight: '1rem', color: 'var(--nav-text-hover)' }} aria-label="Go to top">
+        <a href="#hero" onClick={(e) => smoothScroll(e, '#hero')} className="ds-nav-logo" style={{ fontWeight: 700, marginRight: '1rem', color: 'var(--nav-text-hover)' }} aria-label="Go to top">
           Ali.Codes
         </a>
         {['about', 'projects', 'experience', 'contact'].map((item) => (
@@ -101,9 +101,11 @@ export default function Home() {
             {item}
           </a>
         ))}
-        <MagneticButton variant="primary" as="a" href="/assets/resume/AliMehdiKhan%20Resume%20Optimized.pdf" target="_blank" download style={{ marginLeft: '1rem' }} aria-label="Download Resume">
-          Resume
-        </MagneticButton>
+        <div className="ds-nav-resume">
+          <MagneticButton variant="primary" as="a" href="/assets/resume/AliMehdiKhan%20Resume%20Optimized.pdf" target="_blank" download style={{ marginLeft: '1rem' }} aria-label="Download Resume">
+            Resume
+          </MagneticButton>
+        </div>
         <ThemeToggle />
       </motion.nav>
 

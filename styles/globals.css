@@ -407,6 +407,9 @@ button, input, textarea {
 }
 
 @media (max-width: 768px) {
+  .ds-nav-logo, .ds-nav-resume {
+    display: none;
+  }
   .ds-nav {
     top: auto;
     bottom: 1.5rem;
@@ -415,6 +418,7 @@ button, input, textarea {
     gap: 0.5rem;
     padding: 0.5rem;
     overflow-x: auto;
+    justify-content: center;
   }
   .ds-nav::-webkit-scrollbar {
     display: none;
