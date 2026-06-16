@@ -118,10 +118,11 @@ export default function Home() {
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5 }}
             >
+              <h1 className="sr-only">Ali Mehdi Khan - AI Engineer & Full Stack Developer</h1>
               <Badge style={{ marginBottom: '1.5rem' }}>Software Engineer · AI/ML Specialist</Badge>
             </motion.div>
             
-            <motion.h1 
+            <motion.h2 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.1 }}
@@ -129,7 +130,7 @@ export default function Home() {
               className="text-gradient-animated"
             >
               Building Agentic Intelligence
-            </motion.h1>
+            </motion.h2>
             
             <motion.p 
               initial={{ opacity: 0, y: 20 }}
