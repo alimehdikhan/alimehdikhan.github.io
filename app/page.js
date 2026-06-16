@@ -6,6 +6,7 @@ import { MagneticButton } from '../components/ui/MagneticButton';
 import { Card } from '../components/ui/Card';
 import { Badge } from '../components/ui/Badge';
 import { Section } from '../components/ui/Section';
+import { ThemeToggle } from '../components/ui/ThemeToggle';
 
 
 export default function Home() {
@@ -103,6 +104,7 @@ export default function Home() {
         <MagneticButton variant="primary" as="a" href="/assets/resume/AliMehdiKhan%20Resume%20Optimized.pdf" target="_blank" download style={{ marginLeft: '1rem' }} aria-label="Download Resume">
           Resume
         </MagneticButton>
+        <ThemeToggle />
       </motion.nav>
 
       <main>
@@ -311,16 +313,16 @@ export default function Home() {
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.5rem' }}>
                 <div>
                   <label htmlFor="name" style={{ display: 'block', fontSize: '0.875rem', color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>Name</label>
-                  <input type="text" id="name" name="name" autoComplete="name" required aria-required="true" style={{ width: '100%', padding: '0.875rem', borderRadius: 'var(--radius-sm)', background: 'rgba(255,255,255,0.03)', border: '1px solid var(--card-border)', color: 'white', outline: 'none', transition: 'border-color 0.2s' }} />
+                  <input type="text" id="name" name="name" autoComplete="name" required aria-required="true" style={{ width: '100%', padding: '0.875rem', borderRadius: 'var(--radius-sm)', background: 'var(--input-bg)', border: '1px solid var(--card-border)', color: 'var(--input-color)', outline: 'none', transition: 'border-color 0.2s' }} />
                 </div>
                 <div>
                   <label htmlFor="email" style={{ display: 'block', fontSize: '0.875rem', color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>Email</label>
-                  <input type="email" id="email" name="email" autoComplete="email" required aria-required="true" style={{ width: '100%', padding: '0.875rem', borderRadius: 'var(--radius-sm)', background: 'rgba(255,255,255,0.03)', border: '1px solid var(--card-border)', color: 'white', outline: 'none', transition: 'border-color 0.2s' }} />
+                  <input type="email" id="email" name="email" autoComplete="email" required aria-required="true" style={{ width: '100%', padding: '0.875rem', borderRadius: 'var(--radius-sm)', background: 'var(--input-bg)', border: '1px solid var(--card-border)', color: 'var(--input-color)', outline: 'none', transition: 'border-color 0.2s' }} />
                 </div>
               </div>
               <div>
                 <label htmlFor="message" style={{ display: 'block', fontSize: '0.875rem', color: 'var(--text-secondary)', marginBottom: '0.5rem' }}>Message</label>
-                <textarea id="message" name="message" autoComplete="off" rows="5" required aria-required="true" style={{ width: '100%', padding: '0.875rem', borderRadius: 'var(--radius-sm)', background: 'rgba(255,255,255,0.03)', border: '1px solid var(--card-border)', color: 'white', outline: 'none', resize: 'vertical', transition: 'border-color 0.2s' }}></textarea>
+                <textarea id="message" name="message" autoComplete="off" rows="5" required aria-required="true" style={{ width: '100%', padding: '0.875rem', borderRadius: 'var(--radius-sm)', background: 'var(--input-bg)', border: '1px solid var(--card-border)', color: 'var(--input-color)', outline: 'none', resize: 'vertical', transition: 'border-color 0.2s' }}></textarea>
               </div>
               <MagneticButton type="submit" variant="primary" style={{ width: '100%', marginTop: '1rem' }} disabled={contactStatus === 'sending'} aria-label="Submit Contact Form">
                 {contactStatus === 'sending' ? 'Transmitting...' : contactStatus === 'success' ? 'Message Sent!' : 'Send Message'}
