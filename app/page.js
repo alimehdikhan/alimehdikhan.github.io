@@ -125,7 +125,7 @@ export default function Home() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.1 }}
-              style={{ fontSize: 'clamp(3rem, 8vw, 6rem)', fontWeight: 800, letterSpacing: '-0.06em', lineHeight: 1.05, marginBottom: '1.5rem' }} 
+              style={{ fontSize: 'clamp(2rem, 8vw, 6rem)', fontWeight: 800, letterSpacing: '-0.06em', lineHeight: 1.05, marginBottom: '1.5rem' }} 
               className="text-gradient-animated"
             >
               Building Agentic Intelligence
@@ -144,19 +144,21 @@ export default function Home() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.3 }}
-              style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}
+              className="hero-cta-container"
             >
-              <MagneticButton variant="primary" onClick={(e) => smoothScroll(e, '#projects')} aria-label="View Projects">
+              <MagneticButton variant="primary" onClick={(e) => smoothScroll(e, '#projects')} aria-label="View Projects" className="hero-btn-primary">
                 View Projects
               </MagneticButton>
-              <MagneticButton variant="secondary" as="a" href="https://github.com/alimehdikhan" target="_blank" aria-label="Visit GitHub Profile" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" role="img" aria-hidden="true"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.56v-2c-3.2.7-3.87-1.37-3.87-1.37-.52-1.33-1.28-1.68-1.28-1.68-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.7 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.47.11-3.06 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.79 0c2.21-1.49 3.18-1.18 3.18-1.18.63 1.59.23 2.77.11 3.06.74.81 1.19 1.84 1.19 3.1 0 4.43-2.69 5.41-5.25 5.69.41.36.78 1.06.78 2.14v3.17c0 .31.21.68.8.56A11.5 11.5 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5z"/></svg>
-                <span className="btn-text">GitHub Profile</span>
-              </MagneticButton>
-              <MagneticButton variant="secondary" as="a" href="https://www.linkedin.com/in/ali-mehdi-khan-b4062b2a3/" target="_blank" aria-label="Visit LinkedIn Profile" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" role="img" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.225 0z"/></svg>
-                <span className="btn-text">LinkedIn Profile</span>
-              </MagneticButton>
+              <div className="hero-btn-secondary-wrapper">
+                <MagneticButton variant="secondary" as="a" href="https://github.com/alimehdikhan" target="_blank" aria-label="Visit GitHub Profile" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" role="img" aria-hidden="true"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.56v-2c-3.2.7-3.87-1.37-3.87-1.37-.52-1.33-1.28-1.68-1.28-1.68-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.7 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.47.11-3.06 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.79 0c2.21-1.49 3.18-1.18 3.18-1.18.63 1.59.23 2.77.11 3.06.74.81 1.19 1.84 1.19 3.1 0 4.43-2.69 5.41-5.25 5.69.41.36.78 1.06.78 2.14v3.17c0 .31.21.68.8.56A11.5 11.5 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5z"/></svg>
+                  <span className="btn-text">GitHub</span>
+                </MagneticButton>
+                <MagneticButton variant="secondary" as="a" href="https://www.linkedin.com/in/ali-mehdi-khan-b4062b2a3/" target="_blank" aria-label="Visit LinkedIn Profile" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" role="img" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.225 0z"/></svg>
+                  <span className="btn-text">LinkedIn</span>
+                </MagneticButton>
+              </div>
             </motion.div>
           </div>
         </Section>
@@ -164,28 +166,28 @@ export default function Home() {
         {/* ABOUT & SKILLS (BENTO GRID) */}
         <Section id="about" title="Background">
           <div className="bento-grid">
-            <Card dynamicGlow hoverable className="bento-span-8" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+            <Card dynamicGlow hoverable className="bento-span-8 bento-order-about" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
               <h3 style={{ fontSize: 'clamp(1.25rem, 2.5vw, 1.75rem)', fontWeight: 600, marginBottom: '1rem', letterSpacing: '-0.02em' }}>About Me</h3>
               <p style={{ color: 'var(--text-secondary)', lineHeight: 1.7, fontSize: 'clamp(1rem, 1.5vw, 1.125rem)' }}>
                 Computer Science undergraduate at Babu Banarasi Das University. My focus lies at the intersection of complex data structures and artificial intelligence. I don't just write scripts; I architect complete systems that leverage machine learning to solve real-world problems.
               </p>
             </Card>
 
-            <Card dynamicGlow hoverable className="bento-span-4" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'center' }}>
+            <Card dynamicGlow hoverable className="bento-span-4 bento-order-metrics" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'center' }}>
               <h3 style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '0.5rem', letterSpacing: '-0.05em' }}>30+</h3>
               <p style={{ color: 'var(--text-secondary)', fontSize: 'clamp(0.875rem, 1vw, 1rem)', lineHeight: 1.5 }}>
                 Elevated digital literacy for underprivileged students, guiding 30+ participants to successfully build their first functional applications by delivering a comprehensive 3-month programming training curriculum.
               </p>
             </Card>
 
-            <Card dynamicGlow hoverable className="bento-span-6">
+            <Card dynamicGlow hoverable className="bento-span-6 bento-order-skills">
               <h3 style={{ fontSize: '1.25rem', fontWeight: 600, marginBottom: '1.5rem' }}>Core Technologies</h3>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem' }}>
                 {['Python', 'FastAPI', 'Next.js', 'React', 'SQL', 'Git'].map(skill => <Badge key={skill}>{skill}</Badge>)}
               </div>
             </Card>
 
-            <Card dynamicGlow hoverable className="bento-span-6">
+            <Card dynamicGlow hoverable className="bento-span-6 bento-order-tools">
               <h3 style={{ fontSize: '1.25rem', fontWeight: 600, marginBottom: '1.5rem' }}>AI & Machine Learning</h3>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem' }}>
                 {['TensorFlow', 'Keras', 'OpenAI Whisper', 'NLP', 'Computer Vision'].map(skill => <Badge key={skill}>{skill}</Badge>)}
@@ -208,7 +210,7 @@ export default function Home() {
                     Engineered an AI-driven coaching platform enabling real-time spoken English feedback by integrating OpenAI Whisper, NLP processing, and low-latency FastAPI scoring pipelines.
                   </p>
                 </div>
-                <div style={{ display: 'flex', gap: '1rem', marginTop: '2rem' }}>
+                <div style={{ display: 'flex', gap: '1rem', marginTop: '2rem', flexWrap: 'wrap' }}>
                   <MagneticButton variant="primary" as="a" href="https://huggingface.co/spaces/Alimehdi973/ai-pronunciation-coach" target="_blank" rel="noopener noreferrer" aria-label="View AI Pronunciation Coach Live Demo">Live Demo</MagneticButton>
                   <MagneticButton variant="secondary" as="a" href="https://github.com/alimehdikhan/A.I-Pronunciation-Coach" target="_blank" rel="noopener noreferrer" aria-label="View AI Pronunciation Coach Source Code">Source Code</MagneticButton>
                 </div>
@@ -225,7 +227,7 @@ export default function Home() {
                     Built a binary classification system for early-stage cancer prediction, achieving over 90% accuracy by training custom Keras deep learning architectures on real-world medical datasets.
                   </p>
                 </div>
-                <div style={{ marginTop: '2rem' }}>
+                <div style={{ marginTop: '2rem', display: 'flex', flexWrap: 'wrap' }}>
                   <MagneticButton variant="secondary" as="a" href="https://github.com/alimehdikhan/Cancer-Detection-Model" target="_blank" rel="noopener noreferrer" aria-label="View Cancer Detection Model Source Code">View on GitHub</MagneticButton>
                 </div>
               </div>
