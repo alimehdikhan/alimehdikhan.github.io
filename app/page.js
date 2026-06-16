@@ -6,7 +6,7 @@ import { MagneticButton } from '../components/ui/MagneticButton';
 import { Card } from '../components/ui/Card';
 import { Badge } from '../components/ui/Badge';
 import { Section } from '../components/ui/Section';
-import { Section } from '../components/ui/Section';
+
 
 export default function Home() {
   const [activeSection, setActiveSection] = useState('hero');
