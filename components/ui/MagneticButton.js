@@ -1,43 +1,52 @@
 'use client';
 
-import { useRef, useState } from 'react';
-import { motion, useMotionValue, useSpring, useReducedMotion } from 'framer-motion';
+import { useRef, useState, useEffect } from 'react';
 
-export function MagneticButton({ children, className = '', variant = 'primary', as = 'button', href, target, rel, download, onClick, disabled, ...props }) {
+export function MagneticButton({ children, className = '', variant = 'primary', as = 'button', href, target, rel, download, onClick, disabled, style = {}, ...props }) {
   const ref = useRef(null);
+  const [transform, setTransform] = useState('translate3d(0, 0, 0)');
   const [isHovered, setIsHovered] = useState(false);
-  const prefersReducedMotion = useReducedMotion();
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
 
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-
-  const springConfig = { damping: 15, stiffness: 150, mass: 0.1 };
-  const springX = useSpring(x, springConfig);
-  const springY = useSpring(y, springConfig);
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    setPrefersReducedMotion(mediaQuery.matches);
+    const handleChange = (e) => setPrefersReducedMotion(e.matches);
+    mediaQuery.addEventListener('change', handleChange);
+    return () => mediaQuery.removeEventListener('change', handleChange);
+  }, []);
 
   const handleMouseMove = (e) => {
-    if (prefersReducedMotion || disabled) return;
+    if (prefersReducedMotion || disabled || !ref.current) return;
     const { clientX, clientY } = e;
     const { height, width, left, top } = ref.current.getBoundingClientRect();
     const middleX = clientX - (left + width / 2);
     const middleY = clientY - (top + height / 2);
-    x.set(middleX * 0.2);
-    y.set(middleY * 0.2);
+    
+    // Limit displacement to 10px max for subtlety
+    const displaceX = Math.max(-10, Math.min(10, middleX * 0.15));
+    const displaceY = Math.max(-10, Math.min(10, middleY * 0.15));
+    
+    setTransform(`translate3d(${displaceX}px, ${displaceY}px, 0)`);
+  };
+
+  const handleMouseEnter = () => {
+    setIsHovered(true);
   };
 
   const handleMouseLeave = () => {
     setIsHovered(false);
-    x.set(0);
-    y.set(0);
+    setTransform('translate3d(0, 0, 0)');
   };
 
-  const Component = as === 'a' ? motion.a : motion.button;
+  const Component = as;
+  const transformStyle = prefersReducedMotion ? 'none' : transform;
 
   return (
     <Component
       ref={ref}
       onMouseMove={handleMouseMove}
-      onMouseEnter={() => setIsHovered(true)}
+      onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       onClick={onClick}
       href={href}
@@ -46,8 +55,10 @@ export function MagneticButton({ children, className = '', variant = 'primary', 
       download={download}
       disabled={disabled}
       style={{
-        x: prefersReducedMotion ? 0 : springX,
-        y: prefersReducedMotion ? 0 : springY,
+        transform: transformStyle,
+        transition: isHovered ? 'transform 0.08s linear, background-color 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease' : 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.22s ease, border-color 0.22s ease, box-shadow 0.22s ease',
+        willChange: 'transform',
+        ...style
       }}
       className={`ds-btn ds-btn-${variant} ${className}`}
       {...props}
