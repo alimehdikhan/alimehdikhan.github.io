@@ -1,22 +1,22 @@
 'use client';
 
-import { useRef, useState } from 'react';
-import { motion, useMotionValue, useSpring, useTransform, useReducedMotion } from 'framer-motion';
+import { useRef, useState, useEffect } from 'react';
 
 export function Card({ children, className = '', hoverable = false, dynamicGlow = false, style = {}, ...props }) {
   const cardRef = useRef(null);
   const [isHovering, setIsHovering] = useState(false);
-  const prefersReducedMotion = useReducedMotion();
-
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
-
-  // Smooth springs for 3D rotation
-  const springConfig = { damping: 20, stiffness: 200, mass: 0.5 };
-  const rotateX = useSpring(useTransform(mouseY, [-0.5, 0.5], [6, -6]), springConfig);
-  const rotateY = useSpring(useTransform(mouseX, [-0.5, 0.5], [-6, 6]), springConfig);
-
+  const [rotation, setRotation] = useState({ x: 0, y: 0 });
   const [glowPos, setGlowPos] = useState({ x: 0, y: 0 });
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+
+  // Monitor prefers-reduced-motion
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    setPrefersReducedMotion(mediaQuery.matches);
+    const handleChange = (e) => setPrefersReducedMotion(e.matches);
+    mediaQuery.addEventListener('change', handleChange);
+    return () => mediaQuery.removeEventListener('change', handleChange);
+  }, []);
 
   const handleMouseMove = (e) => {
     if (!cardRef.current) return;
@@ -36,30 +36,36 @@ export function Card({ children, className = '', hoverable = false, dynamicGlow 
       const height = rect.height;
       const xPct = (e.clientX - rect.left) / width - 0.5;
       const yPct = (e.clientY - rect.top) / height - 0.5;
-      mouseX.set(xPct);
-      mouseY.set(yPct);
+      
+      // Calculate rotation angles (max 5 degrees)
+      const rX = -yPct * 6;
+      const rY = xPct * 6;
+      setRotation({ x: rX, y: rY });
     }
   };
 
   const handleMouseLeave = () => {
     setIsHovering(false);
-    mouseX.set(0);
-    mouseY.set(0);
+    setRotation({ x: 0, y: 0 });
   };
 
+  const transformStyleStr = hoverable && !prefersReducedMotion 
+    ? `rotateX(${rotation.x}deg) rotateY(${rotation.y}deg) scale3d(1.025, 1.025, 1.025)` 
+    : 'none';
+
   return (
-    <motion.div 
+    <div 
       ref={cardRef}
       className={`ds-card ${hoverable ? 'ds-card-hover' : ''} ${className}`} 
       onMouseMove={handleMouseMove}
       onMouseEnter={() => setIsHovering(true)}
       onMouseLeave={handleMouseLeave}
       style={{
-        ...style,
         perspective: '1200px',
-        rotateX: hoverable && !prefersReducedMotion ? rotateX : 0,
-        rotateY: hoverable && !prefersReducedMotion ? rotateY : 0,
+        transform: transformStyleStr,
+        transition: isHovering ? 'transform 0.05s linear, border-color 0.2s ease, box-shadow 0.2s ease' : 'transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease, box-shadow 0.2s ease',
         transformStyle: 'preserve-3d',
+        ...style
       }}
       {...props}
     >
@@ -85,9 +91,9 @@ export function Card({ children, className = '', hoverable = false, dynamicGlow 
         ></div>
       )}
 
-      <div className="ds-card-content" style={{ transform: hoverable && !prefersReducedMotion ? 'translateZ(20px)' : 'none' }}>
+      <div className="ds-card-content" style={{ transform: hoverable && !prefersReducedMotion ? 'translateZ(20px)' : 'none', transformStyle: 'preserve-3d' }}>
         {children}
       </div>
-    </motion.div>
+    </div>
   );
 }
