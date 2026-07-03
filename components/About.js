@@ -28,8 +28,8 @@ export function About() {
   };
 
   return (
-    <section id="about" className="relative py-24 md:py-32 bg-bg-primary border-t border-border-dim">
-      <div className="container mx-auto px-6 max-w-6xl">
+    <section id="about" className="relative py-16 sm:py-24 md:py-32 bg-bg-primary border-t border-border-dim">
+      <div className="container mx-auto px-4 sm:px-6 max-w-6xl">
         <motion.div 
           className="text-center mb-16"
           initial="hidden"
@@ -40,14 +40,14 @@ export function About() {
           <span className="text-xs font-semibold text-purple-400 uppercase tracking-widest mb-2 inline-block">
             Background
           </span>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-text-primary tracking-tight">
+          <h2 className="text-2xl sm:text-4xl font-extrabold text-text-primary tracking-tight">
             Academic & Technical Overview
           </h2>
         </motion.div>
 
         {/* Stats Grid */}
         <motion.div 
-          className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 mb-16"
+          className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-6 md:gap-8 mb-10 sm:mb-16"
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: '-100px' }}
@@ -64,7 +64,7 @@ export function About() {
               <Card 
                 hoverable 
                 dynamicGlow
-                className="p-8 text-center flex flex-col justify-center h-full w-full"
+                className="p-4 sm:p-8 text-center flex flex-col justify-center h-full w-full"
               >
                 <div className="text-xs font-semibold uppercase tracking-wider text-text-secondary mb-2">
                   {stat.label}
@@ -86,7 +86,7 @@ export function About() {
             viewport={{ once: true, margin: '-100px' }}
             variants={revealVariants}
           >
-            <Card className="p-8 h-full flex flex-col justify-between">
+            <Card className="p-6 sm:p-8 h-full flex flex-col justify-between">
               <div>
                 <h3 className="text-lg font-bold text-indigo-400 mb-4">
                   Summary
@@ -127,7 +127,7 @@ export function About() {
             viewport={{ once: true, margin: '-100px' }}
             variants={revealVariants}
           >
-            <Card className="p-8 h-full flex flex-col justify-between">
+            <Card className="p-6 sm:p-8 h-full flex flex-col justify-between">
               <div>
                 <h3 className="text-lg font-bold text-purple-400 mb-6">Focus Areas</h3>
                 

@@ -57,8 +57,8 @@ export function Projects() {
   };
 
   return (
-    <section id="projects" className="relative py-24 md:py-32 bg-bg-primary border-t border-border-dim">
-      <div className="container mx-auto px-6 max-w-6xl">
+    <section id="projects" className="relative py-16 sm:py-24 md:py-32 bg-bg-primary border-t border-border-dim">
+      <div className="container mx-auto px-4 sm:px-6 max-w-6xl">
         <motion.div 
           className="text-center mb-16"
           initial={{ y: prefersReducedMotion ? 0 : 20, opacity: 0 }}
@@ -69,7 +69,7 @@ export function Projects() {
           <span className="text-xs font-semibold text-purple-400 uppercase tracking-widest mb-2 inline-block">
             Portfolio
           </span>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-text-primary tracking-tight">
+          <h2 className="text-2xl sm:text-4xl font-extrabold text-text-primary tracking-tight">
             Featured Projects
           </h2>
         </motion.div>
@@ -105,7 +105,7 @@ export function Projects() {
                 </div>
 
                 {/* Project Details */}
-                <div className="p-8 flex flex-col flex-1 justify-between gap-8">
+                <div className="p-5 sm:p-8 flex flex-col flex-1 justify-between gap-5 sm:gap-8">
                   <div className="flex flex-col gap-4">
                     <div className="flex flex-col gap-3">
                       <div className="text-xs text-text-secondary">

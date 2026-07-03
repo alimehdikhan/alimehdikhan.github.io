@@ -183,16 +183,16 @@ export function Hero() {
   };
 
   return (
-    <section id="hero" className="relative flex min-h-screen items-center overflow-hidden bg-bg-primary py-24 md:py-32">
+    <section id="hero" className="relative flex min-h-screen items-center overflow-hidden bg-bg-primary py-20 sm:py-24 md:py-32">
       <canvas id="particle-canvas" ref={canvasRef} className="absolute inset-0 pointer-events-none z-0" aria-hidden="true" />
       
       {/* Ambient background glows */}
       <div className="absolute top-[20%] left-[10%] w-[350px] h-[350px] rounded-full bg-indigo-500/10 blur-[100px] pointer-events-none z-0" ref={orb1Ref} aria-hidden="true" />
       <div className="absolute bottom-[20%] right-[10%] w-[350px] h-[350px] rounded-full bg-purple-500/10 blur-[100px] pointer-events-none z-0" ref={orb2Ref} aria-hidden="true" />
 
-      <div className="container mx-auto px-6 relative z-10 w-full">
+      <div className="container mx-auto px-4 sm:px-6 relative z-10 w-full">
         <motion.div 
-          className="grid grid-cols-1 md:grid-cols-12 gap-16 lg:gap-24 items-center text-left"
+          className="grid grid-cols-1 md:grid-cols-12 gap-10 lg:gap-24 items-center text-left"
           variants={containerVariants}
           initial="hidden"
           animate="visible"
@@ -206,7 +206,7 @@ export function Hero() {
             </motion.div>
 
             <motion.h1 
-              className="text-4xl sm:text-6xl font-extrabold tracking-tight text-text-primary leading-tight"
+              className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-text-primary leading-tight"
               variants={itemVariants}
             >
               Hi, I'm <span className="bg-gradient-to-r from-indigo-400 via-purple-400 to-emerald-400 bg-clip-text text-transparent">Ali Mehdi Khan</span>
@@ -270,7 +270,7 @@ export function Hero() {
 
           <div className="md:col-span-5 flex justify-center md:justify-end">
             <motion.div 
-              className="relative w-[240px] sm:w-[280px] aspect-square rounded-lg overflow-hidden border border-border-dim bg-bg-elevated/50 backdrop-blur-md shadow-2xl"
+              className="relative w-[180px] sm:w-[240px] md:w-[280px] aspect-square rounded-lg overflow-hidden border border-border-dim bg-bg-elevated/50 backdrop-blur-md shadow-2xl"
               variants={itemVariants}
               whileHover={prefersReducedMotion ? {} : { scale: 1.03, rotate: 1 }}
               transition={{ type: 'spring', stiffness: 300, damping: 20 }}

@@ -90,8 +90,8 @@ export function Skills() {
   };
 
   return (
-    <section id="skills" className="relative py-24 md:py-32 bg-bg-primary">
-      <div className="container mx-auto px-6 max-w-6xl">
+    <section id="skills" className="relative py-16 sm:py-24 md:py-32 bg-bg-primary">
+      <div className="container mx-auto px-4 sm:px-6 max-w-6xl">
         <motion.div 
           className="text-center mb-16"
           initial="hidden"
@@ -105,7 +105,7 @@ export function Skills() {
           <span className="text-xs font-semibold text-indigo-400 uppercase tracking-widest mb-2 inline-block">
             Technical Expertise
           </span>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-text-primary tracking-tight">
+          <h2 className="text-2xl sm:text-4xl font-extrabold text-text-primary tracking-tight">
             Skills & Abilities
           </h2>
         </motion.div>
@@ -119,7 +119,7 @@ export function Skills() {
         >
           {categories.map((cat, i) => (
             <motion.div key={i} variants={cardVariants} className="h-full">
-              <Card className="p-8 h-full flex flex-col justify-start">
+              <Card className="p-5 sm:p-8 h-full flex flex-col justify-start">
                 <div className="flex items-center gap-3 mb-8">
                   <div className={`p-2.5 rounded-lg border ${cat.colorClass}`}>
                     {cat.icon}
