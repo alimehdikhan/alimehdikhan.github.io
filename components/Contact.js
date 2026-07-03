@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { Card } from './ui/Card';
+import { RESUME } from '../data/resume';
 
 export function Contact() {
   const prefersReducedMotion = useReducedMotion();
@@ -62,24 +63,24 @@ export function Contact() {
   const contactDetails = [
     {
       title: 'Email',
-      value: 'ali973mehdi@gmail.com',
-      href: 'mailto:ali973mehdi@gmail.com',
+      value: RESUME.email,
+      href: `mailto:${RESUME.email}`,
       icon: <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>,
       gradientClass: 'from-indigo-500/0 to-indigo-500/10',
       iconClass: 'border-indigo-500/20 bg-indigo-500/10 text-indigo-400',
     },
     {
       title: 'Phone',
-      value: '+91 95690 42552',
-      href: 'tel:+919569042552',
+      value: RESUME.phone,
+      href: `tel:${RESUME.phone.replace(/[^+\d]/g, '')}`,
       icon: <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.94.725l.548 2.2a1 1 0 01-.321.988l-1.305.98a10.582 10.582 0 004.872 4.872l.98-1.305a1 1 0 01.988-.321l2.2.548a1 1 0 01.725.94V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>,
       gradientClass: 'from-emerald-500/0 to-emerald-500/10',
       iconClass: 'border-emerald-500/20 bg-emerald-500/10 text-emerald-400',
     },
     {
       title: 'Location',
-      value: 'Lucknow, UP, India',
-      href: 'https://www.google.com/maps/search/?api=1&query=Lucknow,+UP,+India',
+      value: RESUME.location,
+      href: 'https://www.google.com/maps/search/?api=1&query=Lucknow,+Uttar+Pradesh,+India',
       icon: <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>,
       gradientClass: 'from-amber-500/0 to-amber-500/10',
       iconClass: 'border-amber-500/20 bg-amber-500/10 text-amber-400',
@@ -87,8 +88,8 @@ export function Contact() {
   ];
 
   const socialLinks = [
-    { href: 'https://github.com/alimehdikhan', icon: 'M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.56v-2c-3.2.7-3.87-1.37-3.87-1.37-.52-1.33-1.28-1.68-1.28-1.68-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.7 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.47.11-3.06 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.79 0c2.21-1.49 3.18-1.18 3.18-1.18.63 1.59.23 2.77.11 3.06.74.81 1.19 1.84 1.19 3.1 0 4.43-2.69 5.41-5.25 5.69.41.36.78 1.06.78 2.14v3.17c0 .31.21.68.8.56A11.5 11.5 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5z', label: 'GitHub' },
-    { href: 'https://linkedin.com/in/ali-mehdi-khan-b4062b2a3', icon: 'M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z', label: 'LinkedIn' },
+    { href: RESUME.github, icon: 'M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.56v-2c-3.2.7-3.87-1.37-3.87-1.37-.52-1.33-1.28-1.68-1.28-1.68-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.7 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.47.11-3.06 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.79 0c2.21-1.49 3.18-1.18 3.18-1.18.63 1.59.23 2.77.11 3.06.74.81 1.19 1.84 1.19 3.1 0 4.43-2.69 5.41-5.25 5.69.41.36.78 1.06.78 2.14v3.17c0 .31.21.68.8.56A11.5 11.5 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5z', label: 'GitHub' },
+    { href: RESUME.linkedin, icon: 'M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z', label: 'LinkedIn' },
   ];
 
   return (
@@ -123,14 +124,14 @@ export function Contact() {
             <div>
               <div className="inline-flex items-center gap-2 px-3 py-1.5 text-xs font-semibold rounded-full border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 mb-5 self-start shadow-[0_0_15px_rgba(16,185,129,0.15)]">
                 <span className="w-1.5 h-1.5 flex-shrink-0 rounded-full bg-emerald-500 animate-pulse" />
-                <span>Available for Internships & Full-Time</span>
+                <span>Available for Entry-Level Roles</span>
               </div>
               
               <h3 className="text-xl sm:text-2xl lg:text-3xl font-extrabold text-text-primary tracking-tight mb-3">
                 Let's build something great together.
               </h3>
               <p className="text-text-secondary text-sm sm:text-base leading-relaxed mb-7 max-w-md">
-                Whether you're looking for a software engineer, need help with machine learning implementation, or want to collaborate on open-source work — I'd love to hear from you.
+                Open to entry-level Software Engineering and AI/ML opportunities, internships, and collaborations on Python and machine learning projects.
               </p>
 
               <div className="flex flex-col gap-3 mb-7">

@@ -3,8 +3,8 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { ThemeToggle } from './ui/ThemeToggle';
+import { RESUME } from '../data/resume';
 
-// Custom eased smooth scroll utility (easeOutQuart)
 export function smoothScrollTo(targetPosition, duration = 800) {
   const startPosition = window.pageYOffset;
   const distance = targetPosition - startPosition;
@@ -19,7 +19,7 @@ export function smoothScrollTo(targetPosition, duration = 800) {
     const timeElapsed = currentTime - startTime;
     const progress = Math.min(timeElapsed / duration, 1);
     const run = easeOutQuart(progress) * distance + startPosition;
-    
+
     window.scrollTo(0, run);
     if (timeElapsed < duration) {
       requestAnimationFrame(animation);
@@ -31,7 +31,6 @@ export function smoothScrollTo(targetPosition, duration = 800) {
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('hero');
-  const lastScrollY = useRef(0);
   const navRef = useRef(null);
   const prefersReducedMotion = useReducedMotion();
 
@@ -41,20 +40,17 @@ export function Navbar() {
     { name: 'Skills', href: '#skills' },
     { name: 'Experience', href: '#experience' },
     { name: 'Projects', href: '#projects' },
-    { name: 'Open Source', href: '#opensource' },
-    { name: 'Blog', href: '#blog' },
+    { name: 'Certifications', href: '#certifications' },
     { name: 'Contact', href: '#contact' },
   ];
 
-  // Observe scrolling to update active link, scrolled status, and scroll hide
   useEffect(() => {
     const navEl = navRef.current;
 
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
       const scrollPos = currentScrollY + 160;
-      
-      // 1. Update active section
+
       for (const link of navLinks) {
         const id = link.href.substring(1);
         const el = document.getElementById(id);
@@ -68,9 +64,7 @@ export function Navbar() {
         }
       }
 
-      // 2. Hide/Reveal navbar on scroll direction & Scrolled glass treatment
       if (navEl) {
-        // Scrolled glass background transition
         if (currentScrollY > 40) {
           navEl.classList.add('bg-bg-elevated/80', 'border-border-dim/80', 'shadow-2xl');
           navEl.classList.remove('bg-bg-elevated/40', 'border-border-dim/40');
@@ -78,22 +72,7 @@ export function Navbar() {
           navEl.classList.remove('bg-bg-elevated/80', 'border-border-dim/80', 'shadow-2xl');
           navEl.classList.add('bg-bg-elevated/40', 'border-border-dim/40');
         }
-
-        // Scroll direction tracker (past a safety margin)
-        if (currentScrollY > 120) {
-          if (currentScrollY > lastScrollY.current) {
-            // Scrolling down - hide navigation smoothly
-            navEl.style.transform = 'translateY(-120%)';
-          } else {
-            // Scrolling up - show navigation immediately
-            navEl.style.transform = 'translateY(0)';
-          }
-        } else {
-          navEl.style.transform = 'translateY(0)';
-        }
       }
-
-      lastScrollY.current = currentScrollY;
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
@@ -114,110 +93,106 @@ export function Navbar() {
   };
 
   return (
-    <div 
-      className="fixed top-4 w-full flex justify-center z-50 pointer-events-none px-4"
-    >
-      <nav 
+    <div className="fixed top-4 w-full flex justify-center z-50 pointer-events-none px-4">
+      <nav
         ref={navRef}
         className="pointer-events-auto flex items-center justify-between w-[95vw] md:max-w-4xl px-6 py-2 border border-border-dim/40 bg-bg-elevated/40 backdrop-blur-md rounded-full transition-all duration-300"
-        style={{ transform: 'translateY(0)' }}
-        role="navigation" 
+        role="navigation"
         aria-label="Main Navigation"
       >
-      {/* Left: Logo */}
-      <div className="flex-1 flex items-center justify-start">
-        <a href="#hero" className="text-text-primary font-extrabold text-sm hidden lg:block" onClick={(e) => handleLinkClick(e, '#hero')}>
-          Ali Mehdi Khan
-        </a>
+        <div className="flex-1 flex items-center justify-start">
+          <a href="#hero" className="text-text-primary font-extrabold text-sm hidden lg:block" onClick={(e) => handleLinkClick(e, '#hero')}>
+            Ali Mehdi Khan
+          </a>
 
-        {/* Hamburger menu for mobile devices */}
-        <button 
-          className="block md:hidden p-2 text-text-primary bg-transparent border-none cursor-pointer -ml-2" 
-          onClick={() => setIsOpen(!isOpen)}
-          aria-label="Toggle Navigation Menu"
-          aria-expanded={isOpen}
-        >
-          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            {isOpen ? (
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            ) : (
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-            )}
-          </svg>
-        </button>
-      </div>
-
-      {/* Center: Nav links container with sliding highlight */}
-      <div className="flex items-center justify-center gap-1 relative hidden md:flex shrink-0">
-        {navLinks.map((link) => {
-          const id = link.href.substring(1);
-          const isActive = activeSection === id;
-          return (
-            <a
-              key={link.name}
-              href={link.href}
-              onClick={(e) => handleLinkClick(e, link.href)}
-              className={`relative px-3 py-1.5 text-xs font-semibold rounded-full select-none transition-colors z-10 ${isActive ? 'text-text-primary' : 'text-text-secondary hover:text-text-primary'}`}
-              role="menuitem"
-            >
-              {isActive && !prefersReducedMotion && (
-                <motion.div 
-                  layoutId="nav-highlight"
-                  className="absolute inset-0 bg-bg-elevated/80 border border-border-dim/50 rounded-full z-[-1]"
-                  transition={{ type: 'spring', stiffness: 220, damping: 20 }}
-                />
-              )}
-              {isActive && prefersReducedMotion && (
-                <div className="absolute inset-0 bg-bg-elevated/80 border border-border-dim/50 rounded-full z-[-1]" />
-              )}
-              {link.name}
-            </a>
-          );
-        })}
-      </div>
-
-      <div className="flex-1 flex items-center justify-end gap-3">
-        <ThemeToggle />
-        <a 
-          href="/assets/resume/AliMehdiKhan Resume Optimized.pdf" 
-          target="_blank" 
-          rel="noopener noreferrer"
-          download="AliMehdiKhan_Resume.pdf"
-          className="px-3.5 py-1.5 text-xs font-semibold text-text-secondary bg-bg-primary border border-border-dim rounded-full hover:bg-bg-elevated hover:text-text-primary transition-all hidden md:block"
-          aria-label="Download Resume"
-        >
-          Resume
-        </a>
-      </div>
-
-      {/* Mobile menu container overlay */}
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div 
-            className="absolute top-full left-0 right-0 mt-2 p-4 bg-bg-elevated border border-border-dim rounded-2xl flex flex-col gap-2 md:hidden shadow-2xl"
-            initial={{ opacity: 0, scale: 0.95, y: -10 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: -10 }}
-            transition={{ duration: 0.2 }}
+          <button
+            className="block lg:hidden p-2 text-text-primary bg-transparent border-none cursor-pointer -ml-2"
+            onClick={() => setIsOpen(!isOpen)}
+            aria-label="Toggle Navigation Menu"
+            aria-expanded={isOpen}
           >
-            {navLinks.map((link) => {
-              const id = link.href.substring(1);
-              const isActive = activeSection === id;
-              return (
-                <a
-                  key={link.name}
-                  href={link.href}
-                  onClick={(e) => handleLinkClick(e, link.href)}
-                  className={`w-full px-4 py-2.5 text-sm font-semibold rounded-lg ${isActive ? 'bg-bg-primary text-text-primary' : 'text-text-secondary hover:text-text-primary'}`}
-                  role="menuitem"
-                >
-                  {link.name}
-                </a>
-              );
-            })}
-          </motion.div>
-        )}
-      </AnimatePresence>
+            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+              {isOpen ? (
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              ) : (
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              )}
+            </svg>
+          </button>
+        </div>
+
+        <div className="flex items-center justify-center gap-1 relative hidden lg:flex shrink-0">
+          {navLinks.map((link) => {
+            const id = link.href.substring(1);
+            const isActive = activeSection === id;
+            return (
+              <a
+                key={link.name}
+                href={link.href}
+                onClick={(e) => handleLinkClick(e, link.href)}
+                className={`relative px-3 py-1.5 text-xs font-semibold rounded-full select-none transition-colors z-10 ${isActive ? 'text-text-primary' : 'text-text-secondary hover:text-text-primary'}`}
+              >
+                {isActive && !prefersReducedMotion && (
+                  <motion.div
+                    layoutId="nav-highlight"
+                    className="absolute inset-0 bg-bg-elevated/80 border border-border-dim/50 rounded-full z-[-1]"
+                    transition={{ type: 'spring', stiffness: 220, damping: 20 }}
+                  />
+                )}
+                {isActive && prefersReducedMotion && (
+                  <div className="absolute inset-0 bg-bg-elevated/80 border border-border-dim/50 rounded-full z-[-1]" />
+                )}
+                {link.name}
+              </a>
+            );
+          })}
+        </div>
+
+        <div className="flex-1 flex items-center justify-end gap-3">
+          <ThemeToggle />
+          <a
+            href={RESUME.resumePath}
+            download={RESUME.resumeDownloadName}
+            className="px-3.5 py-1.5 text-xs font-semibold text-text-secondary bg-bg-primary border border-border-dim rounded-full hover:bg-bg-elevated hover:text-text-primary transition-all"
+            aria-label="Download Resume PDF"
+          >
+            Resume
+          </a>
+        </div>
+
+        <AnimatePresence>
+          {isOpen && (
+            <motion.div
+              className="absolute top-full left-0 right-0 mt-2 p-4 bg-bg-elevated border border-border-dim rounded-2xl flex flex-col gap-2 lg:hidden shadow-2xl max-h-[70vh] overflow-y-auto"
+              initial={{ opacity: 0, scale: 0.95, y: -10 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: -10 }}
+              transition={{ duration: 0.2 }}
+            >
+              {navLinks.map((link) => {
+                const id = link.href.substring(1);
+                const isActive = activeSection === id;
+                return (
+                  <a
+                    key={link.name}
+                    href={link.href}
+                    onClick={(e) => handleLinkClick(e, link.href)}
+                    className={`w-full px-4 py-2.5 text-sm font-semibold rounded-lg ${isActive ? 'bg-bg-primary text-text-primary' : 'text-text-secondary hover:text-text-primary'}`}
+                  >
+                    {link.name}
+                  </a>
+                );
+              })}
+              <a
+                href={RESUME.resumePath}
+                download={RESUME.resumeDownloadName}
+                className="w-full px-4 py-2.5 text-sm font-semibold rounded-lg text-indigo-400 border border-border-dim hover:bg-bg-primary text-center"
+              >
+                Download Resume
+              </a>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </nav>
     </div>
   );

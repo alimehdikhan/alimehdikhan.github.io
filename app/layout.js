@@ -4,21 +4,21 @@ import { ThemeProvider } from '../components/ThemeProvider';
 export const metadata = {
   metadataBase: new URL('https://alimehdikhan.github.io'),
   title: {
-    default: 'Ali Mehdi Khan | AI Engineer & Full Stack Developer',
+    default: 'Ali Mehdi Khan | CS Graduate (2026) | AI/ML & Python Developer',
     template: '%s | Ali Mehdi Khan',
   },
-  description: 'Portfolio of Ali Mehdi Khan, an Agentic AI Developer, Machine Learning Engineer, and Full Stack Developer specializing in Python, Next.js, and LLM implementations.',
+  description: 'Portfolio of Ali Mehdi Khan — B.Tech Computer Science graduate (2026) skilled in Python, Java, Machine Learning, and AI application development. Google Cloud and Deloitte certified.',
   keywords: [
-    'AI Engineer', 
-    'Agentic AI Developer', 
-    'Machine Learning Engineer', 
-    'Full Stack Developer',
-    'Python', 
-    'Next.js', 
-    'React', 
-    'FastAPI', 
-    'LLM', 
-    'Generative AI'
+    'Software Engineer',
+    'AI/ML Developer',
+    'Machine Learning',
+    'Python',
+    'Java',
+    'FastAPI',
+    'TensorFlow',
+    'Keras',
+    'NLP',
+    'Google Cloud',
   ],
   authors: [{ name: 'Ali Mehdi Khan' }],
   creator: 'Ali Mehdi Khan',
@@ -26,21 +26,21 @@ export const metadata = {
     type: 'website',
     locale: 'en_US',
     url: 'https://alimehdikhan.github.io/',
-    title: 'Ali Mehdi Khan | AI Engineer & Full Stack Developer',
-    description: 'Explore the portfolio of Ali Mehdi Khan, an expert in Agentic AI, Machine Learning, and Full Stack Engineering.',
+    title: 'Ali Mehdi Khan | CS Graduate (2026) | AI/ML & Python Developer',
+    description: 'Entry-level Software Engineering and AI/ML portfolio featuring FastAPI, Whisper, TensorFlow, and Google Cloud certifications.',
     siteName: 'Ali Mehdi Khan Portfolio',
     images: [{
-      url: '/assets/images/og-image.jpg',
+      url: '/assets/images/profile.png',
       width: 1200,
-      height: 630,
-      alt: 'Ali Mehdi Khan Portfolio Preview',
+      height: 1200,
+      alt: 'Ali Mehdi Khan — Portfolio',
     }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Ali Mehdi Khan | AI Engineer & Full Stack Developer',
-    description: 'Expert in Agentic AI, Machine Learning, and Full Stack Engineering.',
-    images: ['/assets/images/og-image.jpg'],
+    title: 'Ali Mehdi Khan | CS Graduate (2026) | AI/ML & Python Developer',
+    description: 'B.Tech CSE (2026) · Python · Machine Learning · FastAPI · Google Cloud & Deloitte certified.',
+    images: ['/assets/images/profile.png'],
   },
   alternates: {
     canonical: 'https://alimehdikhan.github.io/',
@@ -56,7 +56,7 @@ export default function RootLayout({ children }) {
         "@id": "https://alimehdikhan.github.io/#person",
         "name": "Ali Mehdi Khan",
         "url": "https://alimehdikhan.github.io/",
-        "jobTitle": ["AI Engineer", "Machine Learning Engineer", "Full Stack Developer", "Agentic AI Developer"],
+        "jobTitle": ["Software Engineer", "AI/ML Developer", "Python Developer"],
         "alumniOf": {
           "@type": "CollegeOrUniversity",
           "name": "Babu Banarasi Das University",
@@ -105,6 +105,7 @@ export default function RootLayout({ children }) {
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" as="style" />
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
         <script
           type="application/ld+json"

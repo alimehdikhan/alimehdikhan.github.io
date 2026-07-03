@@ -1,6 +1,7 @@
 'use client';
 
 import { smoothScrollTo } from './Navbar';
+import { RESUME } from '../data/resume';
 
 export function Footer() {
   const handleScrollToTop = (e) => {
@@ -13,18 +14,21 @@ export function Footer() {
       <div className="container mx-auto px-6 max-w-6xl flex flex-col sm:flex-row justify-between items-center gap-6">
         <div>
           <p className="text-xs sm:text-sm text-neutral-500">
-            © 2026 Ali Mehdi Khan. Built with ❤️ using Next.js & Framer Motion.
+            © 2026 Ali Mehdi Khan. Built with Next.js & Framer Motion.
           </p>
         </div>
 
-        <div className="flex flex-wrap items-center gap-6 text-xs sm:text-sm">
-          <a href="https://github.com/alimehdikhan" target="_blank" rel="noopener noreferrer" className="text-neutral-500 hover:text-text-primary transition-colors" aria-label="GitHub">
+        <div className="flex flex-wrap items-center justify-center gap-6 text-xs sm:text-sm">
+          <a href={RESUME.resumePath} download={RESUME.resumeDownloadName} className="text-neutral-500 hover:text-text-primary transition-colors" aria-label="Download Resume">
+            Resume
+          </a>
+          <a href={RESUME.github} target="_blank" rel="noopener noreferrer" className="text-neutral-500 hover:text-text-primary transition-colors" aria-label="GitHub">
             GitHub
           </a>
-          <a href="https://linkedin.com/in/ali-mehdi-khan-b4062b2a3" target="_blank" rel="noopener noreferrer" className="text-neutral-500 hover:text-text-primary transition-colors" aria-label="LinkedIn">
+          <a href={RESUME.linkedin} target="_blank" rel="noopener noreferrer" className="text-neutral-500 hover:text-text-primary transition-colors" aria-label="LinkedIn">
             LinkedIn
           </a>
-          <a href="mailto:ali973mehdi@gmail.com" className="text-neutral-500 hover:text-text-primary transition-colors" aria-label="Email">
+          <a href={`mailto:${RESUME.email}`} className="text-neutral-500 hover:text-text-primary transition-colors" aria-label="Email">
             Email
           </a>
           <a href="#hero" onClick={handleScrollToTop} className="text-indigo-400 font-bold hover:text-indigo-300 transition-colors" aria-label="Scroll to top">
