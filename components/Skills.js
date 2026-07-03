@@ -90,7 +90,7 @@ export function Skills() {
   };
 
   return (
-    <section id="skills" className="relative py-24 bg-[#0A0A0A]">
+    <section id="skills" className="relative py-24 md:py-32 bg-bg-primary">
       <div className="container mx-auto px-6 max-w-6xl">
         <motion.div 
           className="text-center mb-16"
@@ -105,13 +105,13 @@ export function Skills() {
           <span className="text-xs font-semibold text-indigo-400 uppercase tracking-widest mb-2 inline-block">
             Technical Expertise
           </span>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+          <h2 className="text-3xl sm:text-4xl font-extrabold text-text-primary tracking-tight">
             Skills & Abilities
           </h2>
         </motion.div>
 
         <motion.div 
-          className="grid grid-cols-1 md:grid-cols-2 gap-6"
+          className="grid grid-cols-1 md:grid-cols-2 gap-8"
           variants={sectionVariants}
           initial="hidden"
           whileInView="visible"
@@ -119,12 +119,12 @@ export function Skills() {
         >
           {categories.map((cat, i) => (
             <motion.div key={i} variants={cardVariants} className="h-full">
-              <Card className="p-6 h-full flex flex-col justify-start">
-                <div className="flex items-center gap-3 mb-6">
+              <Card className="p-8 h-full flex flex-col justify-start">
+                <div className="flex items-center gap-3 mb-8">
                   <div className={`p-2.5 rounded-lg border ${cat.colorClass}`}>
                     {cat.icon}
                   </div>
-                  <h3 className="text-lg font-bold text-white">
+                  <h3 className="text-lg font-bold text-text-primary">
                     {cat.title}
                   </h3>
                 </div>
@@ -138,7 +138,7 @@ export function Skills() {
                   {cat.skills.map((skill, idx) => (
                     <motion.span 
                       key={idx} 
-                      className="px-3.5 py-1.5 text-xs font-semibold rounded-lg bg-neutral-900 border border-neutral-800 text-neutral-300 transition-colors hover:text-white select-none cursor-default"
+                      className="px-3.5 py-1.5 text-xs font-semibold rounded-lg bg-bg-elevated border border-border-dim text-text-secondary transition-colors hover:text-text-primary select-none cursor-default"
                       variants={pillVariants}
                       whileHover={prefersReducedMotion ? {} : { 
                         scale: 1.05, 

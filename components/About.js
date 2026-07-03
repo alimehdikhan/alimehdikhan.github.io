@@ -28,7 +28,7 @@ export function About() {
   };
 
   return (
-    <section id="about" className="relative py-24 bg-[#0A0A0A] border-t border-neutral-900">
+    <section id="about" className="relative py-24 md:py-32 bg-bg-primary border-t border-border-dim">
       <div className="container mx-auto px-6 max-w-6xl">
         <motion.div 
           className="text-center mb-16"
@@ -40,14 +40,14 @@ export function About() {
           <span className="text-xs font-semibold text-purple-400 uppercase tracking-widest mb-2 inline-block">
             Background
           </span>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+          <h2 className="text-3xl sm:text-4xl font-extrabold text-text-primary tracking-tight">
             Academic & Technical Overview
           </h2>
         </motion.div>
 
         {/* Stats Grid */}
         <motion.div 
-          className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12"
+          className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 mb-16"
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: '-100px' }}
@@ -64,12 +64,12 @@ export function About() {
               <Card 
                 hoverable 
                 dynamicGlow
-                className="p-6 text-center flex flex-col justify-center h-full w-full"
+                className="p-8 text-center flex flex-col justify-center h-full w-full"
               >
-                <div className="text-xs font-semibold uppercase tracking-wider text-neutral-400 mb-2">
+                <div className="text-xs font-semibold uppercase tracking-wider text-text-secondary mb-2">
                   {stat.label}
                 </div>
-                <div className="text-sm sm:text-base font-bold text-white leading-tight">
+                <div className="text-sm sm:text-base font-bold text-text-primary leading-tight">
                   {stat.value}
                 </div>
               </Card>
@@ -78,7 +78,7 @@ export function About() {
         </motion.div>
 
         {/* Main Content Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-10">
           <motion.div 
             className="md:col-span-8 h-full"
             initial="hidden"
@@ -86,33 +86,33 @@ export function About() {
             viewport={{ once: true, margin: '-100px' }}
             variants={revealVariants}
           >
-            <Card className="p-6 h-full flex flex-col justify-between">
+            <Card className="p-8 h-full flex flex-col justify-between">
               <div>
                 <h3 className="text-lg font-bold text-indigo-400 mb-4">
                   Summary
                 </h3>
-                <p className="text-neutral-400 leading-relaxed mb-4 text-sm sm:text-base">
+                <p className="text-text-secondary leading-relaxed mb-4 text-sm sm:text-base">
                   B.Tech Computer Science graduate (2026) skilled in Python, Java, Machine Learning, and AI application development. Google Cloud and Deloitte certified. Seeking an entry-level Software Engineering or AI/ML role to deliver impactful, data-driven solutions.
                 </p>
-                <p className="text-neutral-400 leading-relaxed mb-6 text-sm sm:text-base">
+                <p className="text-text-secondary leading-relaxed mb-6 text-sm sm:text-base">
                   Practical experience includes building skin cancer detection and diabetes prediction models, FastAPI audio processing integrations, and delivering programming training to underprivileged students to improve digital literacy.
                 </p>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <Card hoverable className="p-4 bg-neutral-950/20 border border-neutral-900">
-                  <h4 className="font-semibold text-sm text-neutral-200 mb-2 flex items-center gap-2">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <Card hoverable className="p-4 bg-bg-elevated/20 border border-border-dim">
+                  <h4 className="font-semibold text-sm text-text-primary mb-2 flex items-center gap-2">
                     <span className="text-indigo-400">▹</span> Software Development
                   </h4>
-                  <p className="text-xs text-neutral-400 leading-relaxed">
+                  <p className="text-xs text-text-secondary leading-relaxed">
                     Experience building RESTful APIs using Python and FastAPI. Familiar with Java, OOP principles, and SQL databases.
                   </p>
                 </Card>
-                <Card hoverable className="p-4 bg-neutral-950/20 border border-neutral-900">
-                  <h4 className="font-semibold text-sm text-neutral-200 mb-2 flex items-center gap-2">
+                <Card hoverable className="p-4 bg-bg-elevated/20 border border-border-dim">
+                  <h4 className="font-semibold text-sm text-text-primary mb-2 flex items-center gap-2">
                     <span className="text-purple-400">▹</span> Machine Learning
                   </h4>
-                  <p className="text-xs text-neutral-400 leading-relaxed">
+                  <p className="text-xs text-text-secondary leading-relaxed">
                     Implementation experience with supervised learning, binary classification models, Keras deep learning architectures, and Whisper NLP pipelines.
                   </p>
                 </Card>
@@ -127,7 +127,7 @@ export function About() {
             viewport={{ once: true, margin: '-100px' }}
             variants={revealVariants}
           >
-            <Card className="p-6 h-full flex flex-col justify-between">
+            <Card className="p-8 h-full flex flex-col justify-between">
               <div>
                 <h3 className="text-lg font-bold text-purple-400 mb-6">Focus Areas</h3>
                 
@@ -139,9 +139,9 @@ export function About() {
                     { name: 'Machine Learning', width: '88%', label: 'Focus Area', color: 'bg-blue-500' }
                   ].map((focus) => (
                     <div key={focus.name} className="flex flex-col">
-                      <div className="flex justify-between text-xs sm:text-sm mb-1.5 text-neutral-300">
+                      <div className="flex justify-between text-xs sm:text-sm mb-1.5 text-text-secondary">
                         <span>{focus.name}</span>
-                        <span className="text-neutral-400 text-xs">{focus.label}</span>
+                        <span className="text-text-secondary text-xs">{focus.label}</span>
                       </div>
                       <div className="h-1 bg-neutral-800 rounded-full overflow-hidden">
                         <motion.div 
@@ -157,7 +157,7 @@ export function About() {
                 </div>
               </div>
 
-              <div className="mt-8 pt-4 border-t border-neutral-800/60 text-xs text-neutral-400 leading-relaxed">
+              <div className="mt-8 pt-4 border-t border-border-dim/60 text-xs text-text-secondary leading-relaxed">
                 Currently exploring: <strong>Agentic AI</strong>, <strong>Prompt Engineering</strong>, and <strong>Cloud Deployments</strong>.
               </div>
             </Card>

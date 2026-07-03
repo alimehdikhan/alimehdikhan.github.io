@@ -66,32 +66,32 @@ export default function Home() {
 
       {/* Main Sections */}
       <motion.main 
-        className="overflow-x-hidden bg-[#0A0A0A] min-h-screen text-white font-sans"
+        className="overflow-x-hidden bg-bg-primary text-text-primary font-sans"
         initial="hidden"
         animate="visible"
         variants={pageReveal}
       >
         <Hero />
         
-        <div className="w-4/5 h-[1px] bg-gradient-to-r from-transparent via-neutral-800 to-transparent mx-auto" />
+        <div className="w-4/5 h-[1px] bg-gradient-to-r from-transparent via-border-dim to-transparent mx-auto" />
         <About />
         
-        <div className="w-4/5 h-[1px] bg-gradient-to-r from-transparent via-neutral-800 to-transparent mx-auto" />
+        <div className="w-4/5 h-[1px] bg-gradient-to-r from-transparent via-border-dim to-transparent mx-auto" />
         <Skills />
         
-        <div className="w-4/5 h-[1px] bg-gradient-to-r from-transparent via-neutral-800 to-transparent mx-auto" />
+        <div className="w-4/5 h-[1px] bg-gradient-to-r from-transparent via-border-dim to-transparent mx-auto" />
         <Timeline />
         
-        <div className="w-4/5 h-[1px] bg-gradient-to-r from-transparent via-neutral-800 to-transparent mx-auto" />
+        <div className="w-4/5 h-[1px] bg-gradient-to-r from-transparent via-border-dim to-transparent mx-auto" />
         <Projects />
         
-        <div className="w-4/5 h-[1px] bg-gradient-to-r from-transparent via-neutral-800 to-transparent mx-auto" />
+        <div className="w-4/5 h-[1px] bg-gradient-to-r from-transparent via-border-dim to-transparent mx-auto" />
         <OpenSource />
         
-        <div className="w-4/5 h-[1px] bg-gradient-to-r from-transparent via-neutral-800 to-transparent mx-auto" />
+        <div className="w-4/5 h-[1px] bg-gradient-to-r from-transparent via-border-dim to-transparent mx-auto" />
         <Blog />
         
-        <div className="w-4/5 h-[1px] bg-gradient-to-r from-transparent via-neutral-800 to-transparent mx-auto" />
+        <div className="w-4/5 h-[1px] bg-gradient-to-r from-transparent via-border-dim to-transparent mx-auto" />
         <Contact />
       </motion.main>
 

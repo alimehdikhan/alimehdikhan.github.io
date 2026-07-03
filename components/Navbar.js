@@ -72,24 +72,24 @@ export function Navbar() {
       if (navEl) {
         // Scrolled glass background transition
         if (currentScrollY > 40) {
-          navEl.classList.add('bg-neutral-900/80', 'border-neutral-800/80', 'shadow-2xl');
-          navEl.classList.remove('bg-neutral-900/40', 'border-neutral-800/40');
+          navEl.classList.add('bg-bg-elevated/80', 'border-border-dim/80', 'shadow-2xl');
+          navEl.classList.remove('bg-bg-elevated/40', 'border-border-dim/40');
         } else {
-          navEl.classList.remove('bg-neutral-900/80', 'border-neutral-800/80', 'shadow-2xl');
-          navEl.classList.add('bg-neutral-900/40', 'border-neutral-800/40');
+          navEl.classList.remove('bg-bg-elevated/80', 'border-border-dim/80', 'shadow-2xl');
+          navEl.classList.add('bg-bg-elevated/40', 'border-border-dim/40');
         }
 
         // Scroll direction tracker (past a safety margin)
         if (currentScrollY > 120) {
           if (currentScrollY > lastScrollY.current) {
             // Scrolling down - hide navigation smoothly
-            navEl.style.transform = 'translate3d(-50%, -120%, 0)';
+            navEl.style.transform = 'translateY(-120%)';
           } else {
             // Scrolling up - show navigation immediately
-            navEl.style.transform = 'translate3d(-50%, 0, 0)';
+            navEl.style.transform = 'translateY(0)';
           }
         } else {
-          navEl.style.transform = 'translate3d(-50%, 0, 0)';
+          navEl.style.transform = 'translateY(0)';
         }
       }
 
@@ -114,37 +114,41 @@ export function Navbar() {
   };
 
   return (
-    <nav 
-      ref={navRef}
-      className="fixed top-4 left-1/2 -translate-x-1/2 flex items-center justify-between w-full max-w-[95vw] md:max-w-4xl px-6 py-2 border border-neutral-800/40 bg-neutral-900/40 backdrop-blur-md rounded-full z-50 transition-all duration-300 transform"
-      style={{ transform: 'translate3d(-50%, 0, 0)' }}
-      role="navigation" 
-      aria-label="Main Navigation"
+    <div 
+      className="fixed top-4 w-full flex justify-center z-50 pointer-events-none px-4"
     >
-      <a href="#hero" className="text-white font-extrabold text-sm mr-6 hidden md:block" onClick={(e) => handleLinkClick(e, '#hero')}>
-        Ali Mehdi Khan
-      </a>
-
-      {/* Hamburger menu for mobile devices */}
-      <button 
-        className="block md:hidden p-2 text-white bg-transparent border-none cursor-pointer" 
-        onClick={() => setIsOpen(!isOpen)}
-        aria-label="Toggle Navigation Menu"
-        aria-expanded={isOpen}
+      <nav 
+        ref={navRef}
+        className="pointer-events-auto flex items-center justify-between w-[95vw] md:max-w-4xl px-6 py-2 border border-border-dim/40 bg-bg-elevated/40 backdrop-blur-md rounded-full transition-all duration-300"
+        style={{ transform: 'translateY(0)' }}
+        role="navigation" 
+        aria-label="Main Navigation"
       >
-        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          {isOpen ? (
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-          ) : (
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-          )}
-        </svg>
-      </button>
+      {/* Left: Logo */}
+      <div className="flex-1 flex items-center justify-start">
+        <a href="#hero" className="text-text-primary font-extrabold text-sm hidden lg:block" onClick={(e) => handleLinkClick(e, '#hero')}>
+          Ali Mehdi Khan
+        </a>
 
-      {/* Nav links container with sliding highlight */}
-      <div 
-        className="flex items-center gap-1 relative"
-      >
+        {/* Hamburger menu for mobile devices */}
+        <button 
+          className="block md:hidden p-2 text-text-primary bg-transparent border-none cursor-pointer -ml-2" 
+          onClick={() => setIsOpen(!isOpen)}
+          aria-label="Toggle Navigation Menu"
+          aria-expanded={isOpen}
+        >
+          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            {isOpen ? (
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            ) : (
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+            )}
+          </svg>
+        </button>
+      </div>
+
+      {/* Center: Nav links container with sliding highlight */}
+      <div className="flex items-center justify-center gap-1 relative hidden md:flex shrink-0">
         {navLinks.map((link) => {
           const id = link.href.substring(1);
           const isActive = activeSection === id;
@@ -153,18 +157,18 @@ export function Navbar() {
               key={link.name}
               href={link.href}
               onClick={(e) => handleLinkClick(e, link.href)}
-              className={`relative px-3 py-1.5 text-xs font-semibold rounded-full select-none transition-colors z-10 ${isActive ? 'text-white' : 'text-neutral-400 hover:text-neutral-200'} hidden md:block`}
+              className={`relative px-3 py-1.5 text-xs font-semibold rounded-full select-none transition-colors z-10 ${isActive ? 'text-text-primary' : 'text-text-secondary hover:text-text-primary'}`}
               role="menuitem"
             >
               {isActive && !prefersReducedMotion && (
                 <motion.div 
                   layoutId="nav-highlight"
-                  className="absolute inset-0 bg-neutral-800/80 border border-neutral-700/50 rounded-full z-[-1]"
+                  className="absolute inset-0 bg-bg-elevated/80 border border-border-dim/50 rounded-full z-[-1]"
                   transition={{ type: 'spring', stiffness: 220, damping: 20 }}
                 />
               )}
               {isActive && prefersReducedMotion && (
-                <div className="absolute inset-0 bg-neutral-800/80 border border-neutral-700/50 rounded-full z-[-1]" />
+                <div className="absolute inset-0 bg-bg-elevated/80 border border-border-dim/50 rounded-full z-[-1]" />
               )}
               {link.name}
             </a>
@@ -172,14 +176,14 @@ export function Navbar() {
         })}
       </div>
 
-      <div className="flex items-center gap-3 ml-6">
+      <div className="flex-1 flex items-center justify-end gap-3">
         <ThemeToggle />
         <a 
           href="/assets/resume/AliMehdiKhan Resume Optimized.pdf" 
           target="_blank" 
           rel="noopener noreferrer"
           download="AliMehdiKhan_Resume.pdf"
-          className="px-3.5 py-1.5 text-xs font-semibold text-neutral-300 bg-neutral-900 border border-neutral-800 rounded-full hover:bg-neutral-800 hover:text-white transition-all hidden md:block"
+          className="px-3.5 py-1.5 text-xs font-semibold text-text-secondary bg-bg-primary border border-border-dim rounded-full hover:bg-bg-elevated hover:text-text-primary transition-all hidden md:block"
           aria-label="Download Resume"
         >
           Resume
@@ -190,7 +194,7 @@ export function Navbar() {
       <AnimatePresence>
         {isOpen && (
           <motion.div 
-            className="absolute top-full left-0 right-0 mt-2 p-4 bg-neutral-950 border border-neutral-800 rounded-2xl flex flex-col gap-2 md:hidden shadow-2xl"
+            className="absolute top-full left-0 right-0 mt-2 p-4 bg-bg-elevated border border-border-dim rounded-2xl flex flex-col gap-2 md:hidden shadow-2xl"
             initial={{ opacity: 0, scale: 0.95, y: -10 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: -10 }}
@@ -204,7 +208,7 @@ export function Navbar() {
                   key={link.name}
                   href={link.href}
                   onClick={(e) => handleLinkClick(e, link.href)}
-                  className={`w-full px-4 py-2.5 text-sm font-semibold rounded-lg ${isActive ? 'bg-neutral-900 text-white' : 'text-neutral-400 hover:text-neutral-200'}`}
+                  className={`w-full px-4 py-2.5 text-sm font-semibold rounded-lg ${isActive ? 'bg-bg-primary text-text-primary' : 'text-text-secondary hover:text-text-primary'}`}
                   role="menuitem"
                 >
                   {link.name}
@@ -214,6 +218,7 @@ export function Navbar() {
           </motion.div>
         )}
       </AnimatePresence>
-    </nav>
+      </nav>
+    </div>
   );
 }

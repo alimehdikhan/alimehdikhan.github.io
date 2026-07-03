@@ -59,7 +59,7 @@ export function Timeline() {
   };
 
   return (
-    <section id="experience" className="relative py-24 bg-[#0A0A0A] border-t border-neutral-900" ref={containerRef}>
+    <section id="experience" className="relative py-24 md:py-32 bg-bg-primary border-t border-border-dim" ref={containerRef}>
       <div className="container mx-auto px-6 max-w-5xl">
         <motion.div 
           className="text-center mb-20"
@@ -71,14 +71,14 @@ export function Timeline() {
           <span className="text-xs font-semibold text-indigo-400 uppercase tracking-widest mb-2 inline-block">
             Work History
           </span>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+          <h2 className="text-3xl sm:text-4xl font-extrabold text-text-primary tracking-tight">
             Experience & Involvement
           </h2>
         </motion.div>
 
-        <div className="relative flex flex-col md:grid md:grid-cols-2 gap-10">
+        <div className="relative flex flex-col md:grid md:grid-cols-2 gap-16 md:gap-10">
           {/* Vertical scroll-drawn line (desktop only) */}
-          <div className="absolute left-6 md:left-1/2 top-0 bottom-0 w-0.5 bg-neutral-900 -translate-x-1/2 z-0 hidden md:block">
+          <div className="absolute left-6 md:left-1/2 top-0 bottom-0 w-0.5 bg-border-dim -translate-x-1/2 z-0 hidden md:block">
             <motion.div 
               style={{ height: prefersReducedMotion ? '100%' : lineHeight }}
               className="w-full bg-gradient-to-b from-indigo-500 via-purple-500 to-emerald-500 origin-top rounded-full"
@@ -93,11 +93,11 @@ export function Timeline() {
                 className={`relative flex flex-col md:grid md:grid-cols-2 md:col-span-2 ${isLeft ? 'md:text-right' : ''}`}
               >
                 {/* Visual marker dot (desktop only) */}
-                <div className="absolute left-6 md:left-1/2 w-4 h-4 rounded-full border-4 border-[#0a0a0a] bg-indigo-500 top-6 -translate-x-1/2 z-10 hidden md:block shadow-[0_0_12px_rgba(99,102,241,0.5)]" />
+                <div className="absolute left-6 md:left-1/2 w-4 h-4 rounded-full border-4 border-bg-primary bg-indigo-500 top-6 -translate-x-1/2 z-10 hidden md:block shadow-[0_0_12px_rgba(99,102,241,0.5)]" />
 
                 {/* Content Card Wrapper */}
                 <motion.div 
-                  className={`w-full md:w-[90%] md:col-span-1 ${isLeft ? 'md:mr-auto md:col-start-1' : 'md:ml-auto md:col-start-2'}`}
+                  className={`w-[85%] pl-8 md:pl-0 md:w-[90%] md:col-span-1 ${isLeft ? 'md:mr-auto md:col-start-1' : 'md:ml-auto md:col-start-2 ml-auto'}`}
                   custom={exp.align}
                   initial="hidden"
                   whileInView="visible"
@@ -105,13 +105,13 @@ export function Timeline() {
                   variants={cardVariants}
                 >
                   <Card hoverable className="p-6 relative">
-                    <span className="inline-block px-2.5 py-1 text-xs font-bold rounded-full bg-neutral-950 border border-neutral-800 text-neutral-400 mb-4">
+                    <span className="inline-block px-2.5 py-1 text-xs font-bold rounded-full bg-bg-elevated border border-border-dim text-text-secondary mb-4">
                       {exp.date}
                     </span>
-                    <h3 className="text-lg font-bold text-white mb-1">{exp.role}</h3>
+                    <h3 className="text-lg font-bold text-text-primary mb-1">{exp.role}</h3>
                     <div className="text-sm font-semibold text-indigo-400 mb-4">{exp.company}</div>
                     
-                    <ul className={`list-none flex flex-col gap-2 text-sm text-neutral-400 text-left ${isLeft ? 'md:items-end' : ''}`}>
+                    <ul className={`list-none flex flex-col gap-2 text-sm text-text-secondary text-left ${isLeft ? 'md:items-end' : ''}`}>
                       {exp.details.map((detail, dIdx) => (
                         <li key={dIdx} className="flex gap-2 items-start leading-relaxed">
                           <span className="text-indigo-400 mt-1">▹</span>

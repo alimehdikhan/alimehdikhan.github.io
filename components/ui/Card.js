@@ -49,7 +49,7 @@ export function Card({ children, className = '', hoverable = false, dynamicGlow 
   return (
     <motion.div 
       ref={cardRef}
-      className={`relative overflow-hidden rounded-lg border border-neutral-800/80 bg-neutral-900/40 backdrop-blur-md transition-colors duration-300 ${hoverable ? 'hover:border-neutral-700/80' : ''} ${className}`} 
+      className={`relative overflow-hidden rounded-lg border border-border-dim/80 bg-bg-elevated/40 backdrop-blur-md transition-colors duration-300 ${hoverable ? 'hover:border-neutral-700/80' : ''} ${className}`} 
       onMouseMove={handleMouseMove}
       onMouseEnter={() => setIsHovering(true)}
       onMouseLeave={handleMouseLeave}

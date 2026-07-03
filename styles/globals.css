@@ -5,6 +5,20 @@
 @theme {
   --font-sans: "Inter", sans-serif;
   --font-mono: "JetBrains Mono", monospace;
+  
+  /* Semantic Colors */
+  --color-bg-primary: var(--bg-color);
+  --color-bg-elevated: var(--bg-elevated);
+  
+  --color-card: var(--card-bg);
+  --color-card-hover: var(--card-bg-hover);
+  --color-border-dim: var(--card-border);
+  
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-tertiary: var(--text-tertiary);
+  
+  --color-input: var(--input-bg);
 }
 
 :root {
@@ -79,11 +93,12 @@
 /* ==========================================================================
    RESET & ACCESSIBILITY
    ========================================================================== */
-*, *::before, *::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+@layer base {
+  *, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
 
 html {
   scroll-behavior: smooth;
@@ -127,14 +142,21 @@ body {
   border-width: 0;
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
-  transition: color var(--transition-fast);
-}
+  a {
+    color: inherit;
+    text-decoration: none;
+    transition: color var(--transition-fast);
+  }
 
-button, input, textarea {
-  font-family: inherit;
+  /* Ensure icons scale and inherit correctly */
+  svg {
+    display: inline-block;
+    vertical-align: middle;
+  }
+
+  button, input, textarea {
+    font-family: inherit;
+  }
 }
 
 .container {

@@ -34,8 +34,8 @@ export function MagneticButton({ children, className = '', variant = 'primary', 
   const Component = as === 'a' ? motion.a : motion.button;
 
   const btnClasses = {
-    primary: 'relative inline-flex items-center justify-center px-6 py-3 font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-500 shadow-lg shadow-indigo-500/20 active:scale-98 transition-all',
-    secondary: 'relative inline-flex items-center justify-center px-6 py-3 font-medium text-neutral-300 bg-neutral-900 border border-neutral-800 rounded-lg hover:bg-neutral-800 hover:text-white active:scale-98 transition-all',
+    primary: 'relative inline-flex items-center justify-center px-6 py-3 font-medium text-text-primary bg-indigo-600 rounded-lg hover:bg-indigo-500 shadow-lg shadow-indigo-500/20 active:scale-98 transition-all',
+    secondary: 'relative inline-flex items-center justify-center px-6 py-3 font-medium text-text-secondary bg-bg-elevated border border-border-dim rounded-lg hover:bg-card-hover hover:text-text-primary active:scale-98 transition-all',
   };
 
   return (

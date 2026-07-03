@@ -183,7 +183,7 @@ export function Hero() {
   };
 
   return (
-    <section id="hero" className="relative flex min-h-screen items-center overflow-hidden bg-[#0A0A0A] py-20">
+    <section id="hero" className="relative flex min-h-screen items-center overflow-hidden bg-bg-primary py-24 md:py-32">
       <canvas id="particle-canvas" ref={canvasRef} className="absolute inset-0 pointer-events-none z-0" aria-hidden="true" />
       
       {/* Ambient background glows */}
@@ -192,7 +192,7 @@ export function Hero() {
 
       <div className="container mx-auto px-6 relative z-10 w-full">
         <motion.div 
-          className="grid grid-cols-1 md:grid-cols-12 gap-12 items-center text-left"
+          className="grid grid-cols-1 md:grid-cols-12 gap-16 lg:gap-24 items-center text-left"
           variants={containerVariants}
           initial="hidden"
           animate="visible"
@@ -206,25 +206,25 @@ export function Hero() {
             </motion.div>
 
             <motion.h1 
-              className="text-4xl sm:text-6xl font-extrabold tracking-tight text-white leading-tight"
+              className="text-4xl sm:text-6xl font-extrabold tracking-tight text-text-primary leading-tight"
               variants={itemVariants}
             >
               Hi, I'm <span className="bg-gradient-to-r from-indigo-400 via-purple-400 to-emerald-400 bg-clip-text text-transparent">Ali Mehdi Khan</span>
             </motion.h1>
 
-            <motion.div className="text-xl sm:text-2xl text-neutral-300 font-medium flex items-center h-8" variants={itemVariants}>
+            <motion.div className="text-xl sm:text-2xl text-text-secondary font-medium flex items-center h-8" variants={itemVariants}>
               <span>I'm a&nbsp;</span>
-              <span className="text-white font-bold border-r-2 border-white pr-1 animate-caret">{currentText}</span>
+              <span className="text-text-primary font-bold border-r-2 border-text-primary pr-1 animate-caret">{currentText}</span>
             </motion.div>
 
             <motion.p 
-              className="text-lg text-neutral-400 leading-relaxed max-w-2xl"
+              className="text-lg text-text-tertiary leading-relaxed max-w-2xl"
               variants={itemVariants}
             >
               Computer Science undergraduate (2026) skilled in Python, Java, Machine Learning, and AI application development. Certified in Google Cloud and Deloitte Job Simulation.
             </motion.p>
 
-            <motion.div className="flex flex-wrap gap-4 text-sm text-neutral-400" variants={itemVariants}>
+            <motion.div className="flex flex-wrap gap-4 text-sm text-text-tertiary" variants={itemVariants}>
               <span className="flex items-center gap-1.5">
                 <svg className="w-4 h-4 text-indigo-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                 Google Cloud Certified
@@ -255,7 +255,7 @@ export function Hero() {
                   href={social.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center justify-center w-10 h-10 rounded-lg border border-neutral-800 bg-neutral-900/50 text-neutral-400 hover:text-white hover:border-neutral-700 transition-colors"
+                  className="flex items-center justify-center w-10 h-10 rounded-lg border border-border-dim bg-bg-elevated/50 text-text-secondary hover:text-text-primary hover:border-border-dim transition-colors"
                   aria-label={social.label}
                   whileHover={prefersReducedMotion ? {} : { scale: 1.08, y: -2 }}
                   whileTap={prefersReducedMotion ? {} : { scale: 0.95 }}
@@ -270,7 +270,7 @@ export function Hero() {
 
           <div className="md:col-span-5 flex justify-center md:justify-end">
             <motion.div 
-              className="relative w-[240px] sm:w-[280px] aspect-square rounded-lg overflow-hidden border border-neutral-800 bg-neutral-900/50 backdrop-blur-md shadow-2xl"
+              className="relative w-[240px] sm:w-[280px] aspect-square rounded-lg overflow-hidden border border-border-dim bg-bg-elevated/50 backdrop-blur-md shadow-2xl"
               variants={itemVariants}
               whileHover={prefersReducedMotion ? {} : { scale: 1.03, rotate: 1 }}
               transition={{ type: 'spring', stiffness: 300, damping: 20 }}

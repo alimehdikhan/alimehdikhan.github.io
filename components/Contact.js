@@ -61,7 +61,7 @@ export function Contact() {
   };
 
   return (
-    <section id="contact" className="relative py-24 bg-[#0A0A0A] border-t border-neutral-900">
+    <section id="contact" className="relative py-16 md:py-20 bg-bg-primary border-t border-border-dim">
       <div className="container mx-auto px-6 max-w-6xl">
         <motion.div 
           className="text-center mb-16"
@@ -73,7 +73,7 @@ export function Contact() {
           <span className="text-xs font-semibold text-indigo-400 uppercase tracking-widest mb-2 inline-block">
             Get In Touch
           </span>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+          <h2 className="text-3xl sm:text-4xl font-extrabold text-text-primary tracking-tight">
             Contact Me
           </h2>
         </motion.div>
@@ -91,14 +91,14 @@ export function Contact() {
           <motion.div variants={revealVariants} className="h-full">
             <Card className="h-full flex flex-col justify-between p-8">
               <div>
-                <h3 className="text-xl font-bold text-white mb-3">
+                <h3 className="text-xl font-bold text-text-primary mb-3">
                   Interested in working together?
                 </h3>
-                <p className="text-neutral-400 text-sm sm:text-base leading-relaxed mb-4">
+                <p className="text-text-secondary text-sm sm:text-base leading-relaxed mb-4">
                   Whether you're looking for a software engineer, need help with machine learning implementation, or want to collaborate on open-source work — I'd love to hear from you. 
                 </p>
                 <p className="text-xs text-neutral-500 font-semibold mb-8">
-                  ⏰ Average response time: <strong className="text-neutral-300">under 24 hours</strong>.
+                  ⏰ Average response time: <strong className="text-text-secondary">under 24 hours</strong>.
                 </p>
               </div>
 
@@ -125,16 +125,16 @@ export function Contact() {
                     colorClass: 'text-amber-400 border-amber-500/10 bg-amber-500/5'
                   }
                 ].map((item, idx) => (
-                  <Card key={idx} hoverable className="flex items-center gap-4 p-4 bg-neutral-950/20 border border-neutral-900">
+                  <Card key={idx} hoverable className="flex items-center gap-4 p-4 bg-bg-elevated/20 border border-border-dim">
                     <div className={`p-2.5 rounded-lg border ${item.colorClass}`}>
                       {item.icon}
                     </div>
                     <div>
-                      <h4 className="text-xs font-semibold text-neutral-400 uppercase tracking-wider">{item.title}</h4>
+                      <h4 className="text-xs font-semibold text-text-secondary uppercase tracking-wider">{item.title}</h4>
                       {item.href ? (
-                        <a href={item.href} className="text-sm font-bold text-white hover:text-indigo-400 transition-colors">{item.value}</a>
+                        <a href={item.href} className="text-sm font-bold text-text-primary hover:text-indigo-400 transition-colors">{item.value}</a>
                       ) : (
-                        <span className="text-sm font-bold text-white">{item.value}</span>
+                        <span className="text-sm font-bold text-text-primary">{item.value}</span>
                       )}
                     </div>
                   </Card>
@@ -149,7 +149,7 @@ export function Contact() {
               <form onSubmit={handleSubmit} className="flex flex-col gap-5 w-full" aria-label="Contact Form">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 w-full">
                   <div className="flex flex-col items-start w-full">
-                    <label htmlFor="name" className="text-xs font-semibold text-neutral-400 uppercase tracking-wider mb-2">Name</label>
+                    <label htmlFor="name" className="text-xs font-semibold text-text-secondary uppercase tracking-wider mb-2">Name</label>
                     <input 
                       type="text" 
                       id="name" 
@@ -159,11 +159,11 @@ export function Contact() {
                       placeholder="Your Name"
                       value={formState.name}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-3 rounded-lg border border-neutral-800 bg-neutral-950/40 text-white placeholder-neutral-500 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 outline-none transition-all duration-200 text-sm"
+                      className="w-full px-4 py-3 rounded-lg border border-border-dim bg-bg-elevated/40 text-text-primary placeholder-neutral-500 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 outline-none transition-all duration-200 text-sm"
                     />
                   </div>
                   <div className="flex flex-col items-start w-full">
-                    <label htmlFor="email" className="text-xs font-semibold text-neutral-400 uppercase tracking-wider mb-2">Email</label>
+                    <label htmlFor="email" className="text-xs font-semibold text-text-secondary uppercase tracking-wider mb-2">Email</label>
                     <input 
                       type="email" 
                       id="email" 
@@ -173,13 +173,13 @@ export function Contact() {
                       placeholder="you@example.com"
                       value={formState.email}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-3 rounded-lg border border-neutral-800 bg-neutral-950/40 text-white placeholder-neutral-500 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 outline-none transition-all duration-200 text-sm"
+                      className="w-full px-4 py-3 rounded-lg border border-border-dim bg-bg-elevated/40 text-text-primary placeholder-neutral-500 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 outline-none transition-all duration-200 text-sm"
                     />
                   </div>
                 </div>
                 
                 <div className="flex flex-col items-start w-full">
-                  <label htmlFor="subject" className="text-xs font-semibold text-neutral-400 uppercase tracking-wider mb-2">Subject</label>
+                  <label htmlFor="subject" className="text-xs font-semibold text-text-secondary uppercase tracking-wider mb-2">Subject</label>
                   <input 
                     type="text" 
                     id="subject" 
@@ -188,12 +188,12 @@ export function Contact() {
                     placeholder="Subject"
                     value={formState.subject}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-3 rounded-lg border border-neutral-800 bg-neutral-950/40 text-white placeholder-neutral-500 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 outline-none transition-all duration-200 text-sm"
+                    className="w-full px-4 py-3 rounded-lg border border-border-dim bg-bg-elevated/40 text-text-primary placeholder-neutral-500 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 outline-none transition-all duration-200 text-sm"
                   />
                 </div>
 
                 <div className="flex flex-col items-start w-full">
-                  <label htmlFor="message" className="text-xs font-semibold text-neutral-400 uppercase tracking-wider mb-2">Message</label>
+                  <label htmlFor="message" className="text-xs font-semibold text-text-secondary uppercase tracking-wider mb-2">Message</label>
                   <textarea 
                     id="message" 
                     name="message" 
@@ -202,7 +202,7 @@ export function Contact() {
                     placeholder="Tell me about your project or opportunity..."
                     value={formState.message}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-3 rounded-lg border border-neutral-800 bg-neutral-950/40 text-white placeholder-neutral-500 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 outline-none transition-all duration-200 text-sm resize-none min-h-[120px]"
+                    className="w-full px-4 py-3 rounded-lg border border-border-dim bg-bg-elevated/40 text-text-primary placeholder-neutral-500 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 outline-none transition-all duration-200 text-sm resize-none min-h-[120px]"
                   />
                 </div>
 
@@ -246,12 +246,12 @@ export function Contact() {
                     <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                   </div>
                   <div className="flex-1">
-                    <h4 className="text-sm font-bold text-white">Message Transmitted</h4>
-                    <p className="text-xs text-neutral-400 mt-0.5">I have received your email and will respond shortly.</p>
+                    <h4 className="text-sm font-bold text-text-primary">Message Transmitted</h4>
+                    <p className="text-xs text-text-secondary mt-0.5">I have received your email and will respond shortly.</p>
                   </div>
                   <button 
                     onClick={() => setStatus(null)} 
-                    className="text-neutral-400 hover:text-white text-lg font-bold ml-auto leading-none border-none bg-transparent cursor-pointer"
+                    className="text-text-secondary hover:text-text-primary text-lg font-bold ml-auto leading-none border-none bg-transparent cursor-pointer"
                     aria-label="Dismiss Alert"
                   >
                     ×
@@ -275,12 +275,12 @@ export function Contact() {
                     <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
                   </div>
                   <div className="flex-1">
-                    <h4 className="text-sm font-bold text-white">Submission Failed</h4>
-                    <p className="text-xs text-neutral-400 mt-0.5">A network error occurred. Please try again.</p>
+                    <h4 className="text-sm font-bold text-text-primary">Submission Failed</h4>
+                    <p className="text-xs text-text-secondary mt-0.5">A network error occurred. Please try again.</p>
                   </div>
                   <button 
                     onClick={() => setStatus(null)} 
-                    className="text-neutral-400 hover:text-white text-lg font-bold ml-auto leading-none border-none bg-transparent cursor-pointer"
+                    className="text-text-secondary hover:text-text-primary text-lg font-bold ml-auto leading-none border-none bg-transparent cursor-pointer"
                     aria-label="Dismiss Alert"
                   >
                     ×

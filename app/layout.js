@@ -1,4 +1,5 @@
 import '../styles/globals.css';
+import { ThemeProvider } from '../components/ThemeProvider';
 
 export const metadata = {
   metadataBase: new URL('https://alimehdikhan.github.io'),
@@ -109,24 +110,11 @@ export default function RootLayout({ children }) {
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              (function() {
-                try {
-                  var savedTheme = localStorage.getItem('theme');
-                  var prefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
-                  if (savedTheme === 'light' || (!savedTheme && prefersLight)) {
-                    document.documentElement.setAttribute('data-theme', 'light');
-                  }
-                } catch (e) {}
-              })();
-            `,
-          }}
-        />
       </head>
       <body className="antialiased">
-        {children}
+        <ThemeProvider attribute="data-theme" defaultTheme="dark" enableSystem>
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );

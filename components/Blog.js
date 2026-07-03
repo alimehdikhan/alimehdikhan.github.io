@@ -48,7 +48,7 @@ export function Blog() {
   };
 
   return (
-    <section id="blog" className="relative py-24 bg-[#0A0A0A] border-t border-neutral-900">
+    <section id="blog" className="relative py-16 md:py-20 bg-bg-primary border-t border-border-dim">
       <div className="container mx-auto px-6 max-w-6xl">
         <motion.div 
           className="text-center mb-16"
@@ -60,7 +60,7 @@ export function Blog() {
           <span className="text-xs font-semibold text-indigo-400 uppercase tracking-widest mb-2 inline-block">
             Writing
           </span>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+          <h2 className="text-3xl sm:text-4xl font-extrabold text-text-primary tracking-tight">
             Latest Articles & Notes
           </h2>
         </motion.div>
@@ -86,18 +86,18 @@ export function Blog() {
                 className="w-full flex flex-col justify-between cursor-pointer p-6"
               >
                 <div>
-                  <div className="flex flex-wrap items-center gap-2 text-xs text-neutral-400 mb-4 font-semibold uppercase tracking-wider">
-                    <span className="px-2 py-0.5 rounded bg-neutral-950 border border-neutral-800 text-indigo-400">{art.tag}</span>
+                  <div className="flex flex-wrap items-center gap-2 text-xs text-text-secondary mb-4 font-semibold uppercase tracking-wider">
+                    <span className="px-2 py-0.5 rounded bg-bg-elevated border border-border-dim text-indigo-400">{art.tag}</span>
                     <span>{art.date}</span>
                     <span>·</span>
                     <span>{art.readTime}</span>
                   </div>
                   
-                  <h3 className="text-lg font-bold text-white mb-2 leading-snug hover:text-indigo-400 transition-colors">
+                  <h3 className="text-lg font-bold text-text-primary mb-2 leading-snug hover:text-indigo-400 transition-colors">
                     {art.title}
                   </h3>
                   
-                  <p className="text-neutral-400 text-xs sm:text-sm leading-relaxed mb-6">
+                  <p className="text-text-secondary text-xs sm:text-sm leading-relaxed mb-6">
                     {art.excerpt}
                   </p>
                 </div>
