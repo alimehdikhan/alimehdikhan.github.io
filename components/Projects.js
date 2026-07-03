@@ -1,154 +1,168 @@
 'use client';
 
+import { motion, useReducedMotion } from 'framer-motion';
 import { Card } from './ui/Card';
 
 export function Projects() {
+  const prefersReducedMotion = useReducedMotion();
+
   const projects = [
     {
-      title: 'AI Pronunciation Coach API',
-      tag: 'Backend / NLP',
-      overview: 'Audio scoring API evaluating speech pronunciation.',
-      features: 'Streams audio to OpenAI Whisper models for processing.',
-      outcome: 'Evaluates speech segments with low-latency response times.',
-      tech: ['FastAPI', 'Python', 'OpenAI Whisper'],
+      title: 'AI Pronunciation Coach',
+      tag: 'AI / NLP / Web',
+      overview: 'AI pronunciation coaching platform evaluates speech spoken accuracy.',
+      features: 'FastAPI audio processing streams spoken inputs to OpenAI Whisper models.',
+      outcome: 'Computes diagnostic metrics for instant English speaking feedback.',
+      tech: ['FastAPI', 'Python', 'OpenAI Whisper', 'FastAPI'],
       github: 'https://github.com/alimehdikhan/A.I-Pronunciation-Coach',
       demo: 'https://huggingface.co/spaces/Alimehdi973/ai-pronunciation-coach',
-      gradient: 'linear-gradient(135deg, #4f46e5 0%, #3b82f6 100%)' // purple to blue
+      gradient: 'from-indigo-600 to-blue-500'
     },
     {
-      title: 'Diagnostic Vision Pipeline',
+      title: 'Cancer Detection System',
       tag: 'Computer Vision',
-      overview: 'Convolutional Neural Network for medical image classification.',
-      features: 'Custom architecture for processing and augmenting medical datasets.',
-      outcome: 'Reached 90%+ validation accuracy on diagnostic datasets.',
-      tech: ['TensorFlow', 'Keras', 'Pandas'],
+      overview: 'Binary classification model predicting early-stage cancers.',
+      features: 'Deep learning CNN models trained on medical image datasets.',
+      outcome: 'Achieved 90%+ diagnostic validation prediction accuracy.',
+      tech: ['TensorFlow', 'Keras', 'Python', 'Pandas'],
       github: 'https://github.com/alimehdikhan/Cancer-Detection-Model',
       demo: null,
-      gradient: 'linear-gradient(135deg, #10b981 0%, #059669 100%)' // emerald
+      gradient: 'from-emerald-600 to-teal-500'
     },
     {
       title: 'Agentic Task Scheduler',
       tag: 'AI Agents',
-      overview: 'Self-correcting AI agent system scheduling background operations.',
-      features: 'Uses LangGraph & Gemini models to generate plans and execute jobs.',
-      outcome: 'Fully automated pipeline requiring zero manual intervention.',
-      tech: ['Next.js', 'LangGraph', 'Python', 'Gemini API'],
+      overview: 'Autonomous AI scheduler running backgrounds dynamically.',
+      features: 'Coordinates LangGraph workflows and Gemini API endpoints.',
+      outcome: 'Executes planning operations needing zero user inputs.',
+      tech: ['LangGraph', 'Gemini API', 'Python', 'Next.js'],
       github: 'https://github.com/alimehdikhan',
       demo: null,
-      gradient: 'linear-gradient(135deg, #d97706 0%, #b45309 100%)' // amber
+      gradient: 'from-amber-600 to-orange-500'
     }
   ];
 
+  const revealVariants = {
+    hidden: { y: prefersReducedMotion ? 0 : 25, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: {
+        type: 'spring',
+        stiffness: 90,
+        damping: 15,
+        duration: 0.6
+      }
+    }
+  };
+
   return (
-    <section id="projects" className="ds-section">
-      <div className="container reveal-on-scroll">
-        <div style={{ textAlign: 'center', marginBottom: '3.5rem' }}>
-          <span className="section-eyebrow" style={{ color: '#a855f7', letterSpacing: '0.15em', textTransform: 'uppercase', fontSize: '0.8rem', fontWeight: 600, display: 'inline-block', marginBottom: '0.75rem' }}>
+    <section id="projects" className="relative py-24 bg-[#0A0A0A] border-t border-neutral-900">
+      <div className="container mx-auto px-6 max-w-6xl">
+        <motion.div 
+          className="text-center mb-16"
+          initial={{ y: prefersReducedMotion ? 0 : 20, opacity: 0 }}
+          whileInView={{ y: 0, opacity: 1 }}
+          viewport={{ once: true, margin: '-100px' }}
+          transition={{ duration: 0.6 }}
+        >
+          <span className="text-xs font-semibold text-purple-400 uppercase tracking-widest mb-2 inline-block">
             Portfolio
           </span>
-          <h2 className="ds-section-title text-gradient" style={{ marginBottom: '1rem' }}>
+          <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
             Featured Projects
           </h2>
-          <div className="title-underline" style={{ background: 'linear-gradient(90deg, #a855f7, #6366f1)' }} />
-        </div>
+        </motion.div>
 
-        <div className="bento-grid" style={{ gridTemplateColumns: 'repeat(12, 1fr)' }}>
+        <motion.div 
+          className="grid grid-cols-1 md:grid-cols-3 gap-6"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: '-100px' }}
+          variants={{
+            visible: { transition: { staggerChildren: 0.08 } }
+          }}
+        >
           {projects.map((proj, i) => (
-            <div 
+            <motion.div 
               key={i}
-              className={`bento-span-4 reveal-on-scroll stagger-${i + 1}`}
-              style={{ gridColumn: 'span 4' }}
+              className="flex h-full"
+              variants={revealVariants}
             >
               <Card 
                 hoverable 
                 dynamicGlow
-                style={{ padding: 0, display: 'flex', flexDirection: 'column', height: '100%', overflow: 'hidden' }}
+                className="w-full flex flex-col p-0 overflow-hidden"
               >
-                {/* Project Header Gradient Graphic wrapped for hover-zoom */}
-                <div style={{ overflow: 'hidden', height: '140px', position: 'relative' }} className="project-image-wrapper">
-                  <div 
-                    className="project-card-image"
-                    style={{
-                      background: proj.gradient,
-                      height: '100%',
-                      width: '100%',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      color: '#ffffff',
-                      padding: '1rem',
-                      textAlign: 'center',
-                      position: 'relative',
-                      transition: 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)'
-                    }}
-                  >
-                    <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.15)' }} />
-                    <span style={{ fontSize: '0.75rem', fontFamily: 'var(--font-mono)', opacity: 0.85, zIndex: 1 }}>{proj.tag}</span>
-                    <h4 style={{ fontSize: '1.1rem', fontWeight: 800, marginTop: '0.25rem', zIndex: 1, textShadow: '0 2px 4px rgba(0,0,0,0.2)' }}>{proj.title}</h4>
+                {/* Project Header Gradient Graphic */}
+                <div className="relative h-32 overflow-hidden w-full group">
+                  <div className={`absolute inset-0 bg-gradient-to-br ${proj.gradient} transition-transform duration-500 group-hover:scale-105`} />
+                  <div className="absolute inset-0 bg-neutral-950/20" />
+                  <div className="absolute inset-0 flex flex-col justify-center items-center text-center p-4">
+                    <span className="text-[10px] font-mono tracking-wider uppercase text-white/80 mb-1">{proj.tag}</span>
+                    <h4 className="text-base font-extrabold text-white tracking-tight drop-shadow">{proj.title}</h4>
                   </div>
                 </div>
 
                 {/* Project Details */}
-                <div className="project-card-body" style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
-                  <span className="project-tag">{proj.tag}</span>
-                  <h3 className="project-title" style={{ fontSize: '1.2rem', fontWeight: 700 }}>{proj.title}</h3>
-                  
-                  <div className="project-breakdown">
-                    <div className="project-breakdown-row">
-                      <strong>Overview</strong>
-                      <span>{proj.overview}</span>
+                <div className="p-6 flex flex-col flex-1 justify-between gap-6">
+                  <div className="flex flex-col gap-4">
+                    <div className="flex flex-col gap-3">
+                      <div className="text-xs text-neutral-400">
+                        <strong className="block text-white mb-0.5 text-[11px] uppercase tracking-wider">Overview</strong>
+                        <span className="leading-relaxed">{proj.overview}</span>
+                      </div>
+                      <div className="text-xs text-neutral-400">
+                        <strong className="block text-white mb-0.5 text-[11px] uppercase tracking-wider">Key Features</strong>
+                        <span className="leading-relaxed">{proj.features}</span>
+                      </div>
+                      <div className="text-xs text-neutral-400">
+                        <strong className="block text-white mb-0.5 text-[11px] uppercase tracking-wider">Results</strong>
+                        <span className="leading-relaxed text-emerald-400 font-semibold">{proj.outcome}</span>
+                      </div>
                     </div>
-                    <div className="project-breakdown-row">
-                      <strong>Key Features</strong>
-                      <span>{proj.features}</span>
-                    </div>
-                    <div className="project-breakdown-row">
-                      <strong>Results</strong>
-                      <span style={{ color: '#10b981', fontWeight: 500 }}>{proj.outcome}</span>
+
+                    <div className="flex flex-wrap gap-1.5 pt-2">
+                      {proj.tech.map((t, idx) => (
+                        <span 
+                          key={idx} 
+                          className="px-2.5 py-1 text-[10px] font-semibold bg-neutral-950 border border-neutral-800 text-neutral-400 rounded-md"
+                        >
+                          {t}
+                        </span>
+                      ))}
                     </div>
                   </div>
 
-                  <div className="project-tech-tags">
-                    {proj.tech.map((t, idx) => (
-                      <span key={idx}>{t}</span>
-                    ))}
-                  </div>
-
-                  <div className="project-links-row" style={{ marginTop: 'auto', paddingTop: '1rem', borderTop: '1px solid var(--card-border)' }}>
-                    <a href={proj.github} target="_blank" rel="noopener noreferrer" className="project-link-btn" aria-label={`View code for ${proj.title} on GitHub`}>
-                      <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.56v-2c-3.2.7-3.87-1.37-3.87-1.37-.52-1.33-1.28-1.68-1.28-1.68-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.7 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.47.11-3.06 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.79 0c2.21-1.49 3.18-1.18 3.18-1.18.63 1.59.23 2.77.11 3.06.74.81 1.19 1.84 1.19 3.1 0 4.43-2.69 5.41-5.25 5.69.41.36.78 1.06.78 2.14v3.17c0 .31.21.68.8.56A11.5 11.5 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5z"/></svg>
+                  <div className="flex items-center gap-3 pt-4 border-t border-neutral-800/80">
+                    <a 
+                      href={proj.github} 
+                      target="_blank" 
+                      rel="noopener noreferrer" 
+                      className="inline-flex items-center gap-1.5 text-xs font-semibold text-neutral-300 hover:text-white transition-colors"
+                      aria-label={`View code for ${proj.title} on GitHub`}
+                    >
+                      <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.56v-2c-3.2.7-3.87-1.37-3.87-1.37-.52-1.33-1.28-1.68-1.28-1.68-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.7 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.47.11-3.06 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.79 0c2.21-1.49 3.18-1.18 3.18-1.18.63 1.59.23 2.77.11 3.06.74.81 1.19 1.84 1.19 3.1 0 4.43-2.69 5.41-5.25 5.69.41.36.78 1.06.78 2.14v3.17c0 .31.21.68.8.56A11.5 11.5 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5z"/></svg>
                       Code
                     </a>
                     {proj.demo && (
-                      <a href={proj.demo} target="_blank" rel="noopener noreferrer" className="project-link-btn" aria-label={`View live demo of ${proj.title}`}>
+                      <a 
+                        href={proj.demo} 
+                        target="_blank" 
+                        rel="noopener noreferrer" 
+                        className="inline-flex items-center gap-1 text-xs font-semibold text-indigo-400 hover:text-indigo-300 transition-colors"
+                        aria-label={`View live demo of ${proj.title}`}
+                      >
                         Live Demo →
                       </a>
                     )}
                   </div>
                 </div>
               </Card>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
-
-      <style jsx>{`
-        @media (max-width: 1024px) {
-          .bento-grid {
-            grid-template-columns: repeat(2, 1fr) !important;
-          }
-          :global(.bento-span-4) {
-            grid-column: span 1 !important;
-          }
-        }
-        @media (max-width: 768px) {
-          .bento-grid {
-            display: flex !important;
-            flex-direction: column !important;
-          }
-        }
-      `}</style>
     </section>
   );
 }

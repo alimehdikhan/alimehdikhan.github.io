@@ -42,41 +42,20 @@ export default function Home() {
     };
   }, []);
 
-  // viewport IntersectionObserver reveals
-  useEffect(() => {
-    if (prefersReducedMotion) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('active');
-            observer.unobserve(entry.target);
-          }
-        });
-      },
-      { 
-        threshold: 0.08, 
-        rootMargin: '0px 0px -40px 0px' 
-      }
-    );
-
-    const elements = document.querySelectorAll(
-      '.reveal-on-scroll, .reveal-on-scroll-left, .reveal-on-scroll-right, .skill-pill-anim'
-    );
-    elements.forEach((el) => observer.observe(el));
-
-    return () => {
-      elements.forEach((el) => observer.unobserve(el));
-    };
-  }, [prefersReducedMotion]);
+  const pageReveal = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: { duration: 0.6 }
+    }
+  };
 
   return (
     <>
       {/* Scroll Progress Tracker */}
       {!prefersReducedMotion && (
         <motion.div 
-          className="scroll-progress" 
+          className="fixed top-0 left-0 right-0 h-1 bg-indigo-600 origin-left z-50" 
           style={{ scaleX }} 
           aria-hidden="true"
         />
@@ -86,30 +65,35 @@ export default function Home() {
       <Navbar />
 
       {/* Main Sections */}
-      <main style={{ overflowX: 'hidden' }} className="page-load-wrapper">
+      <motion.main 
+        className="overflow-x-hidden bg-[#0A0A0A] min-h-screen text-white font-sans"
+        initial="hidden"
+        animate="visible"
+        variants={pageReveal}
+      >
         <Hero />
         
-        <div className="reveal-on-scroll"><div className="section-divider" /></div>
+        <div className="w-4/5 h-[1px] bg-gradient-to-r from-transparent via-neutral-800 to-transparent mx-auto" />
         <About />
         
-        <div className="reveal-on-scroll"><div className="section-divider" /></div>
+        <div className="w-4/5 h-[1px] bg-gradient-to-r from-transparent via-neutral-800 to-transparent mx-auto" />
         <Skills />
         
-        <div className="reveal-on-scroll"><div className="section-divider" /></div>
+        <div className="w-4/5 h-[1px] bg-gradient-to-r from-transparent via-neutral-800 to-transparent mx-auto" />
         <Timeline />
         
-        <div className="reveal-on-scroll"><div className="section-divider" /></div>
+        <div className="w-4/5 h-[1px] bg-gradient-to-r from-transparent via-neutral-800 to-transparent mx-auto" />
         <Projects />
         
-        <div className="reveal-on-scroll"><div className="section-divider" /></div>
+        <div className="w-4/5 h-[1px] bg-gradient-to-r from-transparent via-neutral-800 to-transparent mx-auto" />
         <OpenSource />
         
-        <div className="reveal-on-scroll"><div className="section-divider" /></div>
+        <div className="w-4/5 h-[1px] bg-gradient-to-r from-transparent via-neutral-800 to-transparent mx-auto" />
         <Blog />
         
-        <div className="reveal-on-scroll"><div className="section-divider" /></div>
+        <div className="w-4/5 h-[1px] bg-gradient-to-r from-transparent via-neutral-800 to-transparent mx-auto" />
         <Contact />
-      </main>
+      </motion.main>
 
       {/* Footer */}
       <Footer />

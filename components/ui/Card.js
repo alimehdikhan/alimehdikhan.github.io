@@ -1,22 +1,21 @@
 'use client';
 
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useState } from 'react';
+import { motion, useMotionValue, useSpring, useTransform, useReducedMotion } from 'framer-motion';
 
 export function Card({ children, className = '', hoverable = false, dynamicGlow = false, style = {}, ...props }) {
   const cardRef = useRef(null);
   const [isHovering, setIsHovering] = useState(false);
-  const [rotation, setRotation] = useState({ x: 0, y: 0 });
-  const [glowPos, setGlowPos] = useState({ x: 0, y: 0 });
-  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+  const prefersReducedMotion = useReducedMotion();
 
-  // Monitor prefers-reduced-motion
-  useEffect(() => {
-    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-    setPrefersReducedMotion(mediaQuery.matches);
-    const handleChange = (e) => setPrefersReducedMotion(e.matches);
-    mediaQuery.addEventListener('change', handleChange);
-    return () => mediaQuery.removeEventListener('change', handleChange);
-  }, []);
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+
+  const springConfig = { damping: 25, stiffness: 200, mass: 0.5 };
+  const rotateX = useSpring(useTransform(mouseY, [-0.5, 0.5], [6, -6]), springConfig);
+  const rotateY = useSpring(useTransform(mouseX, [-0.5, 0.5], [-6, 6]), springConfig);
+
+  const [glowPos, setGlowPos] = useState({ x: 0, y: 0 });
 
   const handleMouseMove = (e) => {
     if (!cardRef.current) return;
@@ -36,64 +35,62 @@ export function Card({ children, className = '', hoverable = false, dynamicGlow 
       const height = rect.height;
       const xPct = (e.clientX - rect.left) / width - 0.5;
       const yPct = (e.clientY - rect.top) / height - 0.5;
-      
-      // Calculate rotation angles (max 5 degrees)
-      const rX = -yPct * 6;
-      const rY = xPct * 6;
-      setRotation({ x: rX, y: rY });
+      mouseX.set(xPct);
+      mouseY.set(yPct);
     }
   };
 
   const handleMouseLeave = () => {
     setIsHovering(false);
-    setRotation({ x: 0, y: 0 });
+    mouseX.set(0);
+    mouseY.set(0);
   };
 
-  const transformStyleStr = hoverable && !prefersReducedMotion 
-    ? `rotateX(${rotation.x}deg) rotateY(${rotation.y}deg) scale3d(1.025, 1.025, 1.025)` 
-    : 'none';
-
   return (
-    <div 
+    <motion.div 
       ref={cardRef}
-      className={`ds-card ${hoverable ? 'ds-card-hover' : ''} ${className}`} 
+      className={`relative overflow-hidden rounded-lg border border-neutral-800/80 bg-neutral-900/40 p-6 backdrop-blur-md transition-colors duration-300 ${hoverable ? 'hover:border-neutral-700/80' : ''} ${className}`} 
       onMouseMove={handleMouseMove}
       onMouseEnter={() => setIsHovering(true)}
       onMouseLeave={handleMouseLeave}
       style={{
         perspective: '1200px',
-        transform: transformStyleStr,
-        transition: isHovering ? 'transform 0.05s linear, border-color 0.2s ease, box-shadow 0.2s ease' : 'transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease, box-shadow 0.2s ease',
+        rotateX: hoverable && !prefersReducedMotion ? rotateX : 0,
+        rotateY: hoverable && !prefersReducedMotion ? rotateY : 0,
         transformStyle: 'preserve-3d',
         ...style
       }}
       {...props}
     >
-      {!dynamicGlow && hoverable && <div className="ds-card-glow"></div>}
-
       {dynamicGlow && (
         <div
-          className="ds-card-dynamic-glow"
+          className="pointer-events-none absolute inset-0 z-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
           style={{
             opacity: isHovering ? 1 : 0,
-            background: `radial-gradient(600px circle at ${glowPos.x}px ${glowPos.y}px, rgba(255,255,255,0.06), transparent 40%)`
+            background: `radial-gradient(400px circle at ${glowPos.x}px ${glowPos.y}px, rgba(99, 102, 241, 0.08), transparent 80%)`
           }}
-        ></div>
+        />
       )}
 
       {dynamicGlow && (
         <div
-          className="ds-card-border-glow"
+          className="pointer-events-none absolute inset-0 z-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
           style={{
             opacity: isHovering ? 1 : 0,
-            background: `radial-gradient(400px circle at ${glowPos.x}px ${glowPos.y}px, rgba(255,255,255,0.3), transparent 40%)`
+            background: `radial-gradient(250px circle at ${glowPos.x}px ${glowPos.y}px, rgba(255, 255, 255, 0.15), transparent 80%)`
           }}
-        ></div>
+        />
       )}
 
-      <div className="ds-card-content" style={{ transform: hoverable && !prefersReducedMotion ? 'translateZ(20px)' : 'none', transformStyle: 'preserve-3d' }}>
+      <div 
+        className="relative z-10 h-full w-full" 
+        style={{ 
+          transform: hoverable && !prefersReducedMotion ? 'translateZ(15px)' : 'none', 
+          transformStyle: 'preserve-3d' 
+        }}
+      >
         {children}
       </div>
-    </div>
+    </motion.div>
   );
 }

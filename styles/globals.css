@@ -1,6 +1,11 @@
-/* ==========================================================================
-   AWARD-WINNING PREMIUM DESIGN SYSTEM v3 (Linear/Vercel/Apple)
-   ========================================================================== */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap');
+
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+}
 
 :root {
   /* Colors */

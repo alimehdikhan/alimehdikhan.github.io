@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState, useRef } from 'react';
+import { motion, useReducedMotion } from 'framer-motion';
 import { MagneticButton } from './ui/MagneticButton';
 import { smoothScrollTo } from './Navbar';
 
@@ -8,23 +9,14 @@ export function Hero() {
   const canvasRef = useRef(null);
   const orb1Ref = useRef(null);
   const orb2Ref = useRef(null);
+  const prefersReducedMotion = useReducedMotion();
 
   // Typewriter states
-  const roles = ['Software Engineer', 'AI/ML Developer', 'Machine Learning Enthusiast'];
+  const roles = ['Software Engineer', 'AI/ML Developer', 'Web Developer'];
   const [roleIndex, setRoleIndex] = useState(0);
   const [currentText, setCurrentText] = useState('');
   const [isDeleting, setIsDeleting] = useState(false);
   const [typingSpeed, setTypingSpeed] = useState(100);
-  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
-
-  // Track prefers reduced motion
-  useEffect(() => {
-    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-    setPrefersReducedMotion(mediaQuery.matches);
-    const handleChange = (e) => setPrefersReducedMotion(e.matches);
-    mediaQuery.addEventListener('change', handleChange);
-    return () => mediaQuery.removeEventListener('change', handleChange);
-  }, []);
 
   // Subtle Scroll Parallax on Background (direct DOM updates to preserve 60fps)
   useEffect(() => {
@@ -74,7 +66,7 @@ export function Hero() {
 
     const particles = [];
     const codeSymbols = ['{ }', '< >', '/ /', ';', '=', '( )', '[ ]', '0 1'];
-    const particleCount = Math.min(Math.max(Math.floor((window.innerWidth * window.innerHeight) / 45000), 10), 30);
+    const particleCount = Math.min(Math.max(Math.floor((window.innerWidth * window.innerHeight) / 45000), 10), 35);
 
     for (let i = 0; i < particleCount; i++) {
       particles.push({
@@ -91,7 +83,6 @@ export function Hero() {
     const draw = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       const isLightTheme = document.documentElement.getAttribute('data-theme') === 'light';
-      ctx.fillStyle = isLightTheme ? 'rgba(0, 0, 0, 0.4)' : 'rgba(255, 255, 255, 0.3)';
 
       particles.forEach((p) => {
         ctx.font = `${p.size}px "JetBrains Mono", monospace`;
@@ -166,169 +157,134 @@ export function Hero() {
     }
   };
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+        delayChildren: 0.1,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { y: 20, opacity: 0, filter: prefersReducedMotion ? 'none' : 'blur(4px)' },
+    visible: {
+      y: 0,
+      opacity: 1,
+      filter: 'blur(0px)',
+      transition: {
+        type: 'spring',
+        stiffness: 100,
+        damping: 15,
+      },
+    },
+  };
+
   return (
-    <section id="hero" style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', position: 'relative', overflow: 'hidden' }}>
-      <canvas id="particle-canvas" ref={canvasRef} aria-hidden="true" />
+    <section id="hero" className="relative flex min-h-screen items-center overflow-hidden bg-[#0A0A0A] py-20">
+      <canvas id="particle-canvas" ref={canvasRef} className="absolute inset-0 pointer-events-none z-0" aria-hidden="true" />
       
-      {/* Ambient background glows with refs for parallax */}
-      <div className="ambient-orb orb-primary" ref={orb1Ref} aria-hidden="true" />
-      <div className="ambient-orb orb-secondary" ref={orb2Ref} aria-hidden="true" />
+      {/* Ambient background glows */}
+      <div className="absolute top-[20%] left-[10%] w-[350px] h-[350px] rounded-full bg-indigo-500/10 blur-[100px] pointer-events-none z-0" ref={orb1Ref} aria-hidden="true" />
+      <div className="absolute bottom-[20%] right-[10%] w-[350px] h-[350px] rounded-full bg-purple-500/10 blur-[100px] pointer-events-none z-0" ref={orb2Ref} aria-hidden="true" />
 
-      <div className="container">
-        <div 
-          className="hero-grid"
-          style={{
-            display: 'grid',
-            gridTemplateColumns: '1.2fr 0.8fr',
-            gap: '2.5rem',
-            alignItems: 'center',
-            width: '100%',
-            textAlign: 'left'
-          }}
+      <div className="container mx-auto px-6 relative z-10 w-full">
+        <motion.div 
+          className="grid grid-cols-1 md:grid-cols-12 gap-12 items-center text-left"
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
         >
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-            <div className="hero-status-wrapper load-animate-1">
-              <div className="hero-badge">
-                <span className="status-dot" />
-                <span>Actively seeking internships and full-time opportunities</span>
+          <div className="md:col-span-7 flex flex-col gap-6">
+            <motion.div className="flex" variants={itemVariants}>
+              <div className="inline-flex items-center gap-2 px-3 py-1 text-xs font-semibold rounded-full border border-emerald-500/30 bg-emerald-500/5 text-emerald-400">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                <span>Actively seeking opportunities</span>
               </div>
-            </div>
+            </motion.div>
 
-            <h1 
-              className="load-animate-2"
-              style={{ fontSize: 'clamp(2.5rem, 6vw, 4.5rem)', fontWeight: 900, lineHeight: 1.1, letterSpacing: '-0.04em' }}
+            <motion.h1 
+              className="text-4xl sm:text-6xl font-extrabold tracking-tight text-white leading-tight"
+              variants={itemVariants}
             >
-              Hi, I'm <span className="text-gradient-animated">Ali Mehdi Khan</span>
-            </h1>
+              Hi, I'm <span className="bg-gradient-to-r from-indigo-400 via-purple-400 to-emerald-400 bg-clip-text text-transparent">Ali Mehdi Khan</span>
+            </motion.h1>
 
-            <div className="hero-typing-subtitle load-animate-3">
+            <motion.div className="text-xl sm:text-2xl text-neutral-300 font-medium flex items-center h-8" variants={itemVariants}>
               <span>I'm a&nbsp;</span>
-              <span style={{ color: 'var(--text-primary)', fontWeight: 700 }}>{currentText}</span>
-              <span className="typing-cursor" aria-hidden="true" />
-            </div>
+              <span className="text-white font-bold border-r-2 border-white pr-1 animate-caret">{currentText}</span>
+            </motion.div>
 
-            <p 
-              className="load-animate-4"
-              style={{ fontSize: 'clamp(1rem, 2vw, 1.15rem)', color: 'var(--text-secondary)', lineHeight: 1.75, maxWidth: '600px' }}
+            <motion.p 
+              className="text-lg text-neutral-400 leading-relaxed max-w-2xl"
+              variants={itemVariants}
             >
-              Computer Science undergraduate with internship experience, certifications, project experience, and practical exposure to Python, APIs, and software development.
-            </p>
+              Computer Science undergraduate (2026) skilled in Python, Java, Machine Learning, and AI application development. Certified in Google Cloud and Deloitte Job Simulation.
+            </motion.p>
 
-            <div className="hero-trust-indicators load-animate-5">
-              <span>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            <motion.div className="flex flex-wrap gap-4 text-sm text-neutral-400" variants={itemVariants}>
+              <span className="flex items-center gap-1.5">
+                <svg className="w-4 h-4 text-indigo-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                 Google Cloud Certified
               </span>
-              <span>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              <span className="flex items-center gap-1.5">
+                <svg className="w-4 h-4 text-indigo-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                 B.Tech CSE (2026)
               </span>
-            </div>
+            </motion.div>
 
-            <div className="hero-cta-container load-animate-6" style={{ justifyContent: 'flex-start', marginTop: '0.5rem' }}>
+            <motion.div className="flex flex-wrap gap-4 pt-2" variants={itemVariants}>
               <MagneticButton variant="primary" as="a" href="#projects" onClick={(e) => handleScrollToSection(e, 'projects')} aria-label="View Projects">
                 View Projects
               </MagneticButton>
               <MagneticButton variant="secondary" as="a" href="#contact" onClick={(e) => handleScrollToSection(e, 'contact')} aria-label="Contact Me">
                 Contact Me
               </MagneticButton>
-            </div>
+            </motion.div>
 
-            <div className="hero-social-row">
-              <a href="https://github.com/alimehdikhan" target="_blank" rel="noopener noreferrer" className="hero-social-link load-animate-7" style={{ animationDelay: '0.48s' }} aria-label="GitHub">
-                <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.56v-2c-3.2.7-3.87-1.37-3.87-1.37-.52-1.33-1.28-1.68-1.28-1.68-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.7 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.47.11-3.06 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.79 0c2.21-1.49 3.18-1.18 3.18-1.18.63 1.59.23 2.77.11 3.06.74.81 1.19 1.84 1.19 3.1 0 4.43-2.69 5.41-5.25 5.69.41.36.78 1.06.78 2.14v3.17c0 .31.21.68.8.56A11.5 11.5 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5z"/></svg>
-              </a>
-              <a href="https://linkedin.com/in/ali-mehdi-khan-b4062b2a3" target="_blank" rel="noopener noreferrer" className="hero-social-link load-animate-7" style={{ animationDelay: '0.54s' }} aria-label="LinkedIn">
-                <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/></svg>
-              </a>
-              <a href="mailto:ali973mehdi@gmail.com" className="hero-social-link load-animate-7" style={{ animationDelay: '0.60s' }} aria-label="Email">
-                <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-              </a>
-            </div>
+            <motion.div className="flex gap-4 pt-4" variants={itemVariants}>
+              {[
+                { href: 'https://github.com/alimehdikhan', icon: 'M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.56v-2c-3.2.7-3.87-1.37-3.87-1.37-.52-1.33-1.28-1.68-1.28-1.68-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.7 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.47.11-3.06 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.79 0c2.21-1.49 3.18-1.18 3.18-1.18.63 1.59.23 2.77.11 3.06.74.81 1.19 1.84 1.19 3.1 0 4.43-2.69 5.41-5.25 5.69.41.36.78 1.06.78 2.14v3.17c0 .31.21.68.8.56A11.5 11.5 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5z', label: 'GitHub' },
+                { href: 'https://linkedin.com/in/ali-mehdi-khan-b4062b2a3', icon: 'M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z', label: 'LinkedIn' },
+                { href: 'mailto:ali973mehdi@gmail.com', icon: 'M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z', label: 'Email', stroke: true },
+              ].map((social, sIdx) => (
+                <motion.a
+                  key={social.label}
+                  href={social.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-center w-10 h-10 rounded-lg border border-neutral-800 bg-neutral-900/50 text-neutral-400 hover:text-white hover:border-neutral-700 transition-colors"
+                  aria-label={social.label}
+                  whileHover={prefersReducedMotion ? {} : { scale: 1.08, y: -2 }}
+                  whileTap={prefersReducedMotion ? {} : { scale: 0.95 }}
+                >
+                  <svg width="18" height="18" fill={social.stroke ? 'none' : 'currentColor'} stroke={social.stroke ? 'currentColor' : 'none'} strokeWidth={social.stroke ? '2' : '0'} viewBox="0 0 24 24">
+                    <path d={social.icon} />
+                  </svg>
+                </motion.a>
+              ))}
+            </motion.div>
           </div>
 
-          <div 
-            className="hero-avatar-wrapper load-animate-8"
-            style={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center'
-            }}
-          >
-            <div 
-              style={{
-                width: 'clamp(200px, 25vw, 300px)',
-                aspectRatio: 1,
-                borderRadius: 'var(--radius-lg)',
-                overflow: 'hidden',
-                border: '1px solid var(--card-border)',
-                background: 'var(--card-bg)',
-                backdropFilter: 'blur(20px)',
-                boxShadow: 'var(--shadow-apple)',
-                position: 'relative'
-              }}
+          <div className="md:col-span-5 flex justify-center md:justify-end">
+            <motion.div 
+              className="relative w-[240px] sm:w-[280px] aspect-square rounded-lg overflow-hidden border border-neutral-800 bg-neutral-900/50 backdrop-blur-md shadow-2xl"
+              variants={itemVariants}
+              whileHover={prefersReducedMotion ? {} : { scale: 1.03, rotate: 1 }}
+              transition={{ type: 'spring', stiffness: 300, damping: 20 }}
             >
               <img 
                 src="/assets/images/profile.png" 
                 alt="Ali Mehdi Khan" 
-                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                className="w-full h-full object-cover"
                 loading="eager"
               />
-            </div>
+            </motion.div>
           </div>
-        </div>
+        </motion.div>
       </div>
-
-      <style jsx>{`
-        /* Pure CSS keyframe animations for staggered fade/slide-up on load */
-        .load-animate-1 { animation: slideUpFade 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; }
-        .load-animate-2 { animation: slideUpFade 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.08s forwards; opacity: 0; }
-        .load-animate-3 { animation: slideUpFade 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.16s forwards; opacity: 0; }
-        .load-animate-4 { animation: slideUpFade 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.24s forwards; opacity: 0; }
-        .load-animate-5 { animation: slideUpFade 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.32s forwards; opacity: 0; }
-        .load-animate-6 { animation: slideUpFade 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.40s forwards; opacity: 0; }
-        .load-animate-7 { animation: slideUpFade 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.48s forwards; opacity: 0; }
-        .load-animate-8 { animation: slideUpFade 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.24s forwards; opacity: 0; }
-
-        @keyframes slideUpFade {
-          0% {
-            opacity: 0;
-            transform: translateY(20px);
-          }
-          100% {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-          .load-animate-1, .load-animate-2, .load-animate-3, .load-animate-4, .load-animate-5, .load-animate-6, .load-animate-7, .load-animate-8 {
-            opacity: 1 !important;
-            transform: none !important;
-            animation: none !important;
-          }
-        }
-
-        @media (max-width: 768px) {
-          .hero-grid {
-            grid-template-columns: 1fr !important;
-            text-align: center !important;
-            gap: 2rem !important;
-          }
-          .hero-grid > div {
-            align-items: center !important;
-          }
-          .hero-cta-container {
-            justify-content: center !important;
-          }
-          .hero-social-row {
-            justify-content: center !important;
-          }
-          .hero-avatar-wrapper {
-            order: -1;
-          }
-        }
-      `}</style>
     </section>
   );
 }

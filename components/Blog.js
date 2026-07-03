@@ -1,8 +1,11 @@
 'use client';
 
+import { motion, useReducedMotion } from 'framer-motion';
 import { Card } from './ui/Card';
 
 export function Blog() {
+  const prefersReducedMotion = useReducedMotion();
+
   const articles = [
     {
       title: 'Building a Pronunciation Coach with OpenAI Whisper',
@@ -30,52 +33,82 @@ export function Blog() {
     }
   ];
 
+  const revealVariants = {
+    hidden: { y: prefersReducedMotion ? 0 : 25, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: {
+        type: 'spring',
+        stiffness: 90,
+        damping: 15,
+        duration: 0.6
+      }
+    }
+  };
+
   return (
-    <section id="blog" className="ds-section">
-      <div className="container reveal-on-scroll">
-        <div style={{ textAlign: 'center', marginBottom: '3.5rem' }}>
-          <span className="section-eyebrow" style={{ color: '#6366f1', letterSpacing: '0.15em', textTransform: 'uppercase', fontSize: '0.8rem', fontWeight: 600, display: 'inline-block', marginBottom: '0.75rem' }}>
+    <section id="blog" className="relative py-24 bg-[#0A0A0A] border-t border-neutral-900">
+      <div className="container mx-auto px-6 max-w-6xl">
+        <motion.div 
+          className="text-center mb-16"
+          initial={{ y: prefersReducedMotion ? 0 : 20, opacity: 0 }}
+          whileInView={{ y: 0, opacity: 1 }}
+          viewport={{ once: true, margin: '-100px' }}
+          transition={{ duration: 0.6 }}
+        >
+          <span className="text-xs font-semibold text-indigo-400 uppercase tracking-widest mb-2 inline-block">
             Writing
           </span>
-          <h2 className="ds-section-title text-gradient" style={{ marginBottom: '1rem' }}>
+          <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
             Latest Articles & Notes
           </h2>
-          <div className="title-underline" style={{ background: 'linear-gradient(90deg, #6366f1, #a855f7)' }} />
-        </div>
+        </motion.div>
 
-        <div className="blog-cards-grid">
+        <motion.div 
+          className="grid grid-cols-1 md:grid-cols-3 gap-6"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: '-100px' }}
+          variants={{
+            visible: { transition: { staggerChildren: 0.08 } }
+          }}
+        >
           {articles.map((art, idx) => (
-            <div 
-              key={idx} 
-              className={`reveal-on-scroll stagger-${idx + 1}`}
+            <motion.div 
+              key={idx}
+              className="flex h-full"
+              variants={revealVariants}
             >
               <Card 
                 hoverable 
                 onClick={() => window.open(art.link, '_blank')}
-                style={{ height: '100%', display: 'flex', flexDirection: 'column', cursor: 'pointer' }}
+                className="w-full flex flex-col justify-between cursor-pointer p-6"
               >
-                <div className="blog-tag-meta">
-                  <span className="blog-badge-tag">{art.tag}</span>
-                  <span>{art.date}</span>
-                  <span>·</span>
-                  <span>{art.readTime}</span>
+                <div>
+                  <div className="flex flex-wrap items-center gap-2 text-xs text-neutral-400 mb-4 font-semibold uppercase tracking-wider">
+                    <span className="px-2 py-0.5 rounded bg-neutral-950 border border-neutral-800 text-indigo-400">{art.tag}</span>
+                    <span>{art.date}</span>
+                    <span>·</span>
+                    <span>{art.readTime}</span>
+                  </div>
+                  
+                  <h3 className="text-lg font-bold text-white mb-2 leading-snug hover:text-indigo-400 transition-colors">
+                    {art.title}
+                  </h3>
+                  
+                  <p className="text-neutral-400 text-xs sm:text-sm leading-relaxed mb-6">
+                    {art.excerpt}
+                  </p>
                 </div>
-                
-                <h3 className="project-title" style={{ fontSize: '1.15rem', marginBottom: '0.5rem', lineHeight: 1.4 }}>
-                  {art.title}
-                </h3>
-                
-                <p style={{ color: 'var(--text-secondary)', fontSize: '0.85rem', lineHeight: 1.6, marginBottom: '1.25rem', flex: 1 }}>
-                  {art.excerpt}
-                </p>
 
-                <span style={{ fontSize: '0.82rem', fontWeight: 600, color: '#6366f1', display: 'inline-flex', alignItems: 'center', gap: '0.25rem' }}>
+                <span className="text-xs sm:text-sm font-semibold text-indigo-400 inline-flex items-center gap-1">
                   Read Article →
                 </span>
               </Card>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );

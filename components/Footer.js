@@ -1,60 +1,37 @@
 'use client';
 
+import { smoothScrollTo } from './Navbar';
+
 export function Footer() {
   const handleScrollToTop = (e) => {
     e.preventDefault();
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth'
-    });
+    smoothScrollTo(0, 850);
   };
 
   return (
-    <footer style={{ borderTop: '1px solid var(--card-border)', padding: '3rem 0', background: 'rgba(0,0,0,0.3)', position: 'relative', zIndex: 10 }}>
-      <div className="container footer-flex" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1.5rem' }}>
+    <footer className="relative py-12 bg-[#0A0A0A] border-t border-neutral-900 z-10">
+      <div className="container mx-auto px-6 max-w-6xl flex flex-col sm:flex-row justify-between items-center gap-6">
         <div>
-          <p style={{ fontSize: '0.875rem', color: 'var(--text-tertiary)' }}>
+          <p className="text-xs sm:text-sm text-neutral-500">
             © 2026 Ali Mehdi Khan. Built with ❤️ using Next.js & Framer Motion.
           </p>
         </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
-          <a href="https://github.com/alimehdikhan" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--text-tertiary)', fontSize: '0.85rem' }} className="footer-link" aria-label="GitHub">
+        <div className="flex flex-wrap items-center gap-6 text-xs sm:text-sm">
+          <a href="https://github.com/alimehdikhan" target="_blank" rel="noopener noreferrer" className="text-neutral-500 hover:text-white transition-colors" aria-label="GitHub">
             GitHub
           </a>
-          <a href="https://linkedin.com/in/ali-mehdi-khan-b4062b2a3" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--text-tertiary)', fontSize: '0.85rem' }} className="footer-link" aria-label="LinkedIn">
+          <a href="https://linkedin.com/in/ali-mehdi-khan-b4062b2a3" target="_blank" rel="noopener noreferrer" className="text-neutral-500 hover:text-white transition-colors" aria-label="LinkedIn">
             LinkedIn
           </a>
-          <a href="mailto:ali973mehdi@gmail.com" style={{ color: 'var(--text-tertiary)', fontSize: '0.85rem' }} className="footer-link" aria-label="Email">
+          <a href="mailto:ali973mehdi@gmail.com" className="text-neutral-500 hover:text-white transition-colors" aria-label="Email">
             Email
           </a>
-          <a href="#hero" onClick={handleScrollToTop} style={{ color: '#6366f1', fontSize: '0.85rem', fontWeight: 600 }} aria-label="Scroll to top">
+          <a href="#hero" onClick={handleScrollToTop} className="text-indigo-400 font-bold hover:text-indigo-300 transition-colors" aria-label="Scroll to top">
             Back to Top ↑
           </a>
         </div>
       </div>
-
-      <style jsx>{`
-        .footer-flex {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          flex-wrap: wrap;
-          gap: 1.5rem;
-        }
-        .footer-link {
-          transition: color var(--transition-fast);
-        }
-        .footer-link:hover {
-          color: var(--text-primary) !important;
-        }
-        @media (max-width: 640px) {
-          .footer-flex {
-            flex-direction: column;
-            text-align: center;
-          }
-        }
-      `}</style>
     </footer>
   );
 }
