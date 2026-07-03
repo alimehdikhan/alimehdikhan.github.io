@@ -16,5 +16,9 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "tailwindcss": "^4.3.2"
+  },
+  "optionalDependencies": {
+    "@tailwindcss/oxide-linux-x64-gnu": "^4.3.2",
+    "@tailwindcss/oxide-win32-x64-msvc": "^4.3.2"
   }
 }
