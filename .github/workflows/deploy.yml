@@ -46,11 +46,14 @@ jobs:
     needs: build
     steps:
       - name: Wait before deploy (avoids Pages backend race condition)
-        run: sleep 15
-      - name: Deploy to GitHub Pages
+        run: sleep 30
+
+      - name: Deploy to GitHub Pages (attempt 1)
         id: deployment
+        continue-on-error: true
         uses: actions/deploy-pages@v4
-        with:
-          timeout: 600000
-          error_count: 10
-          reporting_interval: 5000
+
+      - name: Deploy to GitHub Pages (attempt 2)
+        if: steps.deployment.outcome == 'failure'
+        id: deployment_retry
+        uses: actions/deploy-pages@v4
