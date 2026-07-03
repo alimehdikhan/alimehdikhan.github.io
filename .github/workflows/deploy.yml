@@ -23,14 +23,14 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: "18"
+          node-version: "24"
           cache: npm
       - name: Setup Pages
         uses: actions/configure-pages@v5
-      - name: Install dependencies
+      - name: Clean install dependencies
         run: |
-          rm -f package-lock.json
-          npm install
+          rm -rf node_modules
+          npm ci
       - name: Build with Next.js
         run: npm run build
       - name: Upload artifact
