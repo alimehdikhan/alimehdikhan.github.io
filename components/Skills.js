@@ -119,7 +119,7 @@ export function Skills() {
         >
           {categories.map((cat, i) => (
             <motion.div key={i} variants={cardVariants} className="h-full">
-              <Card className="h-full flex flex-col justify-start">
+              <Card className="p-6 h-full flex flex-col justify-start">
                 <div className="flex items-center gap-3 mb-6">
                   <div className={`p-2.5 rounded-lg border ${cat.colorClass}`}>
                     {cat.icon}
@@ -138,7 +138,7 @@ export function Skills() {
                   {cat.skills.map((skill, idx) => (
                     <motion.span 
                       key={idx} 
-                      className="px-3.5 py-1.5 text-xs font-semibold rounded-lg bg-neutral-900 border border-neutral-800 text-neutral-300 transition-all hover:text-white hover:border-neutral-700 select-none cursor-default"
+                      className="px-3.5 py-1.5 text-xs font-semibold rounded-lg bg-neutral-900 border border-neutral-800 text-neutral-300 transition-colors hover:text-white select-none cursor-default"
                       variants={pillVariants}
                       whileHover={prefersReducedMotion ? {} : { 
                         scale: 1.05, 

@@ -72,11 +72,11 @@ export function Navbar() {
       if (navEl) {
         // Scrolled glass background transition
         if (currentScrollY > 40) {
-          navEl.classList.add('bg-neutral-900/80', 'backdrop-blur-lg', 'border-neutral-800/80', 'shadow-2xl');
-          navEl.classList.remove('bg-neutral-950/20', 'border-transparent');
+          navEl.classList.add('bg-neutral-900/80', 'border-neutral-800/80', 'shadow-2xl');
+          navEl.classList.remove('bg-neutral-900/40', 'border-neutral-800/40');
         } else {
-          navEl.classList.remove('bg-neutral-900/80', 'backdrop-blur-lg', 'border-neutral-800/80', 'shadow-2xl');
-          navEl.classList.add('bg-neutral-950/20', 'border-transparent');
+          navEl.classList.remove('bg-neutral-900/80', 'border-neutral-800/80', 'shadow-2xl');
+          navEl.classList.add('bg-neutral-900/40', 'border-neutral-800/40');
         }
 
         // Scroll direction tracker (past a safety margin)
@@ -116,7 +116,7 @@ export function Navbar() {
   return (
     <nav 
       ref={navRef}
-      className="fixed top-4 left-1/2 -translate-x-1/2 flex items-center justify-between w-max max-w-[95vw] px-4 py-2 border border-transparent bg-neutral-950/20 rounded-full z-50 transition-all duration-300 transform"
+      className="fixed top-4 left-1/2 -translate-x-1/2 flex items-center justify-between w-full max-w-[95vw] md:max-w-4xl px-6 py-2 border border-neutral-800/40 bg-neutral-900/40 backdrop-blur-md rounded-full z-50 transition-all duration-300 transform"
       style={{ transform: 'translate3d(-50%, 0, 0)' }}
       role="navigation" 
       aria-label="Main Navigation"
@@ -153,7 +153,7 @@ export function Navbar() {
               key={link.name}
               href={link.href}
               onClick={(e) => handleLinkClick(e, link.href)}
-              className={`relative px-3 py-1.5 text-xs font-semibold rounded-full select-none transition-colors z-10 ${isActive ? 'text-white' : 'text-neutral-400 hover:text-neutral-200'} ${isOpen ? 'block' : 'hidden md:block'}`}
+              className={`relative px-3 py-1.5 text-xs font-semibold rounded-full select-none transition-colors z-10 ${isActive ? 'text-white' : 'text-neutral-400 hover:text-neutral-200'} hidden md:block`}
               role="menuitem"
             >
               {isActive && !prefersReducedMotion && (

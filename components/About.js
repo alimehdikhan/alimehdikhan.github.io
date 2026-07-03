@@ -60,11 +60,11 @@ export function About() {
           }}
         >
           {stats.map((stat, i) => (
-            <motion.div key={i} variants={revealVariants}>
+            <motion.div key={i} variants={revealVariants} className="h-full w-full">
               <Card 
                 hoverable 
                 dynamicGlow
-                className="p-6 text-center flex flex-col justify-center h-full"
+                className="p-6 text-center flex flex-col justify-center h-full w-full"
               >
                 <div className="text-xs font-semibold uppercase tracking-wider text-neutral-400 mb-2">
                   {stat.label}
@@ -86,7 +86,7 @@ export function About() {
             viewport={{ once: true, margin: '-100px' }}
             variants={revealVariants}
           >
-            <Card className="h-full flex flex-col justify-between">
+            <Card className="p-6 h-full flex flex-col justify-between">
               <div>
                 <h3 className="text-lg font-bold text-indigo-400 mb-4">
                   Summary
@@ -127,7 +127,7 @@ export function About() {
             viewport={{ once: true, margin: '-100px' }}
             variants={revealVariants}
           >
-            <Card className="h-full flex flex-col justify-between">
+            <Card className="p-6 h-full flex flex-col justify-between">
               <div>
                 <h3 className="text-lg font-bold text-purple-400 mb-6">Focus Areas</h3>
                 

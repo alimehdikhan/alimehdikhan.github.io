@@ -49,17 +49,11 @@ export function Card({ children, className = '', hoverable = false, dynamicGlow 
   return (
     <motion.div 
       ref={cardRef}
-      className={`relative overflow-hidden rounded-lg border border-neutral-800/80 bg-neutral-900/40 p-6 backdrop-blur-md transition-colors duration-300 ${hoverable ? 'hover:border-neutral-700/80' : ''} ${className}`} 
+      className={`relative overflow-hidden rounded-lg border border-neutral-800/80 bg-neutral-900/40 backdrop-blur-md transition-colors duration-300 ${hoverable ? 'hover:border-neutral-700/80' : ''} ${className}`} 
       onMouseMove={handleMouseMove}
       onMouseEnter={() => setIsHovering(true)}
       onMouseLeave={handleMouseLeave}
-      style={{
-        perspective: '1200px',
-        rotateX: hoverable && !prefersReducedMotion ? rotateX : 0,
-        rotateY: hoverable && !prefersReducedMotion ? rotateY : 0,
-        transformStyle: 'preserve-3d',
-        ...style
-      }}
+      style={style}
       {...props}
     >
       {dynamicGlow && (
@@ -82,15 +76,18 @@ export function Card({ children, className = '', hoverable = false, dynamicGlow 
         />
       )}
 
-      <div 
+      <motion.div 
         className="relative z-10 h-full w-full" 
         style={{ 
-          transform: hoverable && !prefersReducedMotion ? 'translateZ(15px)' : 'none', 
-          transformStyle: 'preserve-3d' 
+          perspective: '1200px',
+          rotateX: hoverable && !prefersReducedMotion ? rotateX : 0,
+          rotateY: hoverable && !prefersReducedMotion ? rotateY : 0,
+          transformStyle: 'preserve-3d',
+          transform: hoverable && !prefersReducedMotion ? 'translateZ(15px)' : 'none'
         }}
       >
         {children}
-      </div>
+      </motion.div>
     </motion.div>
   );
 }

@@ -97,7 +97,7 @@ export function Timeline() {
 
                 {/* Content Card Wrapper */}
                 <motion.div 
-                  className={`w-full md:w-[90%] ${isLeft ? 'md:mr-auto md:col-start-1' : 'md:ml-auto md:col-start-2'}`}
+                  className={`w-full md:w-[90%] md:col-span-1 ${isLeft ? 'md:mr-auto md:col-start-1' : 'md:ml-auto md:col-start-2'}`}
                   custom={exp.align}
                   initial="hidden"
                   whileInView="visible"
