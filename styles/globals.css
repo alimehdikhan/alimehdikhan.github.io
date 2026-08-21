@@ -1497,12 +1497,23 @@ html.is-loaded .cue {
   filter: saturate(1);
   opacity: 1;
 }
-/* the GitHub mark is black — flip it on the dark theme */
-[data-theme="dark"] .skill-logo img.inv-dark {
+/* dark marks (GitHub, Next.js, LangChain) flip to white on the dark theme —
+   generic rule so any brand <img class="inv-dark"> behaves the same */
+[data-theme="dark"] img.inv-dark {
   filter: invert(1);
 }
 [data-theme="dark"] .skill-grid > span:hover .skill-logo img.inv-dark {
   filter: invert(1);
+}
+.brand-logo {
+  width: 17px;
+  height: 17px;
+  object-fit: contain;
+  flex: none;
+}
+.brand-logo.sm {
+  width: 13px;
+  height: 13px;
 }
 
 /* ─────────── certifications ─────────── */

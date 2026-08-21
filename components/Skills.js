@@ -26,7 +26,9 @@ const LOGOS = {
   Keras: 'keras/keras-original.svg',
   'Hugging Face': { url: 'https://cdn.simpleicons.org/huggingface' },
   LangChain: { url: 'https://cdn.simpleicons.org/langchain', invDark: true },
+  LangGraph: { url: 'https://cdn.simpleicons.org/langgraph', invDark: true },
   Hono: { url: 'https://cdn.simpleicons.org/hono' },
+  'OpenAI Whisper': { url: 'https://cdn.jsdelivr.net/npm/simple-icons@13/icons/openai.svg', invDark: true },
 };
 
 function SkillLogo({ name }) {
