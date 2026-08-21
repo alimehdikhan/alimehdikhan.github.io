@@ -43,8 +43,8 @@ export function About() {
       <div className="hair hair-4 stats bleed rev">
         {stats.map((stat) => (
           <div key={stat.label}>
-            <StatValue value={stat.value} />
             <div className="l">{stat.label}</div>
+            <StatValue value={stat.value} />
           </div>
         ))}
       </div>

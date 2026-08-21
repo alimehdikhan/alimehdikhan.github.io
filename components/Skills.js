@@ -94,15 +94,8 @@ export function Skills() {
       <div className="hair hair-2 hair-hover rev">
         {categories.map((cat, ci) => (
           <div key={cat.title} className="cat">
-            <span className="cat-ghost" aria-hidden="true">
-              {String(ci + 1).padStart(2, '0')}
-            </span>
-
             <div className="cat-top">
               <span className="eyebrow">{cat.eyebrow}</span>
-              <span className="cat-count" aria-hidden="true">
-                <b>{String(cat.skills.length).padStart(2, '0')}</b> ／
-              </span>
             </div>
 
             <div className="cat-id">
