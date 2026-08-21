@@ -5,7 +5,7 @@ import { RESUME } from '../data/resume';
 export const metadata = {
   metadataBase: new URL('https://alimehdikhan.github.io'),
   title: {
-    default: 'Ali Mehdi Khan | CS Graduate (2026) | AI/ML & Python Developer',
+    default: 'Ali Mehdi Khan | AI/ML & Python Developer',
     template: '%s | Ali Mehdi Khan',
   },
   description: 'Portfolio of Ali Mehdi Khan — final-year B.Tech CS student building LLM apps, NLP pipelines, and FastAPI backends in Python. Junior developer at ImaPro. Google Cloud and Deloitte certified.',
@@ -61,7 +61,7 @@ export const metadata = {
     type: 'profile',
     locale: 'en_US',
     url: 'https://alimehdikhan.github.io/',
-    title: 'Ali Mehdi Khan | CS Graduate (2026) | AI/ML & Python Developer',
+    title: 'Ali Mehdi Khan | AI/ML & Python Developer',
     description: 'AI/ML portfolio: a Whisper-based pronunciation coach on Hugging Face Spaces, CNN medical-imaging models, FastAPI backends, and Google Cloud certifications.',
     siteName: 'Ali Mehdi Khan Portfolio',
     firstName: 'Ali Mehdi',
@@ -75,7 +75,7 @@ export const metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Ali Mehdi Khan | CS Graduate (2026) | AI/ML & Python Developer',
+    title: 'Ali Mehdi Khan | AI/ML & Python Developer',
     description: 'B.Tech CSE (2026) · Python · LLM apps & RAG · FastAPI · Junior developer at ImaPro · Google Cloud certified.',
     images: ['/assets/images/profile.png'],
   },
