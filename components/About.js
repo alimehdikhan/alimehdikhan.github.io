@@ -5,7 +5,7 @@ import { RESUME } from '../data/resume';
 
 const stats = [
   { label: 'Certifications', value: `${RESUME.certifications.length} Credentials` },
-  { label: 'Currently', value: 'Junior Developer · ImaPro' },
+  { label: 'Currently', value: 'Junior Developer · IMAPRO' },
   { label: 'Teaching', value: '30+ Students Mentored' },
   { label: 'Education', value: 'B.Tech CSE (2026)' },
 ];
@@ -56,7 +56,7 @@ export function About() {
             {RESUME.summary}
           </p>
           <p className="p-body">
-            Right now that means a junior developer role at ImaPro, migrating a production frontend to SvelteKit 5. Before that: an ML internship at GrasTech training medical-imaging models, and three months teaching programming with Tech for Good.
+            Right now that means a junior developer role at IMAPRO, migrating a production frontend to SvelteKit 5. Before that: an ML internship at GrasTech training medical-imaging models, and three months teaching programming with Tech for Good.
           </p>
 
           <div className="sub-hair">

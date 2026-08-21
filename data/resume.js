@@ -12,7 +12,7 @@ export const RESUME = {
   resumeDownloadName: 'AliMehdiKhan_Resume.pdf',
 
   summary:
-    'Final-year B.Tech CS student (2026) who builds AI products end to end — LLM apps, NLP pipelines, and the FastAPI backends behind them. Shipped a Whisper-based pronunciation coach to Hugging Face Spaces, and currently working as a junior developer at ImaPro. Google Cloud certified in Vertex AI, Gemini, and Imagen.',
+    'Final-year B.Tech CS student (2026) who builds AI products end to end — LLM apps, NLP pipelines, and the FastAPI backends behind them. Shipped a Whisper-based pronunciation coach to Hugging Face Spaces, and currently working as a junior developer at IMAPRO. Google Cloud certified in Vertex AI, Gemini, and Imagen.',
 
   roles: ['Software Engineer', 'AI/ML Developer', 'Python Developer'],
 
@@ -71,12 +71,12 @@ export const RESUME = {
   experience: [
     {
       role: 'Junior Developer — Web & Mobile',
-      company: 'ImaPro · Lucknow',
+      company: 'IMAPRO · Lucknow',
       date: 'Aug 2026 – Present',
       details: [
-        'Leading the move of the production app to SvelteKit 5 — rebuilding the UI into reusable components so pages load faster and feel smoother to use.',
-        'Made sure nothing broke along the way: same Hono + SQLite backend underneath, every booking flow tested by hand before shipping.',
-        'Documented the new component setup so code reviews and onboarding go quicker for the whole team.',
+        'Build features across the full stack using SvelteKit 5 for the frontend, Hono for the backend, and SQLite for the database.',
+        'Leading the production app’s migration to SvelteKit 5, rebuilding existing pages as reusable components to improve speed and consistency.',
+        'Develop and test booking flows end to end, covering the interface, API, backend logic, and database.',
       ],
       align: 'left',
     },

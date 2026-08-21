@@ -8,7 +8,7 @@ export const metadata = {
     default: 'Ali Mehdi Khan | AI/ML & Python Developer',
     template: '%s | Ali Mehdi Khan',
   },
-  description: 'Portfolio of Ali Mehdi Khan — final-year B.Tech CS student building LLM apps, NLP pipelines, and FastAPI backends in Python. Junior developer at ImaPro. Google Cloud and Deloitte certified.',
+  description: 'Portfolio of Ali Mehdi Khan — final-year B.Tech CS student building LLM apps, NLP pipelines, and FastAPI backends in Python. Junior developer at IMAPRO. Google Cloud and Deloitte certified.',
   keywords: [
     'Ali Mehdi Khan',
     'Software Engineer',
@@ -76,7 +76,7 @@ export const metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'Ali Mehdi Khan | AI/ML & Python Developer',
-    description: 'B.Tech CSE (2026) · Python · LLM apps & RAG · FastAPI · Junior developer at ImaPro · Google Cloud certified.',
+    description: 'B.Tech CSE (2026) · Python · LLM apps & RAG · FastAPI · Junior developer at IMAPRO · Google Cloud certified.',
     images: ['/assets/images/profile.png'],
   },
   alternates: {
