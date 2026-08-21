@@ -30,7 +30,9 @@ export function RevealManager() {
           io.unobserve(en.target);
         });
       },
-      { rootMargin: '0px 0px -12% 0px' }
+      /* generous margins pre-reveal content just outside the viewport so
+         fast scrolling never shows blank blocks */
+      { rootMargin: '160px 0px 120px 0px' }
     );
 
     document.querySelectorAll('.rev').forEach((el) => io.observe(el));

@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { smoothScrollTo } from './Navbar';
 import { trackResumeDownload } from './fx/trackDownload';
 import { RESUME } from '../data/resume';
 
@@ -22,11 +21,6 @@ export function Footer() {
     const iv = setInterval(tick, 20000);
     return () => clearInterval(iv);
   }, []);
-
-  const handleScrollToTop = (e) => {
-    e.preventDefault();
-    smoothScrollTo(0, 850);
-  };
 
   return (
     <footer className="foot">
@@ -50,7 +44,7 @@ export function Footer() {
         <a href={`mailto:${RESUME.email}`} aria-label="Email">
           Email
         </a>
-        <a href="#hero" onClick={handleScrollToTop} className="up" aria-label="Scroll to top">
+        <a href="#hero" className="up" aria-label="Scroll to top">
           Back to Top ↑
         </a>
       </div>

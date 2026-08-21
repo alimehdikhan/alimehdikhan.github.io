@@ -4,30 +4,8 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { ThemeToggle } from './ui/ThemeToggle';
 import { trackResumeDownload } from './fx/trackDownload';
+import { revealSection } from './fx/revealSection';
 import { RESUME } from '../data/resume';
-
-export function smoothScrollTo(targetPosition, duration = 800) {
-  const startPosition = window.pageYOffset;
-  const distance = targetPosition - startPosition;
-  let startTime = null;
-
-  function easeOutQuart(t) {
-    return 1 - (--t) * t * t * t;
-  }
-
-  function animation(currentTime) {
-    if (startTime === null) startTime = currentTime;
-    const timeElapsed = currentTime - startTime;
-    const progress = Math.min(timeElapsed / duration, 1);
-    const run = easeOutQuart(progress) * distance + startPosition;
-
-    window.scrollTo(0, run);
-    if (timeElapsed < duration) {
-      requestAnimationFrame(animation);
-    }
-  }
-  requestAnimationFrame(animation);
-}
 
 const navLinks = [
   { name: 'Home', href: '#hero' },
@@ -42,10 +20,13 @@ const navLinks = [
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('hero');
+  const [scrolled, setScrolled] = useState(false);
   const prefersReducedMotion = useReducedMotion();
 
   useEffect(() => {
+    let current = 'hero';
     const handleScroll = () => {
+      setScrolled(window.scrollY > 40);
       const scrollPos = window.scrollY + 160;
       for (const link of navLinks) {
         const id = link.href.substring(1);
@@ -54,7 +35,17 @@ export function Navbar() {
           const top = el.offsetTop;
           const height = el.offsetHeight;
           if (scrollPos >= top && scrollPos < top + height) {
-            setActiveSection(id);
+            if (current !== id) {
+              current = id;
+              setActiveSection(id);
+              /* keep the URL hash in sync with the visible section
+                 (replaceState: no history spam, no scroll side effects) */
+              try {
+                window.history.replaceState(null, '', `#${id}`);
+              } catch (e) {
+                /* ignore */
+              }
+            }
             break;
           }
         }
@@ -72,22 +63,17 @@ export function Navbar() {
     };
   }, [isOpen]);
 
-  const handleLinkClick = (e, href) => {
-    e.preventDefault();
+  /* native anchor handles the (fast) scroll and the hash; we only close the
+     menu and reveal the target's content immediately */
+  const handleLinkClick = (href) => {
     setIsOpen(false);
-    const targetId = href.substring(1);
-    const targetElement = document.getElementById(targetId);
-    if (targetElement) {
-      const navOffset = 80;
-      const elementPosition = targetElement.getBoundingClientRect().top + window.scrollY;
-      smoothScrollTo(elementPosition - navOffset, 850);
-    }
+    revealSection(href);
   };
 
   return (
     <>
-      <nav className="nav" role="navigation" aria-label="Main Navigation">
-        <a className="mark" href="#hero" onClick={(e) => handleLinkClick(e, '#hero')} aria-label={RESUME.name}>
+      <nav className={`nav${scrolled ? ' scrolled' : ''}`} role="navigation" aria-label="Main Navigation">
+        <a className="mark" href="#hero" aria-label={RESUME.name}>
           AMK<em>.</em>
         </a>
 
@@ -98,10 +84,21 @@ export function Navbar() {
               <a
                 key={link.name}
                 href={link.href}
-                onClick={(e) => handleLinkClick(e, link.href)}
+                onClick={() => handleLinkClick(link.href)}
                 className={isActive ? 'on' : ''}
                 aria-current={isActive ? 'true' : undefined}
               >
+                {isActive &&
+                  (prefersReducedMotion ? (
+                    <span className="nav-pill" aria-hidden="true" />
+                  ) : (
+                    <motion.span
+                      layoutId="nav-pill"
+                      className="nav-pill"
+                      aria-hidden="true"
+                      transition={{ type: 'spring', stiffness: 420, damping: 34 }}
+                    />
+                  ))}
                 {link.name}
               </a>
             );
@@ -151,7 +148,7 @@ export function Navbar() {
                 <a
                   key={link.name}
                   href={link.href}
-                  onClick={(e) => handleLinkClick(e, link.href)}
+                  onClick={() => handleLinkClick(link.href)}
                   className={isActive ? 'on' : ''}
                   aria-current={isActive ? 'true' : undefined}
                 >
