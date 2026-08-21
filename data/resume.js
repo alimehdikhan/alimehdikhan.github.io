@@ -74,9 +74,9 @@ export const RESUME = {
       company: 'ImaPro · Lucknow',
       date: 'Aug 2026 – Present',
       details: [
-        'Migrating the production frontend to SvelteKit 5 — reusable reactive components, faster page loads, and zero regressions in the core booking flows.',
-        'Kept the Hono + better-sqlite3 backend contract untouched through the switch, QA-ing every key user journey by hand.',
-        'Wrote the component docs and frontend conventions the team now reviews against.',
+        'Leading the move of the production app to SvelteKit 5 — rebuilding the UI into reusable components so pages load faster and feel smoother to use.',
+        'Made sure nothing broke along the way: same Hono + SQLite backend underneath, every booking flow tested by hand before shipping.',
+        'Documented the new component setup so code reviews and onboarding go quicker for the whole team.',
       ],
       align: 'left',
     },

@@ -1988,6 +1988,11 @@ html.is-loaded .cue {
   gap: 20px;
   flex-wrap: wrap;
 }
+.foot-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
 .foot a {
   transition: color 0.3s;
 }
