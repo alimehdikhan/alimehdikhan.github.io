@@ -491,9 +491,26 @@ html.is-loaded #pre {
     display: none;
   }
 }
-@media (max-width: 520px) {
-  .nav-resume {
+/* very narrow phones: drop the Resume pill so the bar never crowds
+   (needs .nav prefix to outrank the later `.btn` display rule) */
+@media (max-width: 380px) {
+  .nav .btn.nav-resume {
     display: none;
+  }
+}
+/* comfortable 44px tap targets on touch devices */
+@media (pointer: coarse) {
+  .icon-btn {
+    width: 44px;
+    height: 44px;
+  }
+  .tile {
+    width: 44px;
+    height: 44px;
+  }
+  .nav-links a,
+  .foot a {
+    padding-block: 8px;
   }
 }
 
