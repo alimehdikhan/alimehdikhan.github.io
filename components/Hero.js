@@ -3,8 +3,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { useReducedMotion } from 'framer-motion';
 import { MagneticButton } from './ui/MagneticButton';
-import { smoothScrollTo } from './Navbar';
 import { trackResumeDownload } from './fx/trackDownload';
+import { revealSection } from './fx/revealSection';
 import { RESUME } from '../data/resume';
 
 const credibilityChips = [
@@ -48,23 +48,25 @@ export function Hero() {
       return () => clearTimeout(timer);
     }
 
+    /* fast type/delete, long hold on the complete word — so the line reads
+       as a finished phrase most of the time */
     const handleTyping = () => {
       if (!isDeleting) {
         setCurrentText(currentRole.substring(0, currentText.length + 1));
-        setTypingSpeed(100);
+        setTypingSpeed(55);
 
         if (currentText === currentRole) {
           setIsDeleting(true);
-          setTypingSpeed(2000);
+          setTypingSpeed(3200);
         }
       } else {
         setCurrentText(currentRole.substring(0, currentText.length - 1));
-        setTypingSpeed(50);
+        setTypingSpeed(28);
 
         if (currentText === '') {
           setIsDeleting(false);
           setRoleIndex((prev) => (prev + 1) % roles.length);
-          setTypingSpeed(500);
+          setTypingSpeed(300);
         }
       }
     };
@@ -122,14 +124,6 @@ export function Hero() {
     return () => window.removeEventListener('pointermove', once);
   }, []);
 
-  const handleScrollToSection = (e, id) => {
-    e.preventDefault();
-    const el = document.getElementById(id);
-    if (el) {
-      smoothScrollTo(el.offsetTop - 80, 850);
-    }
-  };
-
   const [first, ...rest] = RESUME.name.split(' ');
   const lineOne = `${first} ${rest.slice(0, -1).join(' ')}`.trim();
   const lineTwo = rest.slice(-1).join(' ');
@@ -158,12 +152,18 @@ export function Hero() {
 
       <div className="hero-grid">
         <div>
-          <div className="hero-role hero-fade" aria-live="polite">
-            I&apos;m a&nbsp;<b>{currentText}</b>
-            <span className="caret" aria-hidden="true" />
+          <div className="hero-role hero-fade">
+            {/* complete phrase for screen readers; the typewriter is decorative */}
+            <span className="sr-only">I&apos;m a {roles.join(', ')}.</span>
+            <span aria-hidden="true">
+              I&apos;m a&nbsp;<b>{currentText}</b>
+              <span className="caret" />
+            </span>
           </div>
 
-          <p className="hero-sub hero-fade">{RESUME.summary}</p>
+          <p className="hero-sub hero-fade">
+            Python and AI/ML developer building deployed APIs and applied machine-learning products. Created a Whisper-based pronunciation coach and medical-image classification projects.
+          </p>
 
           <div className="hero-meta eyebrow hero-fade hero-fade-2">
             {credibilityChips.map((chip) => (
@@ -192,7 +192,13 @@ export function Hero() {
           </div>
 
           <div className="hero-actions hero-fade hero-fade-2">
-            <MagneticButton variant="primary" as="a" href="#projects" onClick={(e) => handleScrollToSection(e, 'projects')} aria-label="View Projects">
+            <MagneticButton
+              variant="primary"
+              as="a"
+              href="#projects"
+              onClick={() => revealSection('#projects')}
+              aria-label="View Projects"
+            >
               View Projects
             </MagneticButton>
             <MagneticButton
@@ -204,9 +210,6 @@ export function Hero() {
               aria-label="Download Resume PDF"
             >
               Download Resume
-            </MagneticButton>
-            <MagneticButton variant="secondary" as="a" href="#contact" onClick={(e) => handleScrollToSection(e, 'contact')} aria-label="Contact Me">
-              Contact Me
             </MagneticButton>
           </div>
 
