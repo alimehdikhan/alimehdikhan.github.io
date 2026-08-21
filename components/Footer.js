@@ -1,41 +1,61 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import { smoothScrollTo } from './Navbar';
+import { trackResumeDownload } from './fx/trackDownload';
 import { RESUME } from '../data/resume';
 
 export function Footer() {
+  const [clock, setClock] = useState('—');
+
+  useEffect(() => {
+    const tick = () => {
+      setClock(
+        new Date().toLocaleTimeString('en-GB', {
+          timeZone: 'Asia/Kolkata',
+          hour: '2-digit',
+          minute: '2-digit',
+        })
+      );
+    };
+    tick();
+    const iv = setInterval(tick, 20000);
+    return () => clearInterval(iv);
+  }, []);
+
   const handleScrollToTop = (e) => {
     e.preventDefault();
     smoothScrollTo(0, 850);
   };
 
   return (
-    <footer className="relative py-12 bg-bg-primary border-t border-border-dim z-10">
-      <div className="container mx-auto px-6 max-w-6xl flex flex-col sm:flex-row justify-between items-center gap-6">
-        <div>
-          <p className="text-xs sm:text-sm text-neutral-500">
-            © 2026 Ali Mehdi Khan. Built with Next.js & Framer Motion.
-          </p>
-        </div>
+    <footer className="foot">
+      <span>© 2026 Ali Mehdi Khan. Built with Next.js &amp; Framer Motion.</span>
 
-        <div className="flex flex-wrap items-center justify-center gap-6 text-xs sm:text-sm">
-          <a href={RESUME.resumePath} download={RESUME.resumeDownloadName} className="text-neutral-500 hover:text-text-primary transition-colors" aria-label="Download Resume">
-            Resume
-          </a>
-          <a href={RESUME.github} target="_blank" rel="noopener noreferrer" className="text-neutral-500 hover:text-text-primary transition-colors" aria-label="GitHub">
-            GitHub
-          </a>
-          <a href={RESUME.linkedin} target="_blank" rel="noopener noreferrer" className="text-neutral-500 hover:text-text-primary transition-colors" aria-label="LinkedIn">
-            LinkedIn
-          </a>
-          <a href={`mailto:${RESUME.email}`} className="text-neutral-500 hover:text-text-primary transition-colors" aria-label="Email">
-            Email
-          </a>
-          <a href="#hero" onClick={handleScrollToTop} className="text-indigo-400 font-bold hover:text-indigo-300 transition-colors" aria-label="Scroll to top">
-            Back to Top ↑
-          </a>
-        </div>
+      <div className="foot-links">
+        <a
+          href={RESUME.resumePath}
+          download={RESUME.resumeDownloadName}
+          onClick={() => trackResumeDownload('footer')}
+          aria-label="Download Resume"
+        >
+          Resume
+        </a>
+        <a href={RESUME.github} target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+          GitHub
+        </a>
+        <a href={RESUME.linkedin} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+          LinkedIn
+        </a>
+        <a href={`mailto:${RESUME.email}`} aria-label="Email">
+          Email
+        </a>
+        <a href="#hero" onClick={handleScrollToTop} className="up" aria-label="Scroll to top">
+          Back to Top ↑
+        </a>
       </div>
+
+      <span suppressHydrationWarning>Lucknow · {clock}</span>
     </footer>
   );
 }
