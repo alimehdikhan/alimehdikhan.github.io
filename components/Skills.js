@@ -24,6 +24,9 @@ const LOGOS = {
   GitHub: { path: 'github/github-original.svg', invDark: true },
   TensorFlow: 'tensorflow/tensorflow-original.svg',
   Keras: 'keras/keras-original.svg',
+  'Hugging Face': { url: 'https://cdn.simpleicons.org/huggingface' },
+  LangChain: { url: 'https://cdn.simpleicons.org/langchain', invDark: true },
+  Hono: { url: 'https://cdn.simpleicons.org/hono' },
 };
 
 function SkillLogo({ name }) {
@@ -31,6 +34,7 @@ function SkillLogo({ name }) {
   if (!entry) return null;
   const path = typeof entry === 'string' ? entry : entry.path;
   const invDark = typeof entry === 'object' && entry.invDark;
+  const src = typeof entry === 'object' && entry.url ? entry.url : `${DEVICON}${path}`;
   const hide = (e) => {
     e.currentTarget.parentElement.style.display = 'none';
   };
@@ -38,7 +42,7 @@ function SkillLogo({ name }) {
     <span className="skill-logo" aria-hidden="true">
       <img
         className={invDark ? 'inv-dark' : undefined}
-        src={`${DEVICON}${path}`}
+        src={src}
         alt=""
         loading="lazy"
         onError={hide}

@@ -90,15 +90,6 @@ export const RESUME = {
       ],
       align: 'right',
     },
-    {
-      role: 'Programming Instructor',
-      company: 'Tech for Good · Lucknow',
-      date: '2025 · 3 months',
-      details: [
-        'Taught programming to 30+ underprivileged students — by the end, everyone had a working app of their own.',
-      ],
-      align: 'left',
-    },
   ],
 
   skills: {
