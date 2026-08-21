@@ -19,7 +19,7 @@ export function OpenSource() {
         <div>
           <span className="eyebrow">@alimehdikhan</span>
           <p className="p-body" style={{ marginTop: 16 }}>
-            Open-source projects focused on AI/ML applications and Python backend APIs, including my AI Pronunciation Coach and Cancer Detection System.
+            A dozen public repos, mostly Python — the pronunciation coach, the cancer-detection model, and whatever pipeline experiment is currently mid-commit.
           </p>
 
           <div className="hair hair-3 stats" style={{ margin: '26px 0 30px', border: '1px solid var(--line)' }}>

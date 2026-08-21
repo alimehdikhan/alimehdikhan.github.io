@@ -16,6 +16,10 @@ const LOGOS = {
   HTML: 'html5/html5-original.svg',
   CSS: 'css3/css3-original.svg',
   FastAPI: 'fastapi/fastapi-original.svg',
+  SvelteKit: 'svelte/svelte-original.svg',
+  'Next.js': { path: 'nextjs/nextjs-original.svg', invDark: true },
+  Docker: 'docker/docker-original.svg',
+  'Google Cloud': 'googlecloud/googlecloud-original.svg',
   Git: 'git/git-original.svg',
   GitHub: { path: 'github/github-original.svg', invDark: true },
   TensorFlow: 'tensorflow/tensorflow-original.svg',
@@ -52,27 +56,27 @@ const categories = [
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.6} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
       </svg>
     ),
-    skills: ['Python', 'Java', 'C', 'C++', 'JavaScript', 'SQL', 'HTML', 'CSS'],
+    skills: ['Python', 'Java', 'JavaScript', 'SQL', 'C', 'C++', 'HTML', 'CSS'],
   },
   {
     eyebrow: 'Build',
-    title: 'Backend & Tools',
+    title: 'Backend, Cloud & Tools',
     icon: (
       <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.6} d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01" />
       </svg>
     ),
-    skills: ['FastAPI', 'REST APIs', 'Git', 'GitHub'],
+    skills: ['FastAPI', 'REST APIs', 'SvelteKit', 'Next.js', 'Hono', 'Docker', 'Google Cloud', 'Hugging Face', 'Git', 'GitHub'],
   },
   {
     eyebrow: 'Train',
-    title: 'AI & Machine Learning',
+    title: 'AI, LLMs & RAG',
     icon: (
       <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.6} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
       </svg>
     ),
-    skills: ['Machine Learning', 'NLP', 'TensorFlow', 'Keras'],
+    skills: ['OpenAI Whisper', 'Prompt Engineering', 'LLM Evaluation', 'NLP', 'TensorFlow', 'Keras', 'LangChain', 'LangGraph', 'RAG Pipelines', 'FAISS'],
   },
   {
     eyebrow: 'Work',

@@ -5,15 +5,15 @@ import { RESUME } from '../data/resume';
 
 const stats = [
   { label: 'Certifications', value: `${RESUME.certifications.length} Credentials` },
-  { label: 'Experience', value: 'Machine Learning Internship' },
-  { label: 'Leadership', value: '30+ Students Mentored' },
+  { label: 'Currently', value: 'Junior Developer · ImaPro' },
+  { label: 'Teaching', value: '30+ Students Mentored' },
   { label: 'Education', value: 'B.Tech CSE (2026)' },
 ];
 
 const focusAreas = [
-  'Artificial Intelligence',
+  'LLM Apps & Agentic AI',
+  'RAG & Vector Databases',
   'Backend APIs (FastAPI)',
-  'Python Development',
   'Machine Learning',
 ];
 
@@ -56,7 +56,7 @@ export function About() {
             {RESUME.summary}
           </p>
           <p className="p-body">
-            Practical experience includes building skin cancer detection and diabetes prediction models during my ML internship, engineering FastAPI audio processing pipelines, and delivering programming training to underprivileged students through Tech for Good.
+            Right now that means a junior developer role at ImaPro, migrating a production frontend to SvelteKit 5. Before that: an ML internship at GrasTech training medical-imaging models, and three months teaching programming with Tech for Good.
           </p>
 
           <div className="sub-hair">
@@ -65,7 +65,7 @@ export function About() {
                 <i aria-hidden="true">▹</i> Software Development
               </h4>
               <p className="mini-body">
-                Experience building RESTful APIs using Python and FastAPI. Proficient in Java, OOP principles, and SQL.
+                REST APIs in Python and FastAPI, frontend work in SvelteKit and Next.js. Comfortable in Java, OOP, and SQL.
               </p>
             </div>
             <div>
@@ -73,7 +73,7 @@ export function About() {
                 <i aria-hidden="true">▹</i> Machine Learning
               </h4>
               <p className="mini-body">
-                Supervised learning, binary classification, Keras deep learning architectures, feature engineering, and Whisper NLP pipelines.
+                CNN classifiers, Whisper speech pipelines, and prompt-driven LLM feedback loops — TensorFlow and Keras, tuned by hand.
               </p>
             </div>
           </div>
@@ -99,7 +99,7 @@ export function About() {
 
           <hr className="rule" />
           <p className="mini-body">
-            Certified in Google Cloud (Gemini, Imagen, Vertex AI Prompt Design) and Deloitte Technology Job Simulation.
+            Google Cloud badges for Gemini, Imagen, and Vertex AI prompt design — plus Deloitte&apos;s technology job simulation.
           </p>
         </div>
       </div>

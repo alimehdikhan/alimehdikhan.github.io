@@ -1,4 +1,4 @@
-/** Resume-verified content — single source of truth aligned with AliMehdiKhan Resume Optimized.pdf */
+/** Resume-verified content — single source of truth aligned with the current resume PDF */
 
 export const RESUME = {
   name: 'Ali Mehdi Khan',
@@ -12,7 +12,7 @@ export const RESUME = {
   resumeDownloadName: 'AliMehdiKhan_Resume.pdf',
 
   summary:
-    'B.Tech Computer Science graduate (2026) skilled in Python, Java, Machine Learning, and AI application development. Google Cloud and Deloitte certified. Seeking an entry-level Software Engineering or AI/ML role to deliver impactful, data-driven solutions.',
+    'Final-year B.Tech CS student (2026) who builds AI products end to end — LLM apps, NLP pipelines, and the FastAPI backends behind them. Shipped a Whisper-based pronunciation coach to Hugging Face Spaces, and currently working as a junior developer at ImaPro. Google Cloud certified in Vertex AI, Gemini, and Imagen.',
 
   roles: ['Software Engineer', 'AI/ML Developer', 'Python Developer'],
 
@@ -44,11 +44,11 @@ export const RESUME = {
       title: 'AI Pronunciation Coach',
       tag: 'AI / NLP / API',
       overview:
-        'AI pronunciation coaching platform using OpenAI Whisper and NLP for spoken English evaluation.',
+        'A coaching app that listens to spoken English and scores pronunciation word by word — Whisper handles transcription, a custom Epitran engine extracts the IPA phonemes.',
       features:
-        'Low-latency audio processing and scoring pipelines built with FastAPI for real-time spoken English feedback.',
-      outcome: 'Delivers diagnostic pronunciation metrics through a production-style API pipeline.',
-      tech: ['FastAPI', 'Python', 'OpenAI Whisper', 'NLP', 'REST APIs'],
+        'The FastAPI pipeline scores audio in under a second, and LLM-generated feedback turns raw phoneme scores into advice a learner can actually use. Dockerized, running on Hugging Face Spaces.',
+      outcome: 'Live public API serving per-word pronunciation scores with sub-second responses.',
+      tech: ['Python', 'FastAPI', 'OpenAI Whisper', 'Epitran', 'Docker', 'Hugging Face'],
       github: 'https://github.com/alimehdikhan/A.I-Pronunciation-Coach',
       demo: 'https://huggingface.co/spaces/Alimehdi973/ai-pronunciation-coach',
       gradient: 'from-indigo-600 to-blue-500',
@@ -57,11 +57,11 @@ export const RESUME = {
       title: 'Cancer Detection System',
       tag: 'Machine Learning',
       overview:
-        'Binary classification model trained on real-world medical datasets for early-stage cancer prediction.',
+        'A binary CNN classifier trained on real medical imaging datasets to flag early-stage cancer.',
       features:
-        'Keras deep learning architectures with supervised learning, feature engineering, and hyperparameter tuning.',
-      outcome: 'Achieved 90%+ accuracy for early-stage cancer prediction.',
-      tech: ['TensorFlow', 'Keras', 'Python', 'Machine Learning'],
+        'Keras architectures with data augmentation and a systematic hyperparameter search to keep overfitting in check.',
+      outcome: '90%+ accuracy, with F1 tracked on held-out validation sets.',
+      tech: ['Python', 'TensorFlow', 'Keras', 'CNN'],
       github: 'https://github.com/alimehdikhan/Cancer-Detection-Model',
       demo: null,
       gradient: 'from-emerald-600 to-teal-500',
@@ -70,45 +70,59 @@ export const RESUME = {
 
   experience: [
     {
-      role: 'Machine Learning Intern',
-      company: 'BBD University · Lucknow',
-      date: 'Jun 2025 – Jul 2025',
+      role: 'Junior Developer — Web & Mobile',
+      company: 'ImaPro · Lucknow',
+      date: 'Aug 2026 – Present',
       details: [
-        'Built skin cancer detection and diabetes prediction models using supervised learning and deep learning in Python.',
-        'Applied feature engineering and hyperparameter tuning to maximize model accuracy on medical datasets.',
+        'Migrating the production frontend to SvelteKit 5 — reusable reactive components, faster page loads, and zero regressions in the core booking flows.',
+        'Kept the Hono + better-sqlite3 backend contract untouched through the switch, QA-ing every key user journey by hand.',
+        'Wrote the component docs and frontend conventions the team now reviews against.',
       ],
       align: 'left',
     },
     {
-      role: 'Volunteer',
-      company: 'Tech for Good',
-      date: '3 months',
+      role: 'Machine Learning Intern',
+      company: 'GrasTech · Lucknow',
+      date: 'Jun 2025 – Jul 2025',
       details: [
-        'Delivered programming training to 30+ underprivileged students over 3 months.',
-        'Improved digital literacy and enabled participants to build their first functional applications.',
+        'Built skin-cancer detection and diabetes prediction models in Python with TensorFlow and Keras.',
+        'Most of the work was feature engineering and hyperparameter tuning against messy real-world medical data.',
       ],
       align: 'right',
+    },
+    {
+      role: 'Programming Instructor',
+      company: 'Tech for Good · Lucknow',
+      date: '2025 · 3 months',
+      details: [
+        'Taught programming to 30+ underprivileged students — by the end, everyone had a working app of their own.',
+      ],
+      align: 'left',
     },
   ],
 
   skills: {
     technical: [
       'Python',
-      'Java',
-      'C',
-      'C++',
-      'JavaScript',
-      'SQL',
       'FastAPI',
+      'OpenAI Whisper',
+      'Prompt Engineering',
+      'LangChain',
+      'LangGraph',
+      'RAG Pipelines',
+      'FAISS',
       'TensorFlow',
       'Keras',
-      'Git',
-      'GitHub',
-      'REST APIs',
-      'Machine Learning',
       'NLP',
-      'HTML',
-      'CSS',
+      'Docker',
+      'SvelteKit',
+      'Next.js',
+      'Hono',
+      'Google Cloud',
+      'Git',
+      'SQL',
+      'Java',
+      'JavaScript',
     ],
     soft: [
       'Communication',
@@ -122,7 +136,7 @@ export const RESUME = {
   awards: [
     {
       title: 'Exemplary Discipline Award',
-      detail: 'Maintained 95%+ attendance across all academic terms, demonstrating reliability and commitment.',
+      detail: 'Maintained 95%+ attendance across all academic terms.',
     },
   ],
 

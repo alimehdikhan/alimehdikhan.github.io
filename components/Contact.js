@@ -126,7 +126,7 @@ export function Contact() {
         </p>
 
         <p className="p-body" style={{ maxWidth: '46ch' }}>
-          Open to entry-level Software Engineering and AI/ML opportunities, internships, and collaborations on Python and machine learning projects.
+          Open to Software Engineering and AI/ML roles, internships, and interesting Python or ML collaborations. Email is the fastest way to reach me — I actually read it.
         </p>
 
         <div style={{ marginTop: 40 }}>
@@ -204,7 +204,7 @@ export function Contact() {
 
             <div>
               <button type="submit" className="btn btn-solid" disabled={status === 'sending'}>
-                {status === 'sending' ? 'Sending…' : status === 'success' ? 'Transmitted Successfully' : 'Send Message'}
+                {status === 'sending' ? 'Sending…' : status === 'success' ? 'Sent — thanks!' : 'Send Message'}
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
                   <path d="M5 19L19 5M19 5H9M19 5v10" />
                 </svg>
@@ -268,11 +268,11 @@ export function Contact() {
             transition={{ type: 'spring', stiffness: 200, damping: 22 }}
           >
             <div>
-              <div className="t">{status === 'success' ? 'Message Transmitted' : 'Submission Failed'}</div>
+              <div className="t">{status === 'success' ? 'Message sent' : 'That didn’t go through'}</div>
               <div className="d">
                 {status === 'success'
-                  ? 'I have received your email and will respond shortly.'
-                  : 'A network error occurred. Please try again.'}
+                  ? 'It’s in my inbox — I’ll get back to you soon.'
+                  : 'Something went wrong sending that. Mind trying again?'}
               </div>
             </div>
             <button onClick={() => setStatus(null)} aria-label="Dismiss Alert">
