@@ -6,9 +6,9 @@
    ========================================================================== */
 
 @theme {
-  --font-sans: "Sora", system-ui, -apple-system, sans-serif;
-  --font-display: "Syne", system-ui, sans-serif;
-  --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-sans: var(--font-sora), "Sora", system-ui, -apple-system, sans-serif;
+  --font-display: var(--font-syne), "Syne", system-ui, sans-serif;
+  --font-mono: var(--font-plex-mono), "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
 
   --color-amber: #f5b841;
   --color-violet: #7a5bff;
@@ -26,7 +26,7 @@
   --bg: #06070c;
   --fg: #eae8e3;
   --fg-2: #c6c4c0;
-  --muted: #6e7488;
+  --muted: #7a8096;
   --dim: #9a9995;
 
   --line: rgba(234, 232, 227, 0.1);
@@ -41,9 +41,9 @@
   --violet: #7a5bff;
   --cyan: #39d3e6;
 
-  --display: "Syne", system-ui, sans-serif;
-  --body: "Sora", system-ui, -apple-system, sans-serif;
-  --mono: "IBM Plex Mono", ui-monospace, monospace;
+  --display: var(--font-syne), "Syne", system-ui, sans-serif;
+  --body: var(--font-sora), "Sora", system-ui, -apple-system, sans-serif;
+  --mono: var(--font-plex-mono), "IBM Plex Mono", ui-monospace, monospace;
 
   --gut: clamp(20px, 5vw, 80px);
   --ease: cubic-bezier(0.19, 1, 0.22, 1);
@@ -70,8 +70,22 @@
   --stroke: rgba(11, 12, 18, 0.6);
   --scrim: 243 241 236;
 
-  /* darker amber for text/accent contrast on paper */
-  --amber: #b47607;
+  /* darker accents so small mono labels clear 4.5:1 on paper */
+  --amber: #925c00;
+  --cyan: #0b6b79;
+  --violet: #5a3ed0;
+}
+
+/* amber fills switch to white ink on paper: #000 on #925c00 is only 3.75:1,
+   #fff clears 5.6:1 (same rule ::selection already follows) */
+[data-theme="light"] .skip:focus,
+[data-theme="light"] .btn:hover:not(:disabled),
+[data-theme="light"] .work .side a.demo,
+[data-theme="light"] .work .side a.demo:hover,
+[data-theme="light"] .work .side a.demo:focus-visible,
+[data-theme="light"] .mail:hover,
+[data-theme="light"] .detail:hover .ic {
+  color: #fff;
 }
 
 /* ─────────── base ─────────── */
@@ -85,6 +99,7 @@
   html {
     scroll-behavior: smooth;
     scroll-padding-top: 92px; /* native anchors land clear of the fixed nav */
+  scrollbar-gutter: stable; /* the preloader/menu overflow locks must not reflow the page */
     background: var(--bg);
     color: var(--fg);
   }
@@ -109,6 +124,9 @@
   ::selection {
     background: var(--amber);
     color: #000;
+  }
+  [data-theme="light"] ::selection {
+    color: #fff;
   }
 
   h1,
@@ -154,8 +172,12 @@
   }
 
   *:focus-visible {
-    outline: 1px solid var(--amber);
+    outline: 2px solid var(--amber);
     outline-offset: 3px;
+  }
+  /* skip-link target: focusable for keyboard users, but not ringed */
+  #main-content:focus-visible {
+    outline: none;
   }
 
   .using-mouse *:focus {
@@ -166,9 +188,14 @@
 /* ─────────── backdrop ─────────── */
 .backdrop {
   position: fixed;
-  inset: 0;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  height: 100lvh; /* URL-bar toggles no longer resize (and wipe) the sim */
   z-index: 0;
   pointer-events: none;
+  contain: paint;
 }
 #sim {
   position: absolute;
@@ -177,10 +204,8 @@
   height: 100%;
   display: block;
 }
-[data-theme="light"] #sim {
-  filter: invert(1) hue-rotate(195deg) saturate(1.5) brightness(1.04);
-  opacity: 0.42;
-}
+/* light theme: the canvas tints itself in the draw shader (uTint / uLight),
+   so no per-frame CSS filter pass is needed */
 [data-theme="light"] .grain {
   opacity: 0.035;
 }
@@ -212,7 +237,7 @@
 }
 .grain {
   position: absolute;
-  inset: -40%;
+  inset: 0;
   opacity: 0.055;
   background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3'/></filter><rect width='180' height='180' filter='url(%23n)'/></svg>");
 }
@@ -242,14 +267,13 @@
   justify-content: space-between;
   gap: 20px;
   padding: var(--gut);
-  transition: transform 1s var(--ease);
 }
 html.is-loading #pre,
 html.is-loaded #pre {
   display: flex;
 }
-#pre.done {
-  transform: translateY(-101%);
+html.is-loaded #pre {
+  will-change: transform;
 }
 #pre .word {
   font-family: var(--display);
@@ -261,7 +285,7 @@ html.is-loaded #pre {
 }
 #pre .word span {
   display: block;
-  transform: translateY(102%);
+  transform: translateY(105%);
   animation: rise 0.9s 0.1s var(--ease) both;
 }
 #pre .num {
@@ -276,7 +300,8 @@ html.is-loaded #pre {
   left: 0;
   bottom: 0;
   height: 2px;
-  width: 0;
+  width: 100%;
+  transform-origin: 0 50%;
   background: var(--amber);
 }
 
@@ -291,24 +316,16 @@ html.is-loaded #pre {
   border-radius: 50%;
   mix-blend-mode: difference;
 }
+/* position, centring and the hover grow are driven by Framer Motion */
 .cur {
   width: 6px;
   height: 6px;
   background: #fff;
-  margin: -3px 0 0 -3px;
 }
 .cur-r {
-  width: 34px;
-  height: 34px;
-  margin: -17px 0 0 -17px;
-  border: 1px solid rgba(255, 255, 255, 0.55);
-  transition: width 0.3s var(--ease), height 0.3s var(--ease), margin 0.3s var(--ease), opacity 0.3s;
-}
-.cur-r.big {
   width: 74px;
   height: 74px;
-  margin: -37px 0 0 -37px;
-  border-color: rgba(255, 255, 255, 0.8);
+  border: 2px solid rgba(255, 255, 255, 0.55);
 }
 @media (pointer: coarse) {
   .cur,
@@ -378,21 +395,31 @@ html.is-loaded #pre {
   justify-content: space-between;
   gap: 16px;
   padding: 18px var(--gut);
-  background: linear-gradient(180deg, rgb(var(--scrim) / 0.8), rgb(var(--scrim) / 0));
+  background-color: rgb(var(--scrim) / 0);
+  background-image: linear-gradient(180deg, rgb(var(--scrim) / 0.8), rgb(var(--scrim) / 0));
   border-bottom: 1px solid transparent;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  transition: padding 0.45s var(--ease), background 0.45s, border-color 0.45s;
+  backdrop-filter: blur(12px) saturate(120%);
+  -webkit-backdrop-filter: blur(12px) saturate(120%);
+  transition: padding 0.45s var(--ease), background-color 0.45s, border-color 0.45s;
 }
-/* condensed chrome once the page scrolls */
+/* condensed chrome once the page scrolls: the fill fades in beneath the same
+   gradient and blur, so nothing snaps at the threshold */
 .nav.scrolled {
   padding-block: 10px;
-  background: rgb(var(--scrim) / 0.86);
+  background-color: rgb(var(--scrim) / 0.86);
   border-bottom-color: var(--line);
-  backdrop-filter: blur(16px) saturate(140%);
-  -webkit-backdrop-filter: blur(16px) saturate(140%);
+}
+@media (prefers-reduced-transparency: reduce) {
+  .nav {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background-color: rgb(var(--scrim) / 0.96);
+  }
 }
 .nav .mark {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
   font-family: var(--display);
   font-weight: 800;
   font-size: 15px;
@@ -416,9 +443,7 @@ html.is-loaded #pre {
   border: 1px solid var(--line);
   border-radius: 99px;
   padding: 5px 7px;
-  background: rgb(var(--scrim) / 0.4);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  background: rgb(var(--scrim) / 0.45);
 }
 .nav-links a {
   position: relative;
@@ -464,20 +489,27 @@ html.is-loaded #pre {
   white-space: nowrap;
 }
 .dot {
+  position: relative;
   width: 6px;
   height: 6px;
   border-radius: 50%;
   background: var(--amber);
-  box-shadow: 0 0 0 0 rgba(245, 184, 65, 0.55);
-  animation: pulse 2.6s infinite;
   flex: none;
 }
+/* the pulse rides a pseudo-element on transform + opacity (compositor) */
+.dot::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: rgba(245, 184, 65, 0.55);
+  animation: pulse 2.6s infinite;
+}
 @keyframes pulse {
-  70% {
-    box-shadow: 0 0 0 10px rgba(245, 184, 65, 0);
-  }
+  70%,
   100% {
-    box-shadow: 0 0 0 0 rgba(245, 184, 65, 0);
+    transform: scale(2.8);
+    opacity: 0;
   }
 }
 #prog {
@@ -485,7 +517,9 @@ html.is-loaded #pre {
   top: 0;
   left: 0;
   height: 1px;
-  width: 0;
+  width: 100%;
+  transform: scaleX(0);
+  transform-origin: 0 50%;
   background: var(--amber);
   z-index: 101;
 }
@@ -499,7 +533,7 @@ html.is-loaded #pre {
   background: transparent;
   color: var(--muted);
   cursor: pointer;
-  transition: color 0.3s, border-color 0.3s, background 0.3s;
+  transition: color 0.3s, border-color 0.3s, background 0.3s, transform 0.35s var(--ease);
   flex: none;
 }
 .icon-btn:hover {
@@ -533,6 +567,12 @@ html.is-loaded #pre {
     width: 44px;
     height: 44px;
   }
+  .cue-fine {
+    display: none;
+  }
+  .cue-coarse {
+    display: inline;
+  }
   .tile {
     width: 44px;
     height: 44px;
@@ -547,15 +587,33 @@ html.is-loaded #pre {
   position: fixed;
   inset: 0;
   z-index: 99;
-  background: rgb(var(--scrim) / 0.97);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
+  background: rgb(var(--scrim) / 0.98);
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   gap: 6px;
   padding: 96px var(--gut) var(--gut);
   overflow-y: auto;
+  overscroll-behavior: contain;
+  touch-action: pan-y;
+}
+/* auto margins centre the list when it fits and never push the first link
+   above the scroll origin when it does not */
+.mob > :first-child {
+  margin-top: auto;
+}
+.mob > :last-child {
+  margin-bottom: auto;
+}
+@media (max-height: 520px) {
+  .mob {
+    padding-top: 72px;
+    gap: 2px;
+  }
+  .mob a {
+    font-size: clamp(1.25rem, 5vh, 1.8rem);
+    padding-block: 5px;
+  }
 }
 .mob a {
   font-family: var(--display);
@@ -618,6 +676,7 @@ html.is-loaded #pre {
   line-height: 0.88;
   letter-spacing: -0.045em;
   margin: 14px 0 0;
+  will-change: transform; /* scroll parallax stays on the compositor */
 }
 .hero h1 .line {
   display: block;
@@ -635,11 +694,13 @@ html.is-loaded #pre {
 html.is-loading .hero h1 .line i {
   transform: translateY(105%);
 }
+/* the rise waits for the curtain to clear the headline band, so the
+   visible part of the expo curve is the reveal, not its tail */
 html.is-loaded .hero h1 .line i {
-  animation: rise 1.15s var(--ease) both;
+  animation: rise 1.05s 0.2s var(--ease) backwards;
 }
 html.is-loaded .hero h1 .line:nth-child(2) i {
-  animation-delay: 0.1s;
+  animation-delay: 0.32s;
 }
 @keyframes rise {
   from {
@@ -664,6 +725,8 @@ html.is-loaded .hero h1 .line:nth-child(2) i {
   gap: clamp(30px, 5vw, 70px);
   align-items: start;
   margin-top: clamp(34px, 5vw, 56px);
+  position: relative;
+  z-index: 1; /* copy paints above the drifting, fading name */
 }
 @media (max-width: 900px) {
   .hero-grid {
@@ -691,7 +754,9 @@ html.is-loaded .hero h1 .line:nth-child(2) i {
   background: var(--amber);
   margin-left: 4px;
   vertical-align: text-bottom;
-  animation: blink 1s step-end infinite;
+}
+html.is-loaded .caret {
+  animation: blink 1s step-end 0.9s infinite;
 }
 @keyframes blink {
   0%,
@@ -739,14 +804,25 @@ html.is-loaded .hero h1 .line:nth-child(2) i {
 html.is-loading .hero-fade {
   opacity: 0;
 }
+/* content beat: a short fade plus a small rise, three staggered delays */
+@keyframes rise-sm {
+  from {
+    transform: translateY(14px);
+  }
+  to {
+    transform: none;
+  }
+}
 html.is-loaded .hero-fade {
-  animation: fade 0.9s 0.55s ease both;
+  animation:
+    fade 0.55s var(--d, 0.65s) ease backwards,
+    rise-sm 0.8s var(--d, 0.65s) var(--ease) backwards;
 }
 html.is-loaded .hero-fade-2 {
-  animation-delay: 0.72s;
+  --d: 0.8s;
 }
 html.is-loaded .hero-fade-3 {
-  animation-delay: 0.9s;
+  --d: 0.95s;
 }
 
 .portrait {
@@ -770,11 +846,7 @@ html.is-loaded .hero-fade-3 {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  filter: saturate(1.05) contrast(1.03);
   transition: transform 0.9s var(--ease);
-}
-.portrait:hover img {
-  transform: scale(1.045);
 }
 /* faint bottom vignette only — the photo stays true to colour */
 .portrait::after {
@@ -793,28 +865,36 @@ html.is-loaded .hero-fade-3 {
   position: absolute;
   top: -1px;
   left: -1px;
-  width: 26px;
-  height: 26px;
+  width: 40px;
+  height: 40px;
   border-top: 2px solid var(--amber);
   border-left: 2px solid var(--amber);
   z-index: 2;
-  transition: width 0.5s var(--ease), height 0.5s var(--ease);
+  clip-path: inset(0 14px 14px 0);
+  transition: clip-path 0.5s var(--ease);
 }
 .portrait .corner {
   position: absolute;
   right: -1px;
   bottom: -1px;
-  width: 26px;
-  height: 26px;
+  width: 40px;
+  height: 40px;
   border-bottom: 2px solid var(--amber);
   border-right: 2px solid var(--amber);
   z-index: 2;
-  transition: width 0.5s var(--ease), height 0.5s var(--ease);
+  clip-path: inset(14px 0 0 14px);
+  transition: clip-path 0.5s var(--ease);
 }
-.portrait:hover::before,
-.portrait:hover .corner {
-  width: 40px;
-  height: 40px;
+/* brackets unclip to full size and the photo breathes — hover devices only,
+   so a tap never leaves it stuck enlarged */
+@media (hover: hover) {
+  .portrait:hover::before,
+  .portrait:hover .corner {
+    clip-path: inset(0);
+  }
+  .portrait:hover img {
+    transform: scale(1.045);
+  }
 }
 @media (max-width: 900px) {
   /* stacked layout: centre the portrait and give it real presence */
@@ -831,16 +911,25 @@ html.is-loaded .hero-fade-3 {
   display: flex;
   align-items: center;
   gap: 13px;
-  transition: opacity 0.6s;
+  transition: opacity 0.6s, visibility 0s linear 0.6s;
 }
 html.is-loading .cue {
   opacity: 0;
 }
+/* backwards fill: once the fade has played the transition owns opacity, so
+   dismissal dissolves instead of snapping */
 html.is-loaded .cue {
-  animation: fade 1s 1.25s ease both;
+  animation: fade 1s 1.3s ease backwards;
 }
 .cue.gone {
   opacity: 0 !important;
+  visibility: hidden;
+}
+.cue.gone .arrow {
+  animation-play-state: paused;
+}
+.cue-coarse {
+  display: none;
 }
 .cue .arrow {
   width: 22px;
@@ -896,12 +985,29 @@ html.is-loaded .cue {
   position: relative;
 }
 .head {
+  position: relative;
   display: flex;
   align-items: baseline;
   gap: 22px;
   margin-bottom: clamp(38px, 5vw, 60px);
-  border-bottom: 1px solid var(--line);
   padding-bottom: 22px;
+}
+/* the title rises out of a mask; padding/negative margin keep descenders
+   unclipped without changing the line box */
+.head .line {
+  display: block;
+  overflow: hidden;
+  padding: 0.1em 0 0.2em;
+  margin: -0.1em 0 -0.2em;
+}
+/* hairline rule drawn in from the left by motion (scaleX) */
+.head .rule {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: var(--line);
 }
 .head h2 {
   font-family: var(--display);
@@ -985,7 +1091,7 @@ html.is-loaded .cue {
 .p-body {
   font-size: 0.94rem;
   color: var(--dim);
-  max-width: 62ch;
+  max-width: 58ch;
 }
 .p-body + .p-body {
   margin-top: 14px;
@@ -1151,7 +1257,6 @@ html.is-loaded .cue {
   border-bottom: 1px solid var(--line);
   position: relative;
   isolation: isolate;
-  transition: padding 0.6s var(--ease);
 }
 .work .row:first-child {
   border-top: 1px solid var(--line);
@@ -1181,13 +1286,21 @@ html.is-loaded .cue {
   opacity: 0.5;
   transform: scaleX(1);
 }
-.work .row:hover {
-  padding-inline: 22px;
-}
+/* on hover the title column slides right and the buttons slide left — a
+   transform nudge, so the grid never re-lays-out or re-wraps mid-tween */
 .work .row > * {
   position: relative;
   z-index: 1;
   min-width: 0;
+  transition: transform 0.6s var(--ease);
+}
+.work .row:hover > :first-child,
+.work .row:focus-within > :first-child {
+  transform: translateX(16px);
+}
+.work .row:hover > :last-child,
+.work .row:focus-within > :last-child {
+  transform: translateX(-16px);
 }
 .work .tag {
   display: block;
@@ -1269,7 +1382,7 @@ html.is-loaded .cue {
   padding: 11px 20px;
   white-space: nowrap;
   background: rgb(var(--scrim) / 0.35);
-  transition: color 0.3s, background 0.3s, border-color 0.3s, transform 0.3s var(--ease), box-shadow 0.3s;
+  transition: color 0.3s, background 0.3s, border-color 0.3s, transform 0.3s var(--ease), box-shadow 0.3s, filter 0.3s;
 }
 .work .side a:hover,
 .work .side a:focus-visible {
@@ -1297,8 +1410,9 @@ html.is-loaded .cue {
     grid-template-columns: minmax(0, 1fr);
     gap: 18px;
   }
-  .work .row:hover {
-    padding-inline: 6px;
+  .work .row:hover > *,
+  .work .row:focus-within > * {
+    transform: none;
   }
   .work .side {
     flex-direction: row;
@@ -1312,8 +1426,8 @@ html.is-loaded .cue {
   position: relative;
   padding-left: 30px;
 }
-.rail::before {
-  content: "";
+.rail-line {
+  display: block;
   position: absolute;
   left: 3px;
   top: 6px;
@@ -1458,17 +1572,7 @@ html.is-loaded .cue {
   display: flex;
   align-items: center;
   gap: 10px;
-  opacity: 0;
-  transform: translateY(10px);
-  transition:
-    opacity 0.5s ease calc(var(--i, 0) * 35ms),
-    transform 0.6s var(--ease) calc(var(--i, 0) * 35ms),
-    color 0.3s,
-    background 0.3s;
-}
-.rev.in .skill-grid > span {
-  opacity: 1;
-  transform: none;
+  transition: color 0.3s, background 0.3s;
 }
 .skill-grid > span:hover {
   color: var(--fg);
@@ -1487,12 +1591,10 @@ html.is-loaded .cue {
   height: 100%;
   object-fit: contain;
   /* slightly dimmed at rest, full brand colour on hover */
-  filter: saturate(0.85);
   opacity: 0.9;
-  transition: filter 0.3s, opacity 0.3s;
+  transition: opacity 0.3s;
 }
 .skill-grid > span:hover .skill-logo img {
-  filter: saturate(1);
   opacity: 1;
 }
 /* dark marks (GitHub, Next.js, LangChain) flip to white on the dark theme —
@@ -1607,7 +1709,6 @@ html.is-loaded .cue {
   height: 12px;
   border-radius: 50%;
   box-shadow: inset 0 0 0 0.5px rgba(0, 0, 0, 0.25);
-  transition: filter 0.25s;
 }
 .term-bar .dots i:nth-child(1) {
   background: #ff5f57;
@@ -1617,9 +1718,6 @@ html.is-loaded .cue {
 }
 .term-bar .dots i:nth-child(3) {
   background: #28c840;
-}
-.term:hover .term-bar .dots i {
-  filter: brightness(1.12);
 }
 .term-bar .name {
   font-family: var(--mono);
@@ -1700,6 +1798,36 @@ html.is-loaded .cue {
   color: #000;
   border-color: var(--amber);
 }
+/* headline lines rise out of masks (motion drives the inner i) */
+.big .line {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.08em;
+  margin-bottom: -0.08em;
+}
+.big .line i {
+  display: block;
+  font-style: normal;
+}
+/* submit label: all states stacked in one cell so the button never resizes */
+.lbl {
+  display: grid;
+}
+.lbl > span {
+  grid-area: 1 / 1;
+  white-space: nowrap;
+}
+.lbl > span:not([data-on="true"]) {
+  visibility: hidden;
+}
+.toast-timer {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: var(--cyan);
+}
 .links {
   display: flex;
   gap: 26px;
@@ -1727,13 +1855,15 @@ html.is-loaded .cue {
   gap: 16px;
   padding: 18px 0;
   border-bottom: 1px solid var(--line);
-  transition: padding-left 0.5s var(--ease);
 }
 .detail:first-child {
   border-top: 1px solid var(--line);
 }
-.detail:hover {
-  padding-left: 10px;
+.detail:hover > .ic,
+.detail:hover > .kv,
+.detail:focus-visible > .ic,
+.detail:focus-visible > .kv {
+  transform: translateX(10px);
 }
 .detail .ic {
   width: 38px;
@@ -1744,7 +1874,7 @@ html.is-loaded .cue {
   border-radius: 50%;
   color: var(--amber);
   flex: none;
-  transition: background 0.35s, color 0.35s, border-color 0.35s;
+  transition: background 0.35s, color 0.35s, border-color 0.35s, transform 0.5s var(--ease);
 }
 .detail:hover .ic {
   background: var(--amber);
@@ -1754,6 +1884,7 @@ html.is-loaded .cue {
 .detail .kv {
   display: flex;
   flex-direction: column;
+  transition: transform 0.5s var(--ease);
   gap: 4px;
   min-width: 0;
 }
@@ -1804,7 +1935,7 @@ html.is-loaded .cue {
 .field label {
   display: block;
   font-family: var(--mono);
-  font-size: 10px;
+  font-size: 11px;
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--muted);
@@ -1847,7 +1978,10 @@ html.is-loaded .cue {
   opacity: 0.6;
 }
 /* amber underline draws in from the left on focus */
-.field::after {
+.field .control {
+  position: relative;
+}
+.field .control::after {
   content: "";
   position: absolute;
   left: 0;
@@ -1860,8 +1994,33 @@ html.is-loaded .cue {
   transition: transform 0.55s var(--ease);
   pointer-events: none;
 }
-.field:focus-within::after {
+.field:focus-within .control::after {
   transform: scaleX(1);
+}
+.field .err {
+  display: block;
+  margin-top: 8px;
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  line-height: 1.5;
+  color: #ff8a80;
+}
+.field input[aria-invalid="true"],
+.field textarea[aria-invalid="true"] {
+  border-bottom-color: #ff8a80;
+}
+[data-theme="light"] .field .err {
+  color: #b3261e;
+}
+[data-theme="light"] .field input[aria-invalid="true"],
+[data-theme="light"] .field textarea[aria-invalid="true"] {
+  border-bottom-color: #b3261e;
+}
+.form-note {
+  margin-top: 10px;
+  font-size: 12.5px;
+  color: var(--dim);
 }
 
 .toast {
@@ -1902,6 +2061,7 @@ html.is-loaded .cue {
   font-size: 20px;
   line-height: 1;
   padding: 0 4px;
+  transition: color 0.25s, transform 0.25s var(--ease);
 }
 .toast button:hover {
   color: var(--fg);
@@ -1932,7 +2092,22 @@ html.is-loaded .cue {
   background: transparent;
   cursor: pointer;
   white-space: nowrap;
-  transition: background 0.4s, color 0.4s, border-color 0.4s;
+  will-change: transform; /* magnets spring on the compositor from the first frame */
+  transition: background 0.4s, color 0.4s, border-color 0.4s, transform 0.35s var(--ease);
+}
+/* press feedback: a quick squash on every static control (magnetic buttons
+   use framer's whileTap for the same 0.97) */
+.btn:active:not(:disabled),
+.work .side a:active,
+.mail:active,
+.icon-btn:active,
+.toast button:active {
+  transform: scale(0.97);
+  transition-duration: 0.08s;
+}
+.tile:active {
+  transform: translateY(-1px) scale(0.96);
+  transition-duration: 0.08s;
 }
 .btn:hover:not(:disabled) {
   background: var(--amber);
@@ -1959,7 +2134,7 @@ html.is-loaded .cue {
   place-items: center;
   border: 1px solid var(--line-2);
   color: var(--muted);
-  transition: color 0.35s, border-color 0.35s, background 0.35s, transform 0.35s var(--ease);
+  transition: color 0.35s, border-color 0.35s, background 0.35s;
 }
 .tile:hover {
   color: var(--fg);
@@ -1967,17 +2142,9 @@ html.is-loaded .cue {
   transform: translateY(-2px);
 }
 
-/* ─────────── reveal ─────────── */
-.rev {
-  opacity: 0;
-  transform: translateY(18px);
-  transition: opacity 0.5s ease, transform 0.55s var(--ease);
-  transition-delay: var(--d, 0ms);
-}
-.rev.in {
-  opacity: 1;
-  transform: none;
-}
+/* ─────────── reveal ───────────
+   Scroll reveals are driven by Framer Motion (components/fx/Reveal.js).
+   .rev remains only as the reduced-motion override hook below. */
 
 /* ─────────── footer ─────────── */
 .foot {
@@ -2001,6 +2168,8 @@ html.is-loaded .cue {
   display: inline-flex;
   align-items: center;
   gap: 7px;
+  min-height: 24px;
+  padding-block: 4px;
 }
 .foot a {
   transition: color 0.3s;
@@ -2010,6 +2179,25 @@ html.is-loaded .cue {
 }
 .foot .up {
   color: var(--amber);
+}
+.foot a:focus-visible {
+  color: var(--fg);
+}
+.foot-links img {
+  opacity: 0.72;
+  transition: opacity 0.3s;
+}
+.foot-links a:hover img,
+.foot-links a:focus-visible img {
+  opacity: 1;
+}
+.foot .up .arr {
+  display: inline-block;
+  transition: transform 0.35s var(--ease);
+}
+.foot .up:hover .arr,
+.foot .up:focus-visible .arr {
+  transform: translateY(-3px);
 }
 
 /* ─────────── reduced motion ─────────── */
@@ -2031,23 +2219,29 @@ html.is-loaded .cue {
     transform: none !important;
   }
   .hero-fade,
-  html.is-loading .hero-fade,
-  .cue,
-  html.is-loading .cue {
-    opacity: 1 !important;
-  }
-  .rev {
+  html.is-loading .hero-fade {
     opacity: 1 !important;
     transform: none !important;
   }
+  /* the cue describes a live simulation the fallback does not run */
+  .cue {
+    display: none;
+  }
+  .rev,
+  .rev-i,
+  .rev .line > *,
+  .rev .rule,
+  .rev .idx,
   .rev .skill-grid > span {
     opacity: 1 !important;
     transform: none !important;
   }
-  .work .row:hover {
-    padding-inline: 6px;
+  .work .row:hover > *,
+  .work .row:focus-within > * {
+    transform: none;
   }
-  .detail:hover {
-    padding-left: 0;
+  .detail:hover > .ic,
+  .detail:hover > .kv {
+    transform: none;
   }
 }

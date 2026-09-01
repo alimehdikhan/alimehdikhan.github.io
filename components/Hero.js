@@ -1,10 +1,14 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { useReducedMotion } from 'framer-motion';
+import { motion, useReducedMotion, useScroll, useSpring, useTransform } from 'framer-motion';
 import { MagneticButton } from './ui/MagneticButton';
 import { trackResumeDownload } from './fx/trackDownload';
 import { revealSection } from './fx/revealSection';
+import { scrollToHash } from './fx/scrollTo';
+import { Typewriter } from './fx/Typewriter';
+import { LocalClock } from './fx/LocalClock';
+import { SPRING } from './fx/motion';
 import { RESUME } from '../data/resume';
 
 const credibilityChips = [
@@ -22,111 +26,68 @@ const socials = [
   { href: `mailto:${RESUME.email}`, label: 'Email', icon: 'M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z' },
 ];
 
+/* The hero owns almost no state now: the typewriter and clock are leaf
+   components that write through refs, so this tree renders once and only
+   re-renders when the scroll cue is dismissed. */
 export function Hero() {
   const prefersReducedMotion = useReducedMotion();
-  const h1Ref = useRef(null);
-
   const roles = RESUME.roles;
-  const [roleIndex, setRoleIndex] = useState(0);
-  const [currentText, setCurrentText] = useState('');
-  const [isDeleting, setIsDeleting] = useState(false);
-  const [typingSpeed, setTypingSpeed] = useState(100);
-  const [clock, setClock] = useState('—');
   const [cueGone, setCueGone] = useState(false);
-  const [coarse, setCoarse] = useState(false);
 
-  /* typewriter (existing behaviour, restyled) */
+  /* headline parallax: the giant name drifts and fades as you scroll away.
+     The scroll value is spring-smoothed so wheel steps become a glide; the
+     viewport height is cached so nothing is read from layout per frame. */
+  const { scrollY } = useScroll();
+  const smooth = useSpring(scrollY, SPRING.scroll);
+  const vh = useRef(1);
   useEffect(() => {
-    let timer;
-    const currentRole = roles[roleIndex];
-
-    if (prefersReducedMotion) {
-      setCurrentText(currentRole);
-      timer = setTimeout(() => {
-        setRoleIndex((prev) => (prev + 1) % roles.length);
-      }, 3500);
-      return () => clearTimeout(timer);
-    }
-
-    /* fast type/delete, long hold on the complete word — so the line reads
-       as a finished phrase most of the time */
-    const handleTyping = () => {
-      if (!isDeleting) {
-        setCurrentText(currentRole.substring(0, currentText.length + 1));
-        setTypingSpeed(55);
-
-        if (currentText === currentRole) {
-          setIsDeleting(true);
-          setTypingSpeed(3200);
-        }
-      } else {
-        setCurrentText(currentRole.substring(0, currentText.length - 1));
-        setTypingSpeed(28);
-
-        if (currentText === '') {
-          setIsDeleting(false);
-          setRoleIndex((prev) => (prev + 1) % roles.length);
-          setTypingSpeed(300);
-        }
-      }
+    const update = () => {
+      vh.current = window.innerHeight || 1;
     };
-
-    timer = setTimeout(handleTyping, typingSpeed);
-    return () => clearTimeout(timer);
-  }, [currentText, isDeleting, roleIndex, typingSpeed, prefersReducedMotion, roles]);
-
-  /* local time (Lucknow · IST) */
-  useEffect(() => {
-    const tick = () => {
-      setClock(
-        new Date().toLocaleTimeString('en-GB', {
-          timeZone: 'Asia/Kolkata',
-          hour: '2-digit',
-          minute: '2-digit',
-        })
-      );
-    };
-    tick();
-    const iv = setInterval(tick, 20000);
-    return () => clearInterval(iv);
+    update();
+    window.addEventListener('resize', update, { passive: true });
+    return () => window.removeEventListener('resize', update);
   }, []);
+  const nameY = useTransform(smooth, (v) => (prefersReducedMotion ? 0 : Math.min(v, vh.current) * 0.14));
+  const nameOpacity = useTransform(smooth, (v) =>
+    prefersReducedMotion ? 1 : Math.max(1 - (Math.min(v, vh.current) / vh.current) * 1.5, 0)
+  );
 
-  /* headline parallax: the giant name drifts and fades as you scroll away */
+  /* cursor cue: only dismiss once the curtain is up and the pointer has
+     actually travelled — or on the first scroll / tap, when it is moot */
   useEffect(() => {
-    if (prefersReducedMotion) return undefined;
-    let raf = 0;
-    const onScroll = () => {
-      if (raf) return;
-      raf = requestAnimationFrame(() => {
-        raf = 0;
-        const el = h1Ref.current;
-        if (!el) return;
-        const y = Math.min(window.scrollY, window.innerHeight);
-        el.style.transform = `translateY(${(y * 0.18).toFixed(1)}px)`;
-        el.style.opacity = String(Math.max(1 - (y / window.innerHeight) * 1.1, 0));
-      });
-    };
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => {
+    let travel = 0;
+    const off = () => {
+      window.removeEventListener('pointermove', onMove);
       window.removeEventListener('scroll', onScroll);
-      if (raf) cancelAnimationFrame(raf);
+      window.removeEventListener('pointerdown', dismiss);
     };
-  }, [prefersReducedMotion]);
-
-  /* cursor cue: dismiss on first pointer move */
-  useEffect(() => {
-    setCoarse(window.matchMedia('(pointer: coarse)').matches);
-    const once = () => {
+    const dismiss = () => {
       setCueGone(true);
-      window.removeEventListener('pointermove', once);
+      off();
     };
-    window.addEventListener('pointermove', once, { passive: true });
-    return () => window.removeEventListener('pointermove', once);
+    const onMove = (e) => {
+      if (!document.documentElement.classList.contains('is-loaded')) return;
+      travel += Math.abs(e.movementX) + Math.abs(e.movementY);
+      if (travel >= 40) dismiss();
+    };
+    const onScroll = () => {
+      if (window.scrollY > 40) dismiss();
+    };
+    window.addEventListener('pointermove', onMove, { passive: true });
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('pointerdown', dismiss, { passive: true });
+    return off;
   }, []);
 
   const [first, ...rest] = RESUME.name.split(' ');
   const lineOne = `${first} ${rest.slice(0, -1).join(' ')}`.trim();
   const lineTwo = rest.slice(-1).join(' ');
+
+  const goToProjects = (e) => {
+    if (scrollToHash('#projects')) e.preventDefault();
+    else revealSection('#projects');
+  };
 
   return (
     <header id="hero" className="hero">
@@ -136,19 +97,19 @@ export function Hero() {
           Actively seeking entry-level opportunities
         </span>
         <span className="eyebrow">
-          {RESUME.location} · <span suppressHydrationWarning>{clock}</span>
+          {RESUME.location} · <LocalClock timeZone="Asia/Kolkata" />
         </span>
       </div>
 
       <span className="hero-hi">Hi, I&apos;m</span>
-      <h1 ref={h1Ref}>
+      <motion.h1 style={{ y: nameY, opacity: nameOpacity }}>
         <span className="line">
           <i>{lineOne}</i>
         </span>
         <span className="line">
           <i>{lineTwo}</i>
         </span>
-      </h1>
+      </motion.h1>
 
       <div className="hero-grid">
         <div>
@@ -156,7 +117,7 @@ export function Hero() {
             {/* complete phrase for screen readers; the typewriter is decorative */}
             <span className="sr-only">I&apos;m a {roles.join(', ')}.</span>
             <span aria-hidden="true">
-              I&apos;m a&nbsp;<b>{currentText}</b>
+              I&apos;m a&nbsp;<Typewriter words={roles} />
               <span className="caret" />
             </span>
           </div>
@@ -192,13 +153,7 @@ export function Hero() {
           </div>
 
           <div className="hero-actions hero-fade hero-fade-2">
-            <MagneticButton
-              variant="primary"
-              as="a"
-              href="#projects"
-              onClick={() => revealSection('#projects')}
-              aria-label="View Projects"
-            >
+            <MagneticButton variant="primary" as="a" href="#projects" onClick={goToProjects} aria-label="View Projects">
               View Projects
             </MagneticButton>
             <MagneticButton
@@ -228,6 +183,8 @@ export function Hero() {
                     className={`brand-logo${social.invDark ? ' inv-dark' : ''}`}
                     src={social.img}
                     alt=""
+                    width="17"
+                    height="17"
                     loading="lazy"
                     aria-hidden="true"
                   />
@@ -261,9 +218,8 @@ export function Hero() {
             <path d="M12 5v14M12 19l-6-6M12 19l6-6" />
           </svg>
         </span>
-        {coarse
-          ? 'Tap and drag — the background is a live simulation'
-          : 'Move your cursor — the background is a live simulation'}
+        <span className="cue-fine">Move your cursor — the background is a live simulation</span>
+        <span className="cue-coarse">Tap and drag — the background is a live simulation</span>
       </div>
     </header>
   );

@@ -1,6 +1,9 @@
 'use client';
 
+import { motion } from 'framer-motion';
 import { SectionHead } from './ui/SectionHead';
+import { Reveal } from './fx/Reveal';
+import { ITEM, STAGGER } from './fx/motion';
 import { RESUME } from '../data/resume';
 
 /* Real issuer marks where one exists on a public CDN; issuers without a
@@ -24,6 +27,8 @@ function IssuerLogo({ issuer }) {
         className={logo.invDark ? 'inv-dark' : undefined}
         src={logo.src}
         alt=""
+        width="18"
+        height="18"
         loading="lazy"
         onError={(e) => {
           e.currentTarget.parentElement.style.display = 'none';
@@ -38,9 +43,9 @@ export function Certifications() {
     <section id="certifications" className="sec" aria-labelledby="certifications-title">
       <SectionHead title="Certifications" index="05" label="Credentials" titleId="certifications-title" />
 
-      <div className="hair hair-2 hair-hover rev">
+      <Reveal className="hair hair-2 hair-hover" stagger={STAGGER.item}>
         {RESUME.certifications.map((cert) => (
-          <div key={cert.title}>
+          <motion.div key={cert.title} className="rev-i" variants={ITEM}>
             <div className="cert-head">
               <div className="cert-id">
                 <IssuerLogo issuer={cert.issuer} />
@@ -49,9 +54,9 @@ export function Certifications() {
               <span className="cert-date">{cert.date}</span>
             </div>
             <p className="cert-issuer">{cert.issuer}</p>
-          </div>
+          </motion.div>
         ))}
-      </div>
+      </Reveal>
     </section>
   );
 }

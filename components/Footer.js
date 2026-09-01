@@ -1,26 +1,14 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import { trackResumeDownload } from './fx/trackDownload';
+import { scrollToHash } from './fx/scrollTo';
+import { LocalClock } from './fx/LocalClock';
 import { RESUME } from '../data/resume';
 
 export function Footer() {
-  const [clock, setClock] = useState('—');
-
-  useEffect(() => {
-    const tick = () => {
-      setClock(
-        new Date().toLocaleTimeString('en-GB', {
-          timeZone: 'Asia/Kolkata',
-          hour: '2-digit',
-          minute: '2-digit',
-        })
-      );
-    };
-    tick();
-    const iv = setInterval(tick, 20000);
-    return () => clearInterval(iv);
-  }, []);
+  const toTop = (e) => {
+    if (scrollToHash('#hero')) e.preventDefault();
+  };
 
   return (
     <footer className="foot">
@@ -43,6 +31,8 @@ export function Footer() {
             className="brand-logo sm inv-dark"
             src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/github/github-original.svg"
             alt=""
+            width="13"
+            height="13"
             loading="lazy"
             aria-hidden="true"
           />
@@ -53,6 +43,8 @@ export function Footer() {
             className="brand-logo sm"
             src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/linkedin/linkedin-original.svg"
             alt=""
+            width="13"
+            height="13"
             loading="lazy"
             aria-hidden="true"
           />
@@ -64,12 +56,14 @@ export function Footer() {
           </svg>
           Email
         </a>
-        <a href="#hero" className="up" aria-label="Scroll to top">
-          Back to Top ↑
+        <a href="#hero" className="up" aria-label="Scroll to top" onClick={toTop}>
+          Back to Top <span className="arr">↑</span>
         </a>
       </div>
 
-      <span suppressHydrationWarning>Lucknow · {clock}</span>
+      <span>
+        Lucknow · <LocalClock timeZone="Asia/Kolkata" />
+      </span>
     </footer>
   );
 }

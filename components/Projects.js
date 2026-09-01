@@ -1,6 +1,9 @@
 'use client';
 
+import { motion } from 'framer-motion';
 import { SectionHead } from './ui/SectionHead';
+import { Reveal } from './fx/Reveal';
+import { ITEM, STAGGER } from './fx/motion';
 import { RESUME } from '../data/resume';
 
 /* Tailwind gradient tokens from the data file → layered row cover art,
@@ -21,14 +24,13 @@ function coverArt(gradient) {
 }
 
 export function Projects() {
-
   return (
     <section id="projects" className="sec work" aria-labelledby="projects-title">
       <SectionHead title="Featured Projects" index="04" label="Portfolio" titleId="projects-title" />
 
-      <div className="rev">
+      <Reveal stagger={STAGGER.item}>
         {RESUME.projects.map((proj, i) => (
-          <div key={proj.title} className="row" style={{ '--art': coverArt(proj.gradient) }}>
+          <motion.div key={proj.title} className="row rev-i" variants={ITEM} style={{ '--art': coverArt(proj.gradient) }}>
             <div>
               <span className="tag">
                 <i aria-hidden="true">{String(i + 1).padStart(2, '0')}</i> {proj.tag}
@@ -82,9 +84,9 @@ export function Projects() {
                 </a>
               )}
             </div>
-          </div>
+          </motion.div>
         ))}
-      </div>
+      </Reveal>
     </section>
   );
 }

@@ -1,6 +1,10 @@
 'use client';
 
+import { motion } from 'framer-motion';
 import { SectionHead } from './ui/SectionHead';
+import { Reveal } from './fx/Reveal';
+import { Counter } from './fx/Counter';
+import { ITEM, STAGGER } from './fx/motion';
 import { RESUME } from '../data/resume';
 
 const stats = [
@@ -17,8 +21,14 @@ const focusAreas = [
   'Machine Learning',
 ];
 
-/* Big display number where the value leads with one, editorial text otherwise. */
-function StatValue({ value }) {
+const SPLIT_STYLE = { marginTop: 'clamp(38px, 5vw, 60px)' };
+const GAP_16 = { marginTop: 16 };
+const GAP_12 = { marginTop: 12 };
+const STRONG = { color: 'var(--fg)', fontWeight: 500 };
+
+/* Big display number where the value leads with one, editorial text
+   otherwise. The counter starts once its cell's stagger has made it legible. */
+function StatValue({ value, delay }) {
   const m = value.match(/^(\d+)(\+?)\s+(.*)$/);
   if (!m) {
     return <div className="n n-text">{value}</div>;
@@ -26,10 +36,7 @@ function StatValue({ value }) {
   const [, num, plus, unit] = m;
   return (
     <div className="n">
-      <em data-to={num} data-suffix={plus}>
-        {num}
-        {plus}
-      </em>
+      <Counter to={Number(num)} suffix={plus} delay={delay} />
       <span className="unit">{unit}</span>
     </div>
   );
@@ -40,19 +47,19 @@ export function About() {
     <section id="about" className="sec" aria-labelledby="about-title">
       <SectionHead title="Academic & Technical Overview" index="01" label="Background" titleId="about-title" />
 
-      <div className="hair hair-4 stats bleed rev">
-        {stats.map((stat) => (
-          <div key={stat.label}>
+      <Reveal className="hair hair-4 stats bleed" stagger={STAGGER.item}>
+        {stats.map((stat, i) => (
+          <motion.div key={stat.label} className="rev-i" variants={ITEM}>
             <div className="l">{stat.label}</div>
-            <StatValue value={stat.value} />
-          </div>
+            <StatValue value={stat.value} delay={0.25 + i * STAGGER.item} />
+          </motion.div>
         ))}
-      </div>
+      </Reveal>
 
-      <div className="hair hair-split rev" style={{ marginTop: 'clamp(38px, 5vw, 60px)' }}>
-        <div>
+      <div className="hair hair-split" style={SPLIT_STYLE}>
+        <Reveal as="div">
           <span className="eyebrow">Summary</span>
-          <p className="p-body" style={{ marginTop: 16 }}>
+          <p className="p-body" style={GAP_16}>
             {RESUME.summary}
           </p>
           <p className="p-body">
@@ -61,17 +68,17 @@ export function About() {
 
           <div className="sub-hair">
             <div>
-              <h4 className="mini-title">
+              <h3 className="mini-title">
                 <i aria-hidden="true">▹</i> Software Development
-              </h4>
+              </h3>
               <p className="mini-body">
                 REST APIs in Python and FastAPI, frontend work in SvelteKit and Next.js. Comfortable in Java, OOP, and SQL.
               </p>
             </div>
             <div>
-              <h4 className="mini-title">
+              <h3 className="mini-title">
                 <i aria-hidden="true">▹</i> Machine Learning
-              </h4>
+              </h3>
               <p className="mini-body">
                 CNN classifiers, Whisper speech pipelines, and prompt-driven LLM feedback loops — TensorFlow and Keras, tuned by hand.
               </p>
@@ -81,17 +88,17 @@ export function About() {
           <hr className="rule" />
           <span className="eyebrow">Awards &amp; Honors</span>
           {RESUME.awards.map((award) => (
-            <p key={award.title} className="p-body" style={{ marginTop: 12 }}>
-              <strong style={{ color: 'var(--fg)', fontWeight: 500 }}>{award.title}</strong>
+            <p key={award.title} className="p-body" style={GAP_12}>
+              <strong style={STRONG}>{award.title}</strong>
               {' — '}
               {award.detail}
             </p>
           ))}
-        </div>
+        </Reveal>
 
-        <div>
+        <Reveal as="div">
           <span className="eyebrow">Core Focus Areas</span>
-          <ul className="list-rule" style={{ marginTop: 16 }}>
+          <ul className="list-rule" style={GAP_16}>
             {focusAreas.map((area) => (
               <li key={area}>{area}</li>
             ))}
@@ -101,7 +108,7 @@ export function About() {
           <p className="mini-body">
             Google Cloud badges for Gemini, Imagen, and Vertex AI prompt design — plus Deloitte&apos;s technology job simulation.
           </p>
-        </div>
+        </Reveal>
       </div>
     </section>
   );

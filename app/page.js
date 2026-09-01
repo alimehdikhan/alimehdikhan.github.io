@@ -1,11 +1,12 @@
 'use client';
 
+import { MotionConfig } from 'framer-motion';
 import { Preloader } from '../components/fx/Preloader';
 import { FluidBackdrop } from '../components/fx/FluidBackdrop';
 import { Cursor } from '../components/fx/Cursor';
 import { ScrollProgress } from '../components/fx/ScrollProgress';
 import { Ticker } from '../components/fx/Ticker';
-import { RevealManager } from '../components/fx/RevealManager';
+import { InputMode } from '../components/fx/InputMode';
 import { Navbar } from '../components/Navbar';
 import { Hero } from '../components/Hero';
 import { About } from '../components/About';
@@ -20,7 +21,7 @@ import { RESUME } from '../data/resume';
 
 export default function Home() {
   return (
-    <>
+    <MotionConfig reducedMotion="user">
       <a href="#main-content" className="skip">
         Skip to main content
       </a>
@@ -30,10 +31,10 @@ export default function Home() {
       <ScrollProgress />
       <FluidBackdrop />
       <Navbar />
-      <RevealManager />
+      <InputMode />
 
       <div className="wrap">
-        <main id="main-content">
+        <main id="main-content" tabIndex={-1}>
           <div className="pad">
             <Hero />
           </div>
@@ -55,6 +56,6 @@ export default function Home() {
           <Footer />
         </div>
       </div>
-    </>
+    </MotionConfig>
   );
 }

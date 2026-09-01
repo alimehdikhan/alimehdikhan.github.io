@@ -1,8 +1,11 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
-import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
+import { useEffect, useRef } from 'react';
+import { motion, useMotionValue, useReducedMotion, useSpring } from 'framer-motion';
 import { SectionHead } from './ui/SectionHead';
+import { Reveal } from './fx/Reveal';
+import { EASE, ITEM, MAG, STAGGER } from './fx/motion';
+import { ContactForm } from './ContactForm';
 import { RESUME } from '../data/resume';
 
 const contactDetails = [
@@ -45,182 +48,150 @@ const socialLinks = [
   { href: RESUME.linkedin, label: 'LinkedIn', img: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/linkedin/linkedin-original.svg' },
 ];
 
+/* inline style literals hoisted so a re-render never hands motion a new object */
+const LEAD_STYLE = { maxWidth: '46ch' };
+const PILL_WRAP_STYLE = { marginTop: 40 };
+const SPLIT_STYLE = { marginTop: 'clamp(44px, 6vw, 70px)' };
+/* .eyebrow is an inline span; the ITEM rise needs a box to translate */
+const EYEBROW_STYLE = { display: 'inline-block' };
+const COLUMN_STYLE = { display: 'flex', flexDirection: 'column' };
+const DETAILS_STYLE = { marginTop: 24 };
+const SOCIALS_STYLE = { marginTop: 'auto', paddingTop: 42 };
+
+/* headline line mask: the hero's 105% rise, one line at a time */
+const LINE = {
+  hidden: { y: '105%' },
+  visible: { y: 0, transition: { duration: 0.9, ease: EASE } },
+};
+
+/* the CSS `.tile:hover` lift, restated for motion: motion owns the tile's
+   inline transform once it has animated, so the stylesheet lift cannot win */
+const TILE_HOVER = { y: -2, transition: { duration: 0.35, ease: EASE } };
+
+/* the pill pulls a touch harder than the hero buttons; one multiplier, both axes */
+const PILL_PULL = MAG.strength * 1.3;
+
 export function Contact() {
   const prefersReducedMotion = useReducedMotion();
-  const magRef = useRef(null);
-  const [formState, setFormState] = useState({
-    name: '',
-    email: '',
-    subject: '',
-    message: '',
-  });
-  const [status, setStatus] = useState(null); // 'sending', 'success', 'error'
+  const fine = useRef(false);
+  const rect = useRef(null);
+  const magX = useMotionValue(0);
+  const magY = useMotionValue(0);
+  const magSpringX = useSpring(magX, MAG.spring);
+  const magSpringY = useSpring(magY, MAG.spring);
 
-  /* magnetic email pill */
+  /* magnetic email pill: mouse on a fine pointer only, so a tap on a touch or
+     hybrid device never parks the pill off-centre */
   useEffect(() => {
-    const coarse = window.matchMedia('(pointer: coarse)').matches;
-    if (coarse || prefersReducedMotion) return undefined;
-    const m = magRef.current;
-    if (!m) return undefined;
-
-    const onMove = (e) => {
-      const r = m.getBoundingClientRect();
-      m.style.transform = `translate(${(e.clientX - r.left - r.width / 2) * 0.28}px, ${
-        (e.clientY - r.top - r.height / 2) * 0.4
-      }px)`;
+    const mq = window.matchMedia('(hover: hover) and (pointer: fine)');
+    const sync = () => {
+      fine.current = mq.matches;
     };
-    const onLeave = () => {
-      m.style.transform = '';
-    };
-    m.addEventListener('pointermove', onMove);
-    m.addEventListener('pointerleave', onLeave);
+    sync();
+    if (mq.addEventListener) mq.addEventListener('change', sync);
     return () => {
-      m.removeEventListener('pointermove', onMove);
-      m.removeEventListener('pointerleave', onLeave);
+      if (mq.removeEventListener) mq.removeEventListener('change', sync);
     };
-  }, [prefersReducedMotion]);
+  }, []);
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormState((prev) => ({ ...prev, [name]: value }));
+  const magnetActive = (e) => e.pointerType === 'mouse' && fine.current && !prefersReducedMotion;
+
+  /* cache the untransformed box on enter (minus whatever the spring still
+     carries on a quick re-entry) so the pull is measured from a fixed frame
+     instead of chasing the element as it moves */
+  const onMagnetEnter = (e) => {
+    if (!magnetActive(e)) return;
+    const r = e.currentTarget.getBoundingClientRect();
+    rect.current = {
+      left: r.left - magSpringX.get(),
+      top: r.top - magSpringY.get(),
+      width: r.width,
+      height: r.height,
+    };
   };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setStatus('sending');
-
-    try {
-      const response = await fetch('https://formspree.io/f/xjgzwweq', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Accept: 'application/json',
-        },
-        body: JSON.stringify(formState),
-      });
-
-      if (response.ok) {
-        setStatus('success');
-        setFormState({ name: '', email: '', subject: '', message: '' });
-        setTimeout(() => setStatus(null), 5000);
-      } else {
-        setStatus('error');
-      }
-    } catch (err) {
-      setStatus('error');
-    }
+  const onMagnetMove = (e) => {
+    if (!magnetActive(e)) return;
+    if (!rect.current) onMagnetEnter(e);
+    const r = rect.current;
+    magX.set((e.clientX - r.left - r.width / 2) * PILL_PULL);
+    magY.set((e.clientY - r.top - r.height / 2) * PILL_PULL);
+  };
+  const onMagnetLeave = () => {
+    rect.current = null;
+    magX.set(0);
+    magY.set(0);
   };
 
   return (
     <section id="contact" className="sec" aria-labelledby="contact-title">
       <SectionHead title="Contact Me" index="07" label="Get In Touch" titleId="contact-title" />
 
-      <div className="rev">
-        <span className="hero-badge eyebrow">
+      <Reveal stagger={STAGGER.item}>
+        <motion.span className="hero-badge eyebrow rev-i" variants={ITEM}>
           <span className="dot" />
           Available for Entry-Level Roles
-        </span>
+        </motion.span>
 
         <p className="big">
-          Let&apos;s build something <em>great</em> together.
+          <span className="line">
+            <motion.i className="rev-i" variants={LINE}>
+              Let&apos;s build something
+            </motion.i>
+          </span>
+          <span className="line">
+            <motion.i className="rev-i" variants={LINE}>
+              <em>great</em> together.
+            </motion.i>
+          </span>
         </p>
 
-        <p className="p-body" style={{ maxWidth: '46ch' }}>
+        <motion.p className="p-body rev-i" style={LEAD_STYLE} variants={ITEM}>
           Open to Software Engineering and AI/ML roles, internships, and interesting Python or ML collaborations. Email is the fastest way to reach me — I actually read it.
-        </p>
+        </motion.p>
 
-        <div style={{ marginTop: 40 }}>
-          <span className="magnet" ref={magRef}>
+        <motion.div className="rev-i" style={PILL_WRAP_STYLE} variants={ITEM}>
+          <motion.span
+            className="magnet"
+            style={{ x: magSpringX, y: magSpringY }}
+            onPointerEnter={onMagnetEnter}
+            onPointerMove={onMagnetMove}
+            onPointerLeave={onMagnetLeave}
+            onPointerCancel={onMagnetLeave}
+          >
             <a className="mail" href={`mailto:${RESUME.email}`}>
               {RESUME.email}
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
                 <path d="M5 19L19 5M19 5H9M19 5v10" />
               </svg>
             </a>
-          </span>
-        </div>
-      </div>
+          </motion.span>
+        </motion.div>
+      </Reveal>
 
-      <div className="hair hair-split rev" style={{ marginTop: 'clamp(44px, 6vw, 70px)' }}>
-        <div>
-          <span className="eyebrow">Send a message</span>
-          <form onSubmit={handleSubmit} className="form" style={{ marginTop: 24 }} aria-label="Contact Form">
-            <div className="form-row">
-              <div className="field">
-                <label htmlFor="name">
-                  <i aria-hidden="true">01</i>Name
-                </label>
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  required
-                  value={formState.name}
-                  onChange={handleInputChange}
-                />
-              </div>
-              <div className="field">
-                <label htmlFor="email">
-                  <i aria-hidden="true">02</i>Email Address
-                </label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  required
-                  value={formState.email}
-                  onChange={handleInputChange}
-                />
-              </div>
-            </div>
+      {/* each column observes on its own, so on a phone the details column
+          rises when it is actually scrolled to rather than with the form */}
+      <div className="hair hair-split" style={SPLIT_STYLE}>
+        <Reveal as="div" stagger={STAGGER.item}>
+          <motion.span className="eyebrow rev-i" style={EYEBROW_STYLE} variants={ITEM}>
+            Send a message
+          </motion.span>
+          <motion.p className="form-note rev-i" id="form-note" variants={ITEM}>
+            All fields are required.
+          </motion.p>
+          <ContactForm />
+        </Reveal>
 
-            <div className="field">
-              <label htmlFor="subject">
-                <i aria-hidden="true">03</i>Subject
-              </label>
-              <input
-                type="text"
-                id="subject"
-                name="subject"
-                required
-                value={formState.subject}
-                onChange={handleInputChange}
-              />
-            </div>
-
-            <div className="field">
-              <label htmlFor="message">
-                <i aria-hidden="true">04</i>Message
-              </label>
-              <textarea
-                id="message"
-                name="message"
-                required
-                rows="5"
-                value={formState.message}
-                onChange={handleInputChange}
-              />
-            </div>
-
-            <div>
-              <button type="submit" className="btn btn-solid" disabled={status === 'sending'}>
-                {status === 'sending' ? 'Sending…' : status === 'success' ? 'Sent — thanks!' : 'Send Message'}
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-                  <path d="M5 19L19 5M19 5H9M19 5v10" />
-                </svg>
-              </button>
-            </div>
-          </form>
-        </div>
-
-        <div style={{ display: 'flex', flexDirection: 'column' }}>
-          <span className="eyebrow">Details</span>
-          <div className="detail-list" style={{ marginTop: 24 }}>
+        <Reveal as="div" stagger={STAGGER.item} style={COLUMN_STYLE}>
+          <motion.span className="eyebrow rev-i" style={EYEBROW_STYLE} variants={ITEM}>
+            Details
+          </motion.span>
+          <div className="detail-list" style={DETAILS_STYLE}>
             {contactDetails.map((item) => (
-              <a
+              <motion.a
                 key={item.title}
                 href={item.href}
-                className="detail"
+                className="detail rev-i"
+                variants={ITEM}
                 target={item.external ? '_blank' : undefined}
                 rel={item.external ? 'noopener noreferrer' : undefined}
               >
@@ -234,57 +205,36 @@ export function Contact() {
                     <path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
                   </svg>
                 </span>
-              </a>
+              </motion.a>
             ))}
           </div>
 
-          <div className="hero-socials" style={{ marginTop: 'auto', paddingTop: 42 }}>
+          <div className="hero-socials" style={SOCIALS_STYLE}>
             {socialLinks.map((social) => (
-              <a
+              <motion.a
                 key={social.label}
                 href={social.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="tile"
+                className="tile rev-i"
+                variants={ITEM}
+                whileHover={TILE_HOVER}
                 aria-label={social.label}
               >
                 <img
                   className={`brand-logo${social.invDark ? ' inv-dark' : ''}`}
                   src={social.img}
                   alt=""
+                  width="17"
+                  height="17"
                   loading="lazy"
                   aria-hidden="true"
                 />
-              </a>
+              </motion.a>
             ))}
           </div>
-        </div>
+        </Reveal>
       </div>
-
-      <AnimatePresence>
-        {(status === 'success' || status === 'error') && (
-          <motion.div
-            className={`toast${status === 'error' ? ' err' : ''}`}
-            role="status"
-            initial={{ y: 30, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            exit={{ y: 16, opacity: 0 }}
-            transition={{ type: 'spring', stiffness: 200, damping: 22 }}
-          >
-            <div>
-              <div className="t">{status === 'success' ? 'Message sent' : 'That didn’t go through'}</div>
-              <div className="d">
-                {status === 'success'
-                  ? 'It’s in my inbox — I’ll get back to you soon.'
-                  : 'Something went wrong sending that. Mind trying again?'}
-              </div>
-            </div>
-            <button onClick={() => setStatus(null)} aria-label="Dismiss Alert">
-              ×
-            </button>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </section>
   );
 }

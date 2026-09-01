@@ -1,6 +1,21 @@
 import '../styles/globals.css';
+import localFont from 'next/font/local';
 import { ThemeProvider } from '../components/ThemeProvider';
 import { RESUME } from '../data/resume';
+
+/* Self-hosted from ./fonts (latin subsets of the Google Fonts builds): no
+   network at build time or page load, and next/font derives a size-adjusted
+   fallback face so text doesn't shift when the webfont lands. */
+const syne = localFont({ src: './fonts/Syne-latin-400-800.woff2', weight: '400 800', display: 'swap', variable: '--font-syne' });
+const sora = localFont({ src: './fonts/Sora-latin-100-800.woff2', weight: '100 800', display: 'swap', variable: '--font-sora' });
+const plexMono = localFont({
+  src: [
+    { path: './fonts/IBMPlexMono-latin-400.woff2', weight: '400', style: 'normal' },
+    { path: './fonts/IBMPlexMono-latin-500.woff2', weight: '500', style: 'normal' },
+  ],
+  display: 'swap',
+  variable: '--font-plex-mono',
+});
 
 export const metadata = {
   metadataBase: new URL('https://alimehdikhan.github.io'),
@@ -190,14 +205,13 @@ export default function RootLayout({ children }) {
   };
 
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" className={`${syne.variable} ${sora.variable} ${plexMono.variable}`} suppressHydrationWarning>
       <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <noscript>
+          <style>{`.rev,.rev-i{opacity:1!important;transform:none!important}#pre{display:none!important}`}</style>
+        </noscript>
         <link rel="preconnect" href="https://cdn.jsdelivr.net" />
         <link rel="dns-prefetch" href="https://cdn.simpleicons.org" />
-        <link rel="preload" href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Sora:wght@200;300;400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" as="style" />
-        <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Sora:wght@200;300;400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
         <script
           dangerouslySetInnerHTML={{
             __html:
@@ -210,7 +224,7 @@ export default function RootLayout({ children }) {
         />
       </head>
       <body className="antialiased">
-        <ThemeProvider attribute="data-theme" defaultTheme="dark" enableSystem>
+        <ThemeProvider attribute="data-theme" defaultTheme="dark" enableSystem disableTransitionOnChange>
           {children}
         </ThemeProvider>
       </body>

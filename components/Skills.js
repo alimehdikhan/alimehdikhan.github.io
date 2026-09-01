@@ -1,7 +1,20 @@
 'use client';
 
+import { motion } from 'framer-motion';
 import { SectionHead } from './ui/SectionHead';
+import { Reveal } from './fx/Reveal';
+import { useLoaded } from './fx/useLoaded';
+import { ITEM, STAGGER, VIEWPORT } from './fx/motion';
 import { RESUME } from '../data/resume';
+
+/* Each category carries its own viewport observer, so on a phone (where the
+   grid is ~2000px tall) the cells stagger in when their category is actually
+   on screen, not when the top of the block first appears. Cells inherit
+   hidden/visible from the category and land 30ms apart. */
+const category = {
+  hidden: {},
+  visible: { transition: { staggerChildren: STAGGER.cell, delayChildren: 0.05 } },
+};
 
 /* Official full-colour logos (devicon "original" set) for skills that have a
    real brand mark; the rest (soft skills, generic terms like SQL / REST APIs /
@@ -46,6 +59,8 @@ function SkillLogo({ name }) {
         className={invDark ? 'inv-dark' : undefined}
         src={src}
         alt=""
+        width="17"
+        height="17"
         loading="lazy"
         onError={hide}
       />
@@ -97,13 +112,22 @@ const categories = [
 ];
 
 export function Skills() {
+  const loaded = useLoaded();
+
   return (
     <section id="skills" className="sec" aria-labelledby="skills-title">
       <SectionHead title="Skills & Abilities" index="02" label="Technical Expertise" titleId="skills-title" />
 
-      <div className="hair hair-2 hair-hover rev">
-        {categories.map((cat, ci) => (
-          <div key={cat.title} className="cat">
+      <Reveal className="hair hair-2 hair-hover" rise={false}>
+        {categories.map((cat) => (
+          <motion.div
+            key={cat.title}
+            className="cat"
+            variants={category}
+            initial="hidden"
+            whileInView={loaded ? 'visible' : undefined}
+            viewport={VIEWPORT}
+          >
             <div className="cat-top">
               <span className="eyebrow">{cat.eyebrow}</span>
             </div>
@@ -114,16 +138,16 @@ export function Skills() {
             </div>
 
             <div className="skill-grid">
-              {cat.skills.map((skill, i) => (
-                <span key={skill} style={{ '--i': ci * 2 + i }}>
+              {cat.skills.map((skill) => (
+                <motion.span key={skill} className="rev-i" variants={ITEM}>
                   <SkillLogo name={skill} />
                   {skill}
-                </span>
+                </motion.span>
               ))}
             </div>
-          </div>
+          </motion.div>
         ))}
-      </div>
+      </Reveal>
     </section>
   );
 }
