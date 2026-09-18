@@ -1,74 +1,34 @@
-'use client';
+﻿'use client';
+import { useEffect, useRef, useState } from 'react';
+import { SkillLogo } from '../Skills';
 
-import { useEffect, useRef } from 'react';
-import { motion, useAnimationFrame, useInView, useMotionValue, useReducedMotion } from 'framer-motion';
-
-/* px per ms — 0.55px/frame at 60fps. framer clamps `delta` to 40ms, so below
-   25fps the strip slows rather than skips, which reads better under jank. */
-const SPEED = 0.033;
-
-/* Marquee strip drifting at a constant speed, unaffected by scrolling.
-   - Only runs while on screen (±200px), so it stops writing transforms for
-     the 90% of a visit spent below the hero.
-   - Hover eases the velocity to rest (~400ms) instead of hard-stopping.
-   - The loop distance is measured sub-pixel from the duplicate set's real
-     offset and re-measured by a ResizeObserver (font swap, item change).
-   - Never moves under reduced motion. */
-export function Ticker({ items }) {
-  const trackRef = useRef(null);
-  const halfWidth = useRef(0);
-  const paused = useRef(false);
-  const vel = useRef(1);
-  const x = useMotionValue(0);
-  const reduce = useReducedMotion();
-  const inView = useInView(trackRef, { margin: '200px 0px 200px 0px' });
-
-  useEffect(() => {
-    const track = trackRef.current;
-    if (!track || typeof ResizeObserver === 'undefined') return undefined;
-    const ro = new ResizeObserver(() => {
-      halfWidth.current = 0;
-    });
-    ro.observe(track);
-    return () => ro.disconnect();
-  }, []);
-
-  useAnimationFrame((_, delta) => {
-    if (reduce || !inView) return;
-    const track = trackRef.current;
-    if (!track) return;
-
-    const target = paused.current ? 0 : 1;
-    vel.current += (target - vel.current) * (1 - Math.exp(-delta / 160));
-    if (paused.current && vel.current < 0.002) return;
-
-    if (!halfWidth.current) {
-      const kids = track.children;
-      const half = kids.length >> 1;
-      if (kids.length && kids[half]) {
-        halfWidth.current = kids[half].getBoundingClientRect().left - kids[0].getBoundingClientRect().left;
-      }
-    }
-    const w = halfWidth.current || 1;
-    x.set((x.get() - SPEED * vel.current * delta) % w);
-  });
-
-  return (
-    <div
-      className="ticker"
-      aria-hidden="true"
-      onPointerEnter={() => {
-        paused.current = true;
-      }}
-      onPointerLeave={() => {
-        paused.current = false;
-      }}
-    >
-      <motion.div className="track" ref={trackRef} style={{ x }}>
-        {[...items, ...items].map((item, i) => (
-          <span key={`${item}-${i}`}>{item}</span>
-        ))}
-      </motion.div>
-    </div>
-  );
+export function Ticker({items}) {
+  const track=useRef(null), root=useRef(null), pause=useRef(false);
+  const [paused,setPaused]=useState(false);
+  useEffect(()=>{
+    const media=matchMedia('(prefers-reduced-motion: reduce)');
+    let frame=0,last=0,x=0,width=1,visible=false,velocity=0,lastScroll=scrollY,lastTime=performance.now();
+    const measure=()=>{width=track.current.scrollWidth/2;};
+    const render=time=>{
+      frame=0;if(document.hidden||!visible||media.matches)return;
+      const dt=Math.min(time-last||16,40);last=time;
+      velocity*=Math.exp(-dt/220);
+      if(!pause.current){x=(x-dt*.027*(1+Math.min(velocity/900,4)))%width;track.current.style.transform=`translate3d(${x}px,0,0)`;}
+      frame=requestAnimationFrame(render);
+    };
+    const sync=()=>{cancelAnimationFrame(frame);frame=0;if(media.matches){track.current.style.transform='none';return;}if(!document.hidden&&visible){last=0;frame=requestAnimationFrame(render);}};
+    const scroll=()=>{const now=performance.now();velocity=Math.abs(scrollY-lastScroll)/Math.max(now-lastTime,16)*1000;lastScroll=scrollY;lastTime=now;};
+    const ro=new ResizeObserver(measure);ro.observe(track.current);measure();
+    const io=new IntersectionObserver(([entry])=>{visible=entry.isIntersecting;sync();});io.observe(root.current);
+    window.addEventListener('scroll',scroll,{passive:true});document.addEventListener('visibilitychange',sync);media.addEventListener('change',sync);
+    return ()=>{cancelAnimationFrame(frame);ro.disconnect();io.disconnect();window.removeEventListener('scroll',scroll);document.removeEventListener('visibilitychange',sync);media.removeEventListener('change',sync);};
+  },[]);
+  const toggle=()=>{pause.current=!paused;setPaused(!paused);};
+  return <div className="ticker bleed" ref={root} role="button" tabIndex={0}
+    aria-label={`Tech stack marquee. ${paused?'Resume':'Pause'} animation`} aria-pressed={paused}
+    onClick={toggle} onKeyDown={event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();toggle();}}}
+    onPointerEnter={()=>{pause.current=true;}} onPointerLeave={()=>{pause.current=paused;}}
+    onFocus={()=>{pause.current=true;}} onBlur={()=>{pause.current=paused;}}>
+    <div className="track" ref={track} aria-hidden="true">{[...items,...items].map((item,i)=><span key={`${item}-${i}`}><SkillLogo name={item}/>{item}</span>)}</div>
+  </div>;
 }
