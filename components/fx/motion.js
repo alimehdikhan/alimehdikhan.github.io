@@ -10,7 +10,7 @@ export const EASE_IN_OUT = [0.65, 0, 0.35, 1];
 /* back-compat alias: this was mis-named after CSS `ease`; it is the fade curve */
 export const EASE_CSS = EASE_FADE;
 
-export const DUR = { fast: 0.25, base: 0.4, slow: 0.7, rise: 0.8 };
+export const DUR = { fast: 0.2, base: 0.3, slow: 0.45, rise: 0.45 };
 
 export const SPRING = {
   /* magnets and small UI: ζ≈1.1, settles in ~250ms without overshoot */
@@ -30,7 +30,7 @@ export const STAGGER = { item: 0.06, cell: 0.03, link: 0.035 };
 
 /* Reveal trigger: 160px lead above (upward scroll / hash landings), and the
    block's top must be 48px inside the viewport below, so the rise is seen. */
-export const VIEWPORT = { once: true, margin: '160px 0px -48px 0px' };
+export const VIEWPORT = { once: true, amount: 0, margin: '0px 0px -15% 0px' };
 
 /* block reveal: fast fade, slow visible rise */
 export const BLOCK_T = {
