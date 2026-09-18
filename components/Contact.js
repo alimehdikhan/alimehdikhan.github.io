@@ -6,6 +6,7 @@ import { SectionHead } from './ui/SectionHead';
 import { Reveal } from './fx/Reveal';
 import { EASE, ITEM, MAG, STAGGER } from './fx/motion';
 import { ContactForm } from './ContactForm';
+import { VariableContact } from './fx/VariableContact';
 import { RESUME } from '../data/resume';
 
 const contactDetails = [
@@ -58,11 +59,6 @@ const COLUMN_STYLE = { display: 'flex', flexDirection: 'column' };
 const DETAILS_STYLE = { marginTop: 24 };
 const SOCIALS_STYLE = { marginTop: 'auto', paddingTop: 42 };
 
-/* headline line mask: the hero's 105% rise, one line at a time */
-const LINE = {
-  hidden: { y: '105%' },
-  visible: { y: 0, transition: { duration: 0.9, ease: EASE } },
-};
 
 /* the CSS `.tile:hover` lift, restated for motion: motion owns the tile's
    inline transform once it has animated, so the stylesheet lift cannot win */
@@ -113,8 +109,8 @@ export function Contact() {
     if (!magnetActive(e)) return;
     if (!rect.current) onMagnetEnter(e);
     const r = rect.current;
-    magX.set((e.clientX - r.left - r.width / 2) * PILL_PULL);
-    magY.set((e.clientY - r.top - r.height / 2) * PILL_PULL);
+    magX.set(Math.max(-8, Math.min(8, (e.clientX - r.left - r.width / 2) * PILL_PULL)));
+    magY.set(Math.max(-8, Math.min(8, (e.clientY - r.top - r.height / 2) * PILL_PULL)));
   };
   const onMagnetLeave = () => {
     rect.current = null;
@@ -132,18 +128,7 @@ export function Contact() {
           Available for Entry-Level Roles
         </motion.span>
 
-        <p className="big">
-          <span className="line">
-            <motion.i className="rev-i" variants={LINE}>
-              Let&apos;s build something
-            </motion.i>
-          </span>
-          <span className="line">
-            <motion.i className="rev-i" variants={LINE}>
-              <em>great</em> together.
-            </motion.i>
-          </span>
-        </p>
+        <VariableContact />
 
         <motion.p className="p-body rev-i" style={LEAD_STYLE} variants={ITEM}>
           Open to Software Engineering and AI/ML roles, internships, and interesting Python or ML collaborations. Email is the fastest way to reach me — I actually read it.
