@@ -1,20 +1,14 @@
 'use client';
 
-import { motion } from 'framer-motion';
 import { SectionHead } from './ui/SectionHead';
 import { Reveal } from './fx/Reveal';
-import { useLoaded } from './fx/useLoaded';
-import { ITEM, STAGGER, VIEWPORT } from './fx/motion';
+import { STAGGER } from './fx/motion';
 import { RESUME } from '../data/resume';
 
 /* Each category carries its own viewport observer, so on a phone (where the
    grid is ~2000px tall) the cells stagger in when their category is actually
    on screen, not when the top of the block first appears. Cells inherit
    hidden/visible from the category and land 30ms apart. */
-const category = {
-  hidden: {},
-  visible: { transition: { staggerChildren: STAGGER.cell, delayChildren: 0.05 } },
-};
 
 /* Official full-colour logos (devicon "original" set) for skills that have a
    real brand mark; the rest (soft skills, generic terms like SQL / REST APIs /
@@ -44,7 +38,7 @@ const LOGOS = {
   'OpenAI Whisper': { url: 'https://cdn.jsdelivr.net/npm/simple-icons@13/icons/openai.svg', invDark: true },
 };
 
-function SkillLogo({ name }) {
+export function SkillLogo({ name }) {
   const entry = LOGOS[name];
   if (!entry) return null;
   const path = typeof entry === 'string' ? entry : entry.path;
@@ -112,7 +106,6 @@ const categories = [
 ];
 
 export function Skills() {
-  const loaded = useLoaded();
 
   return (
     <section id="skills" className="sec" aria-labelledby="skills-title">
@@ -120,13 +113,13 @@ export function Skills() {
 
       <Reveal className="hair hair-2 hair-hover" rise={false}>
         {categories.map((cat) => (
-          <motion.div
+          <div
             key={cat.title}
             className="cat"
-            variants={category}
-            initial="hidden"
-            whileInView={loaded ? 'visible' : undefined}
-            viewport={VIEWPORT}
+
+
+
+
           >
             <div className="cat-top">
               <span className="eyebrow">{cat.eyebrow}</span>
@@ -139,13 +132,13 @@ export function Skills() {
 
             <div className="skill-grid">
               {cat.skills.map((skill) => (
-                <motion.span key={skill} className="rev-i" variants={ITEM}>
+                <span key={skill} className="rev-i">
                   <SkillLogo name={skill} />
                   {skill}
-                </motion.span>
+                </span>
               ))}
             </div>
-          </motion.div>
+          </div>
         ))}
       </Reveal>
     </section>
