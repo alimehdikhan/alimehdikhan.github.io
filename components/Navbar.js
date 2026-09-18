@@ -36,13 +36,13 @@ const lineOrigin = { originX: '50%', originY: '50%' };
 const panelVariants = {
   open: {
     opacity: 1,
-    transition: { duration: 0.22, when: 'beforeChildren', staggerChildren: STAGGER.link, delayChildren: 0.04 },
+    transition: { duration: 0.18, when: 'beforeChildren', staggerChildren: 0.018 },
   },
   closed: { opacity: 0, transition: { duration: 0.18 } },
 };
 const linkVariants = {
   closed: { opacity: 0, y: 14 },
-  open: { opacity: 1, y: 0, transition: { duration: 0.45, ease: EASE } },
+  open: { opacity: 1, y: 0, transition: { duration: 0.24, ease: EASE } },
 };
 
 /* keep the URL hash on the visible section: replaceState (no history spam,
@@ -200,8 +200,8 @@ export function Navbar() {
 
   return (
     <>
-      <nav className={`nav${scrolled ? ' scrolled' : ''}`} role="navigation" aria-label="Main Navigation">
-        <a className="mark" href="#hero" aria-label={RESUME.name} onClick={(e) => handleLinkClick(e, '#hero')}>
+      <nav className={`nav${scrolled ? ' scrolled' : ''}${isOpen ? ' menu-open' : ''}`} role="navigation" aria-label="Main Navigation">
+        <a className="mark" href="#hero" aria-label={`AMK. — ${RESUME.name}`} onClick={(e) => handleLinkClick(e, '#hero')}>
           AMK<em>.</em>
         </a>
 
@@ -244,6 +244,7 @@ export function Navbar() {
             aria-label="Download Resume PDF"
           >
             Resume
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true"><path d="M12 3v12m-4-4 4 4 4-4M5 16v5h14v-5" strokeLinecap="round" strokeLinejoin="round"/></svg>
           </a>
           <button
             ref={burgerRef}
