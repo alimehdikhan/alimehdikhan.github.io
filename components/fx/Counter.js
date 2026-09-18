@@ -23,7 +23,7 @@ export function Counter({ to, suffix = '', delay = 0.2, className }) {
 
     const small = to < 10;
     const controls = animate(0, to, {
-      duration: small ? 0.55 : 1.1,
+      duration: small ? 0.4 : 0.55,
       delay,
       ease: small ? 'linear' : [0.33, 1, 0.68, 1],
       onUpdate: (v) => {
@@ -33,13 +33,13 @@ export function Counter({ to, suffix = '', delay = 0.2, className }) {
         el.textContent = `${to}${suffix}`;
       },
     });
-    return () => controls.stop();
+    return () => { controls.stop(); el.textContent = `${to}${suffix}`; };
   }, [inView, loaded, reduce, to, suffix, delay]);
 
   return (
-    <em ref={ref} className={className}>
+    <><span className="sr-only">{to}{suffix}</span><em ref={ref} className={className} aria-hidden="true">
       {to}
       {suffix}
-    </em>
+    </em></>
   );
 }
