@@ -1,15 +1,14 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
-import { motion, useReducedMotion, useScroll, useSpring, useTransform } from 'framer-motion';
+import { useEffect, useState } from 'react';
 import { MagneticButton } from './ui/MagneticButton';
 import { trackResumeDownload } from './fx/trackDownload';
 import { revealSection } from './fx/revealSection';
 import { scrollToHash } from './fx/scrollTo';
 import { Typewriter } from './fx/Typewriter';
 import { LocalClock } from './fx/LocalClock';
-import { SPRING } from './fx/motion';
 import { RESUME } from '../data/resume';
+import { HeroMotion } from './fx/HeroMotion';
 
 const credibilityChips = [
   {
@@ -30,28 +29,8 @@ const socials = [
    components that write through refs, so this tree renders once and only
    re-renders when the scroll cue is dismissed. */
 export function Hero() {
-  const prefersReducedMotion = useReducedMotion();
   const roles = RESUME.roles;
   const [cueGone, setCueGone] = useState(false);
-
-  /* headline parallax: the giant name drifts and fades as you scroll away.
-     The scroll value is spring-smoothed so wheel steps become a glide; the
-     viewport height is cached so nothing is read from layout per frame. */
-  const { scrollY } = useScroll();
-  const smooth = useSpring(scrollY, SPRING.scroll);
-  const vh = useRef(1);
-  useEffect(() => {
-    const update = () => {
-      vh.current = window.innerHeight || 1;
-    };
-    update();
-    window.addEventListener('resize', update, { passive: true });
-    return () => window.removeEventListener('resize', update);
-  }, []);
-  const nameY = useTransform(smooth, (v) => (prefersReducedMotion ? 0 : Math.min(v, vh.current) * 0.14));
-  const nameOpacity = useTransform(smooth, (v) =>
-    prefersReducedMotion ? 1 : Math.max(1 - (Math.min(v, vh.current) / vh.current) * 1.5, 0)
-  );
 
   /* cursor cue: only dismiss once the curtain is up and the pointer has
      actually travelled — or on the first scroll / tap, when it is moot */
@@ -67,7 +46,6 @@ export function Hero() {
       off();
     };
     const onMove = (e) => {
-      if (!document.documentElement.classList.contains('is-loaded')) return;
       travel += Math.abs(e.movementX) + Math.abs(e.movementY);
       if (travel >= 40) dismiss();
     };
@@ -91,28 +69,29 @@ export function Hero() {
 
   return (
     <header id="hero" className="hero">
+      <HeroMotion />
       <div className="hero-top">
         <span className="hero-badge eyebrow">
           <span className="dot" />
-          Actively seeking entry-level opportunities
+          <span className="hero-label">Actively seeking entry-level opportunities</span>
         </span>
         <span className="eyebrow">
           {RESUME.location} · <LocalClock timeZone="Asia/Kolkata" />
         </span>
       </div>
 
-      <span className="hero-hi">Hi, I&apos;m</span>
-      <motion.h1 style={{ y: nameY, opacity: nameOpacity }}>
-        <span className="line">
-          <i>{lineOne}</i>
-        </span>
-        <span className="line">
-          <i>{lineTwo}</i>
-        </span>
-      </motion.h1>
-
       <div className="hero-grid">
-        <div>
+        <div className="hero-copy">
+      <span className="hero-hi">Hi, I&apos;m</span>
+      <h1 className="hero-name">
+        <span className="line">
+          <i className="first-name">{lineOne}</i>
+        </span>
+        <span className="line">
+          <i className="outline-name" data-text={lineTwo}>{lineTwo}</i>
+        </span>
+      </h1>
+
           <div className="hero-role hero-fade">
             {/* complete phrase for screen readers; the typewriter is decorative */}
             <span className="sr-only">I&apos;m a {roles.join(', ')}.</span>
@@ -199,12 +178,19 @@ export function Hero() {
         </div>
 
         <figure className="portrait hero-fade hero-fade-2">
+          <svg width="0" height="0" className="effect-defs" aria-hidden="true"><defs>
+            <filter id="portrait-ripple"><feTurbulence type="fractalNoise" baseFrequency="0.015 0.025" numOctaves="1" seed="7" result="noise"/>
+              <feDisplacementMap id="portrait-displacement" in="SourceGraphic" in2="noise" scale="0" xChannelSelector="R" yChannelSelector="G"/>
+            </filter>
+          </defs></svg>
           <img
-            src="/assets/images/profile.png"
+            src="/assets/images/profile-800.webp"
+            srcSet="/assets/images/profile-480.webp 480w, /assets/images/profile-800.webp 800w"
+            sizes="(max-width: 620px) 280px, (max-width: 900px) 38vw, 34vw"
             alt="Portrait of Ali Mehdi Khan, Software Engineer and AI/ML Developer"
             loading="eager"
             decoding="async"
-            fetchPriority="high"
+            fetchPriority="auto"
             width={320}
             height={320}
           />
