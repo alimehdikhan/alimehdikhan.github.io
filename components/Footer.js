@@ -56,7 +56,7 @@ export function Footer() {
           </svg>
           Email
         </a>
-        <a href="#hero" className="up" aria-label="Scroll to top" onClick={toTop}>
+        <a href="#hero" className="up" aria-label="Back to Top" onClick={toTop}>
           Back to Top <span className="arr">↑</span>
         </a>
       </div>
