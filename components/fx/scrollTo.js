@@ -17,6 +17,17 @@ const INTERRUPTS = ['wheel', 'touchstart', 'keydown'];
 
 let travel = null;
 let stopListeners = null;
+let smoothScroller = null;
+export function setSmoothScroller(scroller) { smoothScroller = scroller; }
+
+// Gallery controls share Lenis so native smooth scrolling never fights its RAF.
+export function scrollToPosition(top, { immediate = false } = {}) {
+  if (smoothScroller) {
+    smoothScroller.scrollTo(top, { immediate, duration: .55 });
+  } else {
+    window.scrollTo({ top, behavior: immediate ? 'instant' : 'smooth' });
+  }
+}
 
 function finish(hash) {
   if (stopListeners) stopListeners();
@@ -48,6 +59,12 @@ export function scrollToHash(hash, { push = true } = {}) {
 
   if (travel) travel.stop();
   if (stopListeners) stopListeners();
+
+  if (smoothScroller) {
+    travel = { stop: () => smoothScroller?.scrollTo(window.scrollY, { immediate: true }) };
+    smoothScroller.scrollTo(to, { duration: .8, onComplete: () => finish(hash) });
+    return true;
+  }
 
   const dist = Math.abs(to - from);
   if (dist < 2) {
