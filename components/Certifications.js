@@ -1,9 +1,8 @@
 'use client';
 
-import { motion } from 'framer-motion';
 import { SectionHead } from './ui/SectionHead';
 import { Reveal } from './fx/Reveal';
-import { ITEM, STAGGER } from './fx/motion';
+import { STAGGER } from './fx/motion';
 import { RESUME } from '../data/resume';
 
 /* Real issuer marks where one exists on a public CDN; issuers without a
@@ -45,7 +44,7 @@ export function Certifications() {
 
       <Reveal className="hair hair-2 hair-hover" stagger={STAGGER.item}>
         {RESUME.certifications.map((cert) => (
-          <motion.div key={cert.title} className="rev-i" variants={ITEM}>
+          <div key={cert.title} className="rev-i">
             <div className="cert-head">
               <div className="cert-id">
                 <IssuerLogo issuer={cert.issuer} />
@@ -54,7 +53,7 @@ export function Certifications() {
               <span className="cert-date">{cert.date}</span>
             </div>
             <p className="cert-issuer">{cert.issuer}</p>
-          </motion.div>
+          </div>
         ))}
       </Reveal>
     </section>
