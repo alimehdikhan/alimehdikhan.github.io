@@ -50,8 +50,8 @@ export function MagneticButton({
   const onPointerMove = (e) => {
     if (e.pointerType !== 'mouse' || prefersReducedMotion || disabled) return;
     const r = rect.current || (rect.current = e.currentTarget.getBoundingClientRect());
-    x.set((e.clientX - (r.left + r.width / 2)) * MAG.strength);
-    y.set((e.clientY - (r.top + r.height / 2)) * MAG.strength);
+    x.set(Math.max(-8, Math.min(8, (e.clientX - (r.left + r.width / 2)) * MAG.strength)));
+    y.set(Math.max(-8, Math.min(8, (e.clientY - (r.top + r.height / 2)) * MAG.strength)));
   };
   const handleClick = (e) => {
     reset();
