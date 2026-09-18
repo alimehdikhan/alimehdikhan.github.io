@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { ITEM, SPRING } from './fx/motion';
 
 /* The contact form owns its own state so a keystroke re-renders this
@@ -39,6 +39,7 @@ const validate = (name, value) => {
 };
 
 export function ContactForm() {
+  const reducedMotion = useReducedMotion();
   const [formState, setFormState] = useState(EMPTY);
   const [status, setStatus] = useState(null); // 'sending', 'success', 'error'
   const [errors, setErrors] = useState({});
@@ -157,6 +158,8 @@ export function ContactForm() {
   return (
     <>
       <motion.form
+        action={ENDPOINT}
+        method="POST"
         onSubmit={handleSubmit}
         className="form rev-i"
         variants={ITEM}
@@ -225,7 +228,7 @@ export function ContactForm() {
         <div>
           {/* all three labels share one grid cell, so the button is always as
               wide as its widest label and never resizes between states */}
-          <button type="submit" className="btn btn-solid" disabled={status === 'sending'}>
+          <motion.button type="submit" className="btn btn-solid" data-status={status || 'idle'} disabled={status === 'sending'} aria-busy={status === 'sending'} whileTap={{ scale: .98 }} animate={status === 'success' && !reducedMotion ? { scale: [1, 1.035, 1] } : { scale: 1 }} transition={{ duration: .32 }}>
             <span className="lbl">
               <span data-on={status !== 'sending' && status !== 'success'}>Send Message</span>
               <span data-on={status === 'sending'}>Sending…</span>
@@ -234,7 +237,7 @@ export function ContactForm() {
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
               <path d="M5 19L19 5M19 5H9M19 5v10" />
             </svg>
-          </button>
+          </motion.button>
         </div>
       </motion.form>
 
