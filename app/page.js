@@ -1,9 +1,7 @@
-'use client';
-
-import { MotionConfig } from 'framer-motion';
-import { Preloader } from '../components/fx/Preloader';
-import { FluidBackdrop } from '../components/fx/FluidBackdrop';
-import { Cursor } from '../components/fx/Cursor';
+import { MotionProvider } from '../components/fx/MotionProvider';
+import { ClientEffects } from '../components/fx/ClientEffects';
+import { ScrollMotion } from '../components/fx/ScrollMotion';
+import { MicroInteractions } from '../components/fx/MicroInteractions';
 import { ScrollProgress } from '../components/fx/ScrollProgress';
 import { Ticker } from '../components/fx/Ticker';
 import { InputMode } from '../components/fx/InputMode';
@@ -21,15 +19,15 @@ import { RESUME } from '../data/resume';
 
 export default function Home() {
   return (
-    <MotionConfig reducedMotion="user">
+    <MotionProvider>
       <a href="#main-content" className="skip">
         Skip to main content
       </a>
 
-      <Preloader />
-      <Cursor />
       <ScrollProgress />
-      <FluidBackdrop />
+      <ClientEffects />
+      <ScrollMotion />
+      <MicroInteractions />
       <Navbar />
       <InputMode />
 
@@ -39,10 +37,9 @@ export default function Home() {
             <Hero />
           </div>
 
-          <Ticker items={RESUME.skills.technical} />
-
           <div className="pad">
             <About />
+            <Ticker items={RESUME.skills.technical} />
             <Skills />
             <Timeline />
             <Projects />
@@ -56,6 +53,6 @@ export default function Home() {
           <Footer />
         </div>
       </div>
-    </MotionConfig>
+    </MotionProvider>
   );
 }
