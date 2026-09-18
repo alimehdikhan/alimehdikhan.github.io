@@ -1,10 +1,7 @@
-'use client';
-
-import { motion } from 'framer-motion';
 import { SectionHead } from './ui/SectionHead';
 import { Reveal } from './fx/Reveal';
 import { Counter } from './fx/Counter';
-import { ITEM, STAGGER } from './fx/motion';
+import { STAGGER } from './fx/motion';
 import { RESUME } from '../data/resume';
 
 const stats = [
@@ -49,10 +46,10 @@ export function About() {
 
       <Reveal className="hair hair-4 stats bleed" stagger={STAGGER.item}>
         {stats.map((stat, i) => (
-          <motion.div key={stat.label} className="rev-i" variants={ITEM}>
+          <div key={stat.label} className="rev-i">
             <div className="l">{stat.label}</div>
             <StatValue value={stat.value} delay={0.25 + i * STAGGER.item} />
-          </motion.div>
+          </div>
         ))}
       </Reveal>
 
