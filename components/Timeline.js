@@ -1,13 +1,7 @@
-'use client';
-
-import { motion } from 'framer-motion';
 import { SectionHead } from './ui/SectionHead';
 import { Reveal } from './fx/Reveal';
-import { EASE, ITEM, STAGGER } from './fx/motion';
+import { STAGGER } from './fx/motion';
 import { RESUME } from '../data/resume';
-
-/* the vertical rail draws down as the entries land beside it */
-const line = { hidden: { scaleY: 0 }, visible: { scaleY: 1, transition: { duration: 1.1, ease: EASE } } };
 
 export function Timeline() {
   return (
@@ -15,9 +9,9 @@ export function Timeline() {
       <SectionHead title="Experience & Involvement" index="03" label="Work History" titleId="experience-title" />
 
       <Reveal className="rail" stagger={STAGGER.item}>
-        <motion.i className="rail-line rev-i" aria-hidden="true" variants={line} style={{ originY: 0 }} />
+        <i className="rail-line rev-i" aria-hidden="true" />
         {RESUME.experience.map((exp) => (
-          <motion.article key={exp.role} className="rail-item rev-i" variants={ITEM}>
+          <article key={exp.role} className="rail-item rev-i">
             <div className="rail-head">
               <h3>{exp.role}</h3>
               <span className="rail-date">{exp.date}</span>
@@ -28,7 +22,7 @@ export function Timeline() {
                 <li key={dIdx}>{detail}</li>
               ))}
             </ul>
-          </motion.article>
+          </article>
         ))}
       </Reveal>
     </section>
