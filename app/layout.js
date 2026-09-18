@@ -1,21 +1,6 @@
 import '../styles/globals.css';
-import localFont from 'next/font/local';
 import { ThemeProvider } from '../components/ThemeProvider';
 import { RESUME } from '../data/resume';
-
-/* Self-hosted from ./fonts (latin subsets of the Google Fonts builds): no
-   network at build time or page load, and next/font derives a size-adjusted
-   fallback face so text doesn't shift when the webfont lands. */
-const syne = localFont({ src: './fonts/Syne-latin-400-800.woff2', weight: '400 800', display: 'swap', variable: '--font-syne' });
-const sora = localFont({ src: './fonts/Sora-latin-100-800.woff2', weight: '100 800', display: 'swap', variable: '--font-sora' });
-const plexMono = localFont({
-  src: [
-    { path: './fonts/IBMPlexMono-latin-400.woff2', weight: '400', style: 'normal' },
-    { path: './fonts/IBMPlexMono-latin-500.woff2', weight: '500', style: 'normal' },
-  ],
-  display: 'swap',
-  variable: '--font-plex-mono',
-});
 
 export const metadata = {
   metadataBase: new URL('https://alimehdikhan.github.io'),
@@ -205,19 +190,13 @@ export default function RootLayout({ children }) {
   };
 
   return (
-    <html lang="en" className={`${syne.variable} ${sora.variable} ${plexMono.variable}`} suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning>
       <head>
         <noscript>
           <style>{`.rev,.rev-i{opacity:1!important;transform:none!important}#pre{display:none!important}`}</style>
         </noscript>
         <link rel="preconnect" href="https://cdn.jsdelivr.net" />
         <link rel="dns-prefetch" href="https://cdn.simpleicons.org" />
-        <script
-          dangerouslySetInnerHTML={{
-            __html:
-              "(function(){try{if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches){document.documentElement.classList.add('is-loading');}}catch(e){}})();",
-          }}
-        />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
