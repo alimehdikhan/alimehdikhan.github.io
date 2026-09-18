@@ -1,10 +1,7 @@
-'use client';
-
-import { motion } from 'framer-motion';
 import { SectionHead } from './ui/SectionHead';
 import { MagneticButton } from './ui/MagneticButton';
 import { Reveal } from './fx/Reveal';
-import { ITEM, STAGGER } from './fx/motion';
+import { STAGGER } from './fx/motion';
 import { RESUME } from '../data/resume';
 
 const stats = [
@@ -33,10 +30,10 @@ export function OpenSource() {
 
           <div className="hair hair-3 stats" style={STATS_STYLE}>
             {stats.map((s) => (
-              <motion.div key={s.name} className="rev-i" variants={ITEM} style={CELL_STYLE}>
+              <div key={s.name} className="rev-i" style={CELL_STYLE}>
                 <div className="n n-text">{s.value}</div>
                 <div className="l">{s.name}</div>
-              </motion.div>
+              </div>
             ))}
           </div>
 
@@ -64,25 +61,25 @@ export function OpenSource() {
               <span className="name">A.I-Pronunciation-Coach</span>
             </div>
             <div className="term-body">
-              <motion.div className="term-cmd rev-i" variants={ITEM}>
+              <div className="term-cmd rev-i">
                 <i aria-hidden="true">$</i>
                 <span>git log --oneline -5</span>
-              </motion.div>
+              </div>
               <div className="term-out">
                 {RESUME.githubCommits.map((commit) => (
-                  <motion.div key={commit.sha} className="rev-i" variants={ITEM}>
+                  <div key={commit.sha} className="rev-i">
                     <span className="sha">{commit.sha}</span> {commit.message}
-                  </motion.div>
+                  </div>
                 ))}
               </div>
 
-              <motion.div className="term-cmd rev-i" variants={ITEM}>
+              <div className="term-cmd rev-i">
                 <i aria-hidden="true">$</i>
                 <span>echo $STATUS</span>
-              </motion.div>
-              <motion.div className="term-ok rev-i" variants={ITEM}>
+              </div>
+              <div className="term-ok rev-i">
                 Available for entry-level Software Engineering and AI/ML roles
-              </motion.div>
+              </div>
             </div>
           </div>
         </Reveal>
