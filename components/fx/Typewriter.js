@@ -17,6 +17,7 @@ export function Typewriter({ words, type = 55, erase = 28, hold = 3200, pause = 
   useEffect(() => {
     const el = ref.current;
     if (!el || !loaded || !words.length) return undefined;
+    if (reduce) { el.textContent = words[0]; return; }
 
     let i = 0;
     let len = 0;
@@ -72,5 +73,5 @@ export function Typewriter({ words, type = 55, erase = 28, hold = 3200, pause = 
     };
   }, [words, reduce, loaded, type, erase, hold, pause, start]);
 
-  return <b ref={ref} />;
+  return <b ref={ref}>{words[0]}</b>;
 }
