@@ -1,31 +1,27 @@
-import { BadgeCheck } from 'lucide-react';
+import { BadgeCheck } from '@/components/ui/icons';
 import { SectionHead } from './ui/SectionHead';
 import { DirectionalCard } from './ui/directional-card';
+import { IconTile } from './ui/icon-tile';
 import { Reveal } from './fx/Reveal';
 import { RESUME } from '../data/resume';
 
-/* Real issuer marks where one exists on a public CDN; issuers without a
-   published logo (Deloitte via Forage) get a neutral check mark. */
+/* Issuer marks are the self-hosted brand SVGs; issuers without a published
+   logo (Deloitte via Forage) get a duotone seal. */
 const ISSUER_LOGOS = {
-  'Google Cloud Skill Badge': {
-    src: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/googlecloud/googlecloud-original.svg',
-  },
-  freeCodeCamp: {
-    src: 'https://cdn.simpleicons.org/freecodecamp',
-    invDark: true,
-  },
+  'Google Cloud Skill Badge': { file: 'googlecloud' },
+  freeCodeCamp: { file: 'freecodecamp', invert: true },
 };
 
 function IssuerLogo({ issuer }) {
   const logo = ISSUER_LOGOS[issuer];
   return (
-    <span className="grid size-12 shrink-0 place-items-center rounded-2xl bg-secondary" aria-hidden="true">
+    <IconTile size="md" aria-hidden="true">
       {logo ? (
-        <img className={logo.invDark ? 'inv-dark' : undefined} src={logo.src} alt="" width="20" height="20" loading="lazy" />
+        <img className={logo.invert ? 'inv-dark' : undefined} src={`/assets/icons/tech/${logo.file}.svg`} alt="" width="22" height="22" loading="lazy" decoding="async" />
       ) : (
-        <BadgeCheck className="size-5 text-muted-foreground" />
+        <BadgeCheck className="size-[22px]" />
       )}
-    </span>
+    </IconTile>
   );
 }
 
