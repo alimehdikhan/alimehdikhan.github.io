@@ -4,6 +4,7 @@ import { Button } from './ui/button';
 import { Magnetic } from './ui/magnetic';
 import { SpotlightCard } from './ui/aceternity/spotlight-card';
 import { CardContainer } from './ui/aceternity/3d-card';
+import { SkillLogo } from './Skills';
 import { Counter } from './fx/Counter';
 import { ProjectSequence } from './fx/ProjectSequence';
 import { RESUME } from '../data/resume';
@@ -126,7 +127,11 @@ export function Projects() {
 
                       <ul className="mt-5 flex flex-wrap gap-2" aria-label="Technologies">
                         {proj.tech.map((t) => (
-                          <li key={t} className="rounded-full border border-border px-3 py-1 text-[13px] text-muted-foreground">
+                          <li
+                            key={t}
+                            className="inline-flex min-h-9 items-center gap-2 rounded-full border border-border px-3 text-[13px] text-muted-foreground has-[.logo-plate]:pl-1.5"
+                          >
+                            <SkillLogo name={t} size={14} />
                             {t}
                           </li>
                         ))}
