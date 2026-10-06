@@ -5,38 +5,88 @@ The content in `data/resume.js`, section order, navigation labels, contact endpo
 ## Preview
 
 ```sh
-npm run build
-node scripts/serve-preview.cjs
+npm run dev                      # live development at http://localhost:3000
+npm run build                    # static export to out/
+node scripts/serve-preview.cjs   # serves out/ at http://127.0.0.1:4173
 ```
 
-Open http://127.0.0.1:4173. The preview serves `out/`, including gzip compression for HTML, JavaScript, CSS, and SVG.
+## Stack
 
-## Design
+- **Tailwind CSS v4** for all styling. Design tokens are CSS variables in `styles/globals.css`, exposed to Tailwind through `@theme inline`. `.theme-lime` is a local token scope: everything inside the contact panel renders as ink on lime without per-component overrides.
+- **shadcn/ui** (`components.json`, JS) primitives in `components/ui/`: `button`, `card`, `input`, `textarea`, `label`, `dialog`, plus `magnetic` and `directional-card`.
+- **Aceternity UI**, adapted, in `components/ui/aceternity/`: `spotlight-card` (cursor-following highlight and border glow) and `3d-card` (project tilt).
+- **Motion** for interface motion: portrait tilt, parallax and badge entrance, expanding entrance rings, masked heading reveals, scroll reveals, magnetic buttons, card highlights, directional hover, nav underline, menu, toast, counters, anchor travel.
+- **GSAP ScrollTrigger** (`components/fx/gsap.js`, loaded on demand once the browser is idle) for the three scroll-linked sequences: projects, timeline rail, contact panel. GSAP and Motion never animate the same element; each sequence file lists which layer it owns.
+- **Canvas 2D** for the hero particle vortex. Three.js was not needed: depth-layered particles give the parallax at a fraction of the cost.
+- Native scrolling throughout (no smooth-scroll library, no CSS `scroll-behavior`); deep links land instantly.
 
-- Apple system typography throughout: San Francisco on Apple platforms, native sans-serif fallbacks elsewhere. No proprietary Apple font files are redistributed.
-- Compact floating navigation island, existing dark/light toggle, 96px desktop and 64px phone section spacing.
-- Original portrait colours, responsive WebP copies, and a brief hover ripple. The original PNG is retained.
-- Content is visible in static HTML. Heading wipes start at 85% of viewport height and last 500ms; other reveals last 420ms.
-- The skills marquee sits between About and Skills. Scroll velocity increases its speed; hover, focus, and reduced motion stop it. Its separate pause icon has been removed; clicking the strip or pressing Enter/Space while focused toggles persistent pause.
-- Projects use full-width case studies with the title and primary action first, 16px overview text, a restrained technology list, and a separate results footer. On mobile, names and links appear before the artwork. Project selectors sit above the gallery and work as native anchors without JavaScript. Desktop galleries have scroll-linked horizontal travel; keyboard focus brings the focused project into view. Hover previews stay in the artwork area, clear of the descriptions.
-- Pinning requires a fine pointer, at least 1100px width and 820px height, and enough room for all content. Smaller/shorter viewports, enlarged content, no JavaScript, and reduced motion use stacked projects.
-- Custom SVG artwork depicts speech and imaging volumes; it is illustrative, not an invented application screenshot. Regenerate it with `node scripts/generate-project-art.cjs`. Hover depth and floating title previews are disabled with reduced motion.
-- Contact lettering responds to pointer proximity through font weight. Focus underlines and the existing confirmed submission success state remain accessible.
+## Design (Apple-inspired layout, black and lime)
 
-## Motion implementation
+- Type: `-apple-system, BlinkMacSystemFont, "SF Pro Display", Manrope, "Segoe UI", sans-serif`; Instrument Serif italic for highlighted words. Body 17px; headings semibold with tight tracking.
+- Colour: dark by default (ground `#090A0A`, lime `#D5F66B`, text `#F2F2EA`, muted `#A0A4A0`, borders `#2B2E2B`). The light theme uses white / `#F5F5F7` with lime fills and olive `#4A6300` for lime-as-text and focus rings.
+- Layout: 8px grid, 1200px content width, sections 64 / 96 / 112px apart on phone / tablet / desktop.
+- Each section has its own composition and its own effect:
+  - **Hero**: split introduction and portrait stage.
+  - **About**: bento of stat cards (2×2 on phones) with the cursor-following highlight.
+  - **Skills**: 2×2 category cards.
+  - **Experience**: timeline whose rail draws with scroll and whose nodes pop as it reaches them.
+  - **Projects**: two-column cards that stack in 3D on desktop.
+  - **Certifications**: a single list with a directional lime wash per row.
+  - **GitHub**: text, stats and a terminal.
+  - **Contact**: a lime panel that expands into view.
 
-New npm dependencies are `gsap` (ScrollTrigger and SplitText included) and `lenis`. Existing Framer Motion remains for controls and navigation.
+## Choreography
 
-`ClientEffects.js` lazy-loads WebGL through `next/dynamic` with `ssr: false`, after first paint. Touch devices and reduced-motion users do not load the canvases. Canvas DPR is capped at 2. The trail stops after pointer inactivity; canvas, marquee, and smooth-scroll loops pause when the tab is hidden.
+- **Hero entrance** (CSS keyframes, so it starts on first paint; the portrait is the LCP element):
+  1. The headline words rise out of their masks.
+  2. The copy follows in a stagger.
+  3. The portrait swings forward in depth.
+  4. Three lime rings expand from the disc (Motion).
+  5. The particle vortex fades in spinning fast, then settles.
+  6. The badges slide in one by one and start floating.
+- **Hero interaction**: the stage tilts up to 5° on a soft spring while the glow, rings, portrait and badges drift by their own depths. The vortex light and a light patch on the disc follow the cursor. The vortex centre leans toward the cursor by depth and nearby particles are pushed aside.
+- **Section headings**: the title rises out of a masked line on a spring after its eyebrow fades in. Content blocks use a 16px upward fade, and the timeline cards slide in from the side.
+- **Projects (desktop, when every card fits under the nav)**:
+  - Cards are sticky and stack.
+  - The incoming card tilts up out of perspective as it rises, while the outgoing one tips back, scales to 90% and dims (scrubbed to the same scroll range).
+  - Each card's artwork wipes in and its details stagger up on arrival.
+  - Phones, short screens and reduced motion get a normal vertical list.
+- **Contact**: the panel expands from a narrow rounded window to full size (scrubbed), and its content fades in over the last part so no half-clipped text shows. The headline lines then mask in.
+- **Removed as distracting**: the Aceternity beam behind the headline, the rotating orbit rings and the halo pulse.
 
-`fluidTrail.js` adapts Pavel Dobryakov's [WebGL Fluid Simulation](https://github.com/PavelDoGreat/WebGL-Fluid-Simulation). Its MIT notice is retained in the source and `public/fluid-simulation-LICENSE.txt`. The integration removes the demo UI, analytics, random bursts, external texture requests, and touch handlers. Low-performance or unavailable WebGL falls back to a Canvas 2D ribbon.
+## UX conventions
 
-Final trail tuning: 34% layer opacity, 0.18 bloom intensity, 0.07 splat radius, and 3.5 density dissipation. It is behind the content, never above headings or the portrait. Colours are amber, teal, and violet.
+- Navigation: six section links, no Home link (the logo returns to the top). No link is highlighted while the hero or the GitHub section is in view, and the bar turns 90% opaque on scroll so its links stay readable over the lime panel.
+- Headings: section titles are h2. Card labels ("Summary", "Core Focus Areas", "Awards & Honors", stat names, skill groups) share one small caps label style; subsections inside a card are h4.
+- Project cards scan top-down: number and category, title, a highlighted Results callout, the Live Demo / Code actions, then overview, implementation and the technology list.
+- Hover feedback only where something is clickable: buttons, links, contact rows and project cards. Static cards and skill pills do not move. The certification rows' directional wash is a reading highlight.
+- Controls: every button is the shadcn Button (pill; icon buttons round and 40px). Object icons lead the label (Download, Code, Mail, Copy, Send); arrows trail it (↗ opens a new tab, ↓ jumps within the page). Decorative icon tiles are rounded squares. Mail links never open a new tab.
+- Spacing: the hero only fills the viewport on large screens (capped at 960px), so the portrait follows the calls to action on phones; the tech marquee sits in the existing gap between sections without extra margin.
 
-## Verification
+## Interaction, feedback and accessibility
 
-The UI UX Pro Max review checklist informed the project gallery follow-up: 48px controls with press feedback, relative text sizes, 16px mobile body text, visible focus and selection states, and keyboard activation that moves focus into the chosen project. Pinning is re-measured after resize and removed when enlarged content no longer fits. Pointer previews cache their bounds, and artwork reset tweens only run after an actual hover movement.
+- Primary buttons are magnetic (up to 8px, mouse only) with press feedback.
+- Contact puts the main actions first: an email button and a copy button that confirms "Copied" (announced via a live region).
+- Contact form, sending (`components/SendButton.js`): a light sweeps through the button, the paper plane flies in place and the label's dots pulse; a progress bar runs along the card's top edge and the fields lock (read-only and dimmed) so nothing changes mid-send. Focus stays on the button.
+- Contact form, success (`components/ContactSuccess.js`), about two seconds:
+  1. An ink circle floods out of the Send button and fills the whole card.
+  2. A lime ring draws and the check badge springs in, then the checkmark strokes in.
+  3. Three shockwave rings pulse out and about 130 confetti pieces (70 on phones) burst from the badge with gravity, drag and spin.
+  4. "Thank you for *reaching out!*" rises word by word, followed by "Message sent. Your note is in my inbox — I'll get back to you soon."
+  5. "Send another message" collapses the scene back into the button and returns focus to the Name field.
+  The scene stays until dismissed, the form behind it is `inert`, and focus moves to the headline so it is announced. Reduced motion: a plain fade, no burst, rings or word animation.
+- Sending is guarded synchronously against repeat submits (Enter, Enter, click sends one request). A failure keeps everything typed and shows the error toast, which is now used only for errors.
+- The tech marquee pauses on hover. A real toggle button (shown on hover, focus or while paused) pauses it for keyboard users, and clicking the strip still toggles.
+- Touch devices get no cursor effects. Reduced motion disables the entrance, reveals, masks, tilt, parallax, magnetic pull, vortex animation (one still frame), stacking, scrubbed sequences, card lifts, the marquee and animated anchor travel.
+- Offscreen: the vortex stops drawing and the hero's CSS loops pause; ScrollTrigger sequences only move on scroll.
+- Keyboard: 38 tab stops in logical order, all with a visible focus indicator; skip link; the mobile menu dialog traps focus, closes on Escape and returns focus to its trigger.
 
-The static export, four requested widths (375, 768, 1280, 1920), dark/light themes, JavaScript-disabled content, reduced motion, mobile navigation/Escape, project keyboard focus, and local mocked form success/validation have been checked. Form tests intercept the request and do not send a message.
+## Verification (local, this machine)
 
-Mobile Lighthouse reports are written locally to `.cache/lighthouse-mobile.json`. Scores depend on the host and should be rechecked on the deployed GitHub Pages build. On this Windows host, Lighthouse writes the report but its Chrome temporary-directory cleanup can fail with EPERM; the report remains readable.
+- Links: all 17 unique destinations checked (in-page anchors exist, résumé PDF and GitHub / Hugging Face / Maps return 200; LinkedIn answers scripts with its 999 bot response). Every new-tab link has `noopener`.
+- Form (submissions intercepted, nothing sent): validation messages and focus on the first invalid field, no request while invalid, spinner with disabled/`aria-busy` while sending, success toast with cleared fields and the right payload, error toast that keeps the input, dismissible toasts; copy-email confirms and fills the clipboard.
+- Contrast: Lighthouse accessibility 100 (mobile and desktop); axe on the fully revealed page in dark and light themes reports only the dimmed card stacked behind the active project (intentional, restored on scroll).
+
+- `npm run build` passes; GSAP is split into its own chunks.
+- Headless Chrome screenshots at 1440×900 (dark and light) and 390×844, plus a reduced-motion pass, with no console errors. Frame pacing while scrolling through the project sequence averaged 10ms with no frames over 34ms.
+- Mobile Lighthouse on the static export, six runs: accessibility 100, best practices 100, SEO 100. Performance had a median of about 80, ranging 77–85 with two outliers (55, 57) where hydration fell late in the trace. Observed LCP was 0.7–0.85s on most runs.

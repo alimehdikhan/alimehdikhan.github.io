@@ -39,7 +39,7 @@ B.Tech Computer Science graduate (2026) skilled in Python, Java, Machine Learnin
 |---------|-------------|------|
 | **AI Pronunciation Coach** | OpenAI Whisper + FastAPI audio scoring for spoken English feedback | [GitHub](https://github.com/alimehdikhan/A.I-Pronunciation-Coach) |
 | **Cancer Detection System** | Keras binary classification on medical datasets (90%+ accuracy) | [GitHub](https://github.com/alimehdikhan/Cancer-Detection-Model) |
-| **Portfolio Website** | This site — Next.js, Tailwind CSS, Framer Motion | [Live](https://alimehdikhan.github.io) |
+| **Portfolio Website** | This site — Next.js, Tailwind CSS, shadcn/ui, Aceternity UI, Motion, GSAP | [Live](https://alimehdikhan.github.io) |
 
 ---
 
