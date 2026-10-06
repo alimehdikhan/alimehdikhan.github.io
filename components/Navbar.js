@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, useReducedMotion } from 'motion/react';
-import { Download, Menu } from 'lucide-react';
+import { Download, Menu } from '@/components/ui/icons';
 import { ThemeToggle } from './ui/ThemeToggle';
 import { Button } from './ui/button';
 import { Magnetic } from './ui/magnetic';
@@ -210,7 +210,7 @@ export function Navbar() {
       <nav aria-label="Main Navigation" className="container-page flex h-14 items-center justify-between gap-4">
         <a
           href="#hero"
-          className="flex items-center text-[17px] font-semibold tracking-[-0.02em]"
+          className="flex min-h-11 items-center text-[17px] font-semibold tracking-[-0.02em]"
           aria-label={`AMK. — ${RESUME.name}`}
           onClick={(e) => handleLinkClick(e, '#hero')}
         >
@@ -259,7 +259,7 @@ export function Navbar() {
         <div className="flex items-center gap-2">
           <ThemeToggle />
           <Magnetic className="hidden sm:inline-flex" strength={0.25} max={5}>
-            <Button asChild size="sm">
+            <Button asChild size="sm" className="h-10">
               <a
                 href={RESUME.resumePath}
                 download={RESUME.resumeDownloadName}
@@ -274,8 +274,8 @@ export function Navbar() {
 
           <Dialog open={isOpen} onOpenChange={setIsOpen}>
             <DialogTrigger asChild>
-              <Button variant="ghost" size="icon" className="lg:hidden" aria-label="Open navigation menu">
-                <Menu className="size-[18px]" aria-hidden="true" />
+              <Button variant="glass" size="icon" className="lg:hidden" aria-label="Open navigation menu">
+                <Menu />
               </Button>
             </DialogTrigger>
             <DialogContent
