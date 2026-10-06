@@ -512,6 +512,85 @@
   transition: --ma 0.5s var(--ease-out-soft);
 }
 
+/* ───────── hero stage ───────── */
+
+/* a comet on the outer orbit and the glass skill chips; the stage's light
+   (rim highlight, lit ticks) is driven from HeroPortrait.js */
+@keyframes stage-spin {
+  to { transform: rotate(360deg); }
+}
+.stage-comet {
+  animation: stage-spin 24s linear infinite;
+}
+
+/* chips drift along a small arc rather than bobbing straight up and down */
+@keyframes drift {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  33% { transform: translate3d(4px, -6px, 0); }
+  66% { transform: translate3d(-3px, -3px, 0); }
+}
+.chip-drift {
+  animation: drift 9s ease-in-out infinite;
+}
+
+/* the portrait breaks out of its disc: the window is the disc below its
+   centre line and the whole width above it, so the head rises past the edge
+   while the shoulders stay inside. The mask box is 120% x 125% of the disc,
+   bottom-aligned, so the circle layer is 83.33% x 80% of it. */
+.subject-mask {
+  -webkit-mask-image: linear-gradient(#000, #000), radial-gradient(closest-side, #000 calc(100% - 1px), transparent);
+  mask-image: linear-gradient(#000, #000), radial-gradient(closest-side, #000 calc(100% - 1px), transparent);
+  -webkit-mask-size: 100% 60%, 83.3333% 80%;
+  mask-size: 100% 60%, 83.3333% 80%;
+  -webkit-mask-position: top, 50% 100%;
+  mask-position: top, 50% 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+}
+/* the cutout as a stencil, for the lime silhouette glow behind it */
+.subject-stencil {
+  background: rgb(var(--glow));
+  -webkit-mask: url(/assets/images/profile-cutout-480.webp) center bottom / contain no-repeat;
+  mask: url(/assets/images/profile-cutout-480.webp) center bottom / contain no-repeat;
+}
+
+/* a thin ring cut out of a conic gradient: --ring-w is its thickness */
+.stage-ring {
+  --ring-w: 2px;
+  border-radius: 9999px;
+  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - var(--ring-w) - 0.6px), #000 calc(100% - var(--ring-w)));
+  mask: radial-gradient(farthest-side, transparent calc(100% - var(--ring-w) - 0.6px), #000 calc(100% - var(--ring-w)));
+}
+
+/* skill chip: glass face, hairline ring, bright top edge and a lime hairline
+   that fades out across the chip */
+.badge-glass {
+  position: relative;
+  background: linear-gradient(150deg, var(--tile-from), var(--tile-to)), var(--card);
+  box-shadow:
+    inset 0 0 0 1px var(--tile-ring),
+    inset 0 1px 0 var(--tile-hi),
+    var(--shadow-lift);
+}
+.badge-glass::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  padding: 1px;
+  border-radius: inherit;
+  pointer-events: none;
+  background: linear-gradient(135deg, rgb(var(--glow) / 0.6), transparent 42%, rgb(var(--glow) / 0.18));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+}
+@media (min-width: 768px) {
+  .badge-glass {
+    -webkit-backdrop-filter: blur(14px) saturate(1.3);
+    backdrop-filter: blur(14px) saturate(1.3);
+  }
+}
+
 /* project artwork: a gentle zoom on card hover, inside its rounded frame */
 .project-art {
   transition: transform 0.8s var(--ease-out-soft);
