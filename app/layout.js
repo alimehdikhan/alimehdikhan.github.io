@@ -25,7 +25,7 @@ export const metadata = {
     default: 'Ali Mehdi Khan | AI/ML & Python Developer',
     template: '%s | Ali Mehdi Khan',
   },
-  description: 'Portfolio of Ali Mehdi Khan — final-year B.Tech CS student building LLM apps, NLP pipelines, and FastAPI backends in Python. Junior developer at IMAPRO. Google Cloud and Deloitte certified.',
+  description: 'Portfolio of Ali Mehdi Khan, a B.Tech CS graduate (July 2026) and junior software developer at IMAPRO. Python projects in LLM apps, NLP and FastAPI, plus Google Cloud skill badges and a Deloitte job simulation.',
   keywords: [
     'Ali Mehdi Khan',
     'Software Engineer',
@@ -47,8 +47,8 @@ export const metadata = {
     'LangChain',
     'RAG Pipelines',
     'Docker',
-    'Google Cloud Certified',
-    'Deloitte Certified',
+    'Google Cloud Skill Badges',
+    'Deloitte Job Simulation',
     'AI Pronunciation Coach',
     'Cancer Detection System',
     'Portfolio',
@@ -79,7 +79,7 @@ export const metadata = {
     locale: 'en_US',
     url: 'https://alimehdikhan.github.io/',
     title: 'Ali Mehdi Khan | AI/ML & Python Developer',
-    description: 'AI/ML portfolio: a Whisper-based pronunciation coach on Hugging Face Spaces, CNN medical-imaging models, FastAPI backends, and Google Cloud certifications.',
+    description: 'A Whisper-based pronunciation coach on Hugging Face Spaces, CNN models for medical images, FastAPI backends and Google Cloud skill badges.',
     siteName: 'Ali Mehdi Khan Portfolio',
     firstName: 'Ali Mehdi',
     lastName: 'Khan',
@@ -93,7 +93,7 @@ export const metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'Ali Mehdi Khan | AI/ML & Python Developer',
-    description: 'B.Tech CSE (2026) · Python · LLM apps & RAG · FastAPI · Junior developer at IMAPRO · Google Cloud certified.',
+    description: 'B.Tech CSE (2026) · Python · LLM apps and RAG · FastAPI · Junior software developer at IMAPRO.',
     images: ['/assets/images/profile.png'],
   },
   alternates: {
@@ -164,7 +164,7 @@ export default function RootLayout({ children }) {
         "@id": `${SITE}/#website`,
         "url": `${SITE}/`,
         "name": "Ali Mehdi Khan Portfolio",
-        "description": "Portfolio of Ali Mehdi Khan — final-year B.Tech CS student building LLM apps, NLP pipelines, and FastAPI backends in Python.",
+        "description": "Portfolio of Ali Mehdi Khan, a B.Tech CS graduate who builds LLM apps, NLP pipelines and FastAPI backends in Python.",
         "publisher": { "@id": `${SITE}/#person` },
         "author": { "@id": `${SITE}/#person` },
         "copyrightHolder": { "@id": `${SITE}/#person` },
@@ -209,8 +209,6 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" className={`${manrope.variable} ${instrumentSerif.variable}`} suppressHydrationWarning>
       <head>
-        <link rel="preconnect" href="https://cdn.jsdelivr.net" />
-        <link rel="dns-prefetch" href="https://cdn.simpleicons.org" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
