@@ -16,7 +16,7 @@ const words = (text) =>
     </Fragment>
   ));
 
-/* Contact headline: letter weight swells toward a mouse pointer. Mouse on a
+/* Contact heading (the section's h2): letter weight swells toward a mouse pointer. Mouse on a
    fine pointer only, and never under reduced motion. */
 export function VariableContact() {
   const ref = useRef(null);
@@ -66,17 +66,19 @@ export function VariableContact() {
     };
   }, []);
   return (
-    <p
+    <h2
       ref={ref}
-      className="display max-w-[16ch] text-[clamp(2.5rem,6vw,4.5rem)] leading-[1.05] tracking-[-0.035em]"
+      id="contact-title"
+      className="display max-w-[16ch] text-[clamp(2.5rem,5.2vw,4rem)] leading-[1.05] tracking-[-0.035em]"
     >
-      <span className="sr-only">Let&apos;s build something great together.</span>
+      <span className="sr-only">Have a role or project in mind? Email me.</span>
       <span aria-hidden="true">
-        <MaskReveal delay={0.1}>{words("Let's build something")}</MaskReveal>
-        <MaskReveal delay={0.22}>
-          <em>{words('great')}</em> {words('together.')}
+        <MaskReveal delay={0.1}>{words('Have a role or')}</MaskReveal>
+        <MaskReveal delay={0.18}>{words('project in mind?')}</MaskReveal>
+        <MaskReveal delay={0.26}>
+          <em>{words('Email me.')}</em>
         </MaskReveal>
       </span>
-    </p>
+    </h2>
   );
 }
