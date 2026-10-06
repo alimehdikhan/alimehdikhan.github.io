@@ -1,6 +1,6 @@
 'use client';
 import { useEffect, useRef, useState } from 'react';
-import { Pause, Play } from 'lucide-react';
+import { Pause, Play } from '@/components/ui/icons';
 import { SkillLogo } from '../Skills';
 
 /* Tech-stack marquee. Scroll velocity speeds it up; hover and focus hold it;
@@ -79,9 +79,9 @@ export function Ticker({ items }) {
           {[...items, ...items].map((item, i) => (
             <span
               key={`${item}-${i}`}
-              className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-4 py-2 text-[15px] font-medium whitespace-nowrap shadow-soft"
+              className="inline-flex min-h-11 items-center gap-2.5 rounded-full border border-border bg-card px-4 text-[15px] font-medium whitespace-nowrap shadow-soft has-[.logo-plate]:pl-2"
             >
-              <SkillLogo name={item} size={16} />
+              <SkillLogo name={item} size={18} />
               {item}
             </span>
           ))}
