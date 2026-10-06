@@ -60,6 +60,7 @@ export const Puzzle = make(P.PuzzlePiece);
 export const Adapt = make(P.ArrowsClockwise);
 export const Timer = make(P.Timer);
 export const Waveform = make(P.Waveform);
+export const Repo = make(P.GitBranch);
 export const Layers = make(P.Stack);
 
 /* brand marks are monochrome so they sit in the black-and-lime palette */
