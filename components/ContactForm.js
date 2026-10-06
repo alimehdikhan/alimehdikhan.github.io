@@ -2,30 +2,26 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
-import { ITEM, SPRING } from './fx/motion';
+import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
+import { CircleAlert, X } from 'lucide-react';
+import { Button } from './ui/button';
+import { Input } from './ui/input';
+import { Label } from './ui/label';
+import { Textarea } from './ui/textarea';
+import { SendButton } from './SendButton';
+import { ContactSuccess } from './ContactSuccess';
+import { SPRING } from './fx/motion';
 
 /* The contact form owns its own state so a keystroke re-renders this
-   component only, never the Contact section and its reveal choreography.
-   The form lands as one unit (ITEM) after the eyebrow and note; fields are
-   not staggered individually because a form should not wobble. */
+   component only, never the Contact section. */
 
 const ENDPOINT = 'https://formspree.io/f/xjgzwweq';
 const EMPTY = { name: '', email: '', subject: '', message: '' };
-const TOAST_MS = 5000;
-
-const FORM_STYLE = { marginTop: 20 };
-
-/* toast: SPRING.ui in, a short fade out; the timer hairline drains over the
-   auto-dismiss window so the success toast's disappearance is not a surprise */
+/* failure toast: SPRING.ui in, a short fade out */
 const TOAST_IN = { y: 30, opacity: 0 };
 const TOAST_SHOWN = { y: 0, opacity: 1 };
 const TOAST_OUT = { y: 16, opacity: 0, transition: { duration: 0.18 } };
 const TOAST_T = { type: 'spring', ...SPRING.ui };
-const TIMER_FROM = { scaleX: 1 };
-const TIMER_TO = { scaleX: 0 };
-const TIMER_T = { duration: TOAST_MS / 1000, ease: 'linear' };
-const TIMER_STYLE = { originX: 0 };
 
 /* validate on blur rather than per keystroke; an existing error clears as
    soon as the field becomes valid so nobody is nagged while fixing it */
@@ -38,17 +34,76 @@ const validate = (name, value) => {
   return '';
 };
 
+function Field({ id, number, label, error, children }) {
+  return (
+    <div className="flex flex-col gap-2">
+      <Label htmlFor={id}>
+        <span className="text-xs font-normal text-muted-foreground tabular-nums" aria-hidden="true">
+          {number}
+        </span>
+        {label}
+      </Label>
+      {children}
+      {error && (
+        <span className="text-sm text-destructive" id={`${id}-error`}>
+          {error}
+        </span>
+      )}
+    </div>
+  );
+}
+
+/* indeterminate progress bar along the top edge of the card while sending */
+function SendingBar({ active, host }) {
+  return createPortal(
+    <AnimatePresence>
+      {active && (
+        <motion.div
+          key="bar"
+          aria-hidden="true"
+          className="absolute inset-x-0 top-0 z-10 h-1 overflow-hidden bg-foreground/10"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.2 }}
+        >
+          <motion.span
+            className="absolute inset-y-0 w-2/5 rounded-full bg-foreground"
+            initial={{ x: '-100%' }}
+            animate={{ x: '260%' }}
+            transition={{ duration: 1.1, ease: 'easeInOut', repeat: Infinity }}
+          />
+        </motion.div>
+      )}
+    </AnimatePresence>,
+    host
+  );
+}
+
 export function ContactForm() {
   const reducedMotion = useReducedMotion();
   const [formState, setFormState] = useState(EMPTY);
   const [status, setStatus] = useState(null); // 'sending', 'success', 'error'
   const [errors, setErrors] = useState({});
   const [mounted, setMounted] = useState(false);
-  /* auto-dismiss timer: cleared on manual dismiss, on a new submission and on unmount */
   const hide = useRef();
+  const formRef = useRef(null);
+  const anchorRef = useRef(null);
+  /* the card around the form hosts the success scene and the progress bar */
+  const [card, setCard] = useState(null);
+  /* where the send button sits inside that card: the scene floods out from it */
+  const [origin, setOrigin] = useState(null);
+  /* synchronous guard against double submits (a second click or Enter can
+     land before React has re-rendered the busy state) */
+  const inFlight = useRef(false);
 
   useEffect(() => {
     setMounted(true);
+    const host = formRef.current?.closest('[data-slot="card"]') || null;
+    if (host) {
+      host.classList.add('relative', 'overflow-hidden');
+      setCard(host);
+    }
     return () => clearTimeout(hide.current);
   }, []);
 
@@ -69,6 +124,7 @@ export function ContactForm() {
     value: formState[name],
     onChange: handleInputChange,
     onBlur: handleBlur,
+    readOnly: status === 'sending',
     'aria-invalid': errors[name] ? 'true' : undefined,
     'aria-describedby': errors[name] ? `${name}-error` : undefined,
   });
@@ -78,8 +134,14 @@ export function ContactForm() {
     setStatus(null);
   };
 
+  /* "Send another message": the scene collapses back into the button, and
+     focus returns to the first field once it has */
+  const reset = () => setStatus(null);
+  const afterScene = () => document.getElementById('name')?.focus({ preventScroll: true });
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (inFlight.current || status === 'sending' || status === 'success') return;
     const next = Object.fromEntries(Object.keys(formState).map((k) => [k, validate(k, formState[k])]));
     setErrors(next);
     const firstInvalid = Object.keys(next).find((k) => next[k]);
@@ -89,6 +151,7 @@ export function ContactForm() {
       return;
     }
     clearTimeout(hide.current);
+    inFlight.current = true;
     setStatus('sending');
 
     try {
@@ -102,54 +165,49 @@ export function ContactForm() {
       });
 
       if (response.ok) {
+        const c = card?.getBoundingClientRect();
+        const b = anchorRef.current?.getBoundingClientRect();
+        setOrigin(c && b ? { x: b.left - c.left + b.width / 2, y: b.top - c.top + b.height / 2 } : null);
         setStatus('success');
         setFormState(EMPTY);
         setErrors({});
-        clearTimeout(hide.current);
-        hide.current = setTimeout(() => setStatus(null), TOAST_MS);
       } else {
+        /* the entered text stays so the visitor can simply try again */
         setStatus('error');
       }
     } catch (err) {
       setStatus('error');
+    } finally {
+      inFlight.current = false;
     }
   };
 
-  /* The toast is position: fixed, so it is portaled to <body>: the section's
-     Reveal blocks carry will-change: transform, which would otherwise make a
-     column its containing block. Mount-gated so server and hydration agree. */
+  /* Only failures use the toast; success is shown in place on the button.
+     The toast is position: fixed, so it is portaled to <body>, clear of any
+     transformed ancestor. Mount-gated so server and hydration agree. */
   const toast = (
     <AnimatePresence>
-      {(status === 'success' || status === 'error') && (
+      {status === 'error' && (
         <motion.div
-          className={`toast${status === 'error' ? ' err' : ''}`}
+          className="fixed right-4 bottom-4 left-4 z-[70] flex items-start gap-4 overflow-hidden rounded-3xl border border-border bg-card/90 p-4 pr-2 text-card-foreground shadow-lift backdrop-blur-xl sm:right-6 sm:bottom-6 sm:left-auto sm:w-[376px]"
           role="status"
           initial={TOAST_IN}
           animate={TOAST_SHOWN}
           exit={TOAST_OUT}
           transition={TOAST_T}
         >
-          <div>
-            <div className="t">{status === 'success' ? 'Message sent' : 'That didn’t go through'}</div>
-            <div className="d">
-              {status === 'success'
-                ? 'It’s in my inbox — I’ll get back to you soon.'
-                : 'Something went wrong sending that. Mind trying again?'}
+          <span className="grid size-10 shrink-0 place-items-center rounded-full bg-destructive/10 text-destructive" aria-hidden="true">
+            <CircleAlert className="size-5" />
+          </span>
+          <div className="flex-1 pt-0.5">
+            <div className="font-semibold">That didn’t go through</div>
+            <div className="mt-1 text-sm text-muted-foreground">
+              Something went wrong sending that. Your message is still in the form — mind trying again?
             </div>
           </div>
-          <button onClick={dismiss} aria-label="Dismiss Alert">
-            ×
-          </button>
-          {status === 'success' && (
-            <motion.i
-              className="toast-timer"
-              initial={TIMER_FROM}
-              animate={TIMER_TO}
-              transition={TIMER_T}
-              style={TIMER_STYLE}
-              aria-hidden="true"
-            />
-          )}
+          <Button variant="ghost" size="icon" className="-mt-1 size-9" onClick={dismiss} aria-label="Dismiss Alert">
+            <X aria-hidden="true" />
+          </Button>
         </motion.div>
       )}
     </AnimatePresence>
@@ -157,91 +215,49 @@ export function ContactForm() {
 
   return (
     <>
-      <motion.form
+      <form
+        ref={formRef}
         action={ENDPOINT}
         method="POST"
         onSubmit={handleSubmit}
-        className="form rev-i"
-        variants={ITEM}
-        style={FORM_STYLE}
+        className={`mt-6 flex flex-col gap-6 transition-opacity duration-300 ${status === 'sending' ? '[&_input]:opacity-60 [&_textarea]:opacity-60' : ''}`}
         aria-label="Contact Form"
         aria-describedby="form-note"
         noValidate
+        inert={status === 'success' ? '' : undefined}
       >
-        <div className="form-row">
-          <div className="field">
-            <label htmlFor="name">
-              <i aria-hidden="true">01</i>Name
-            </label>
-            <div className="control">
-              <input type="text" autoComplete="name" required {...fieldProps('name')} />
-            </div>
-            {errors.name && (
-              <span className="err" id="name-error">
-                {errors.name}
-              </span>
-            )}
-          </div>
-          <div className="field">
-            <label htmlFor="email">
-              <i aria-hidden="true">02</i>Email Address
-            </label>
-            <div className="control">
-              <input type="email" autoComplete="email" inputMode="email" required {...fieldProps('email')} />
-            </div>
-            {errors.email && (
-              <span className="err" id="email-error">
-                {errors.email}
-              </span>
-            )}
-          </div>
+        <div className="grid gap-6 sm:grid-cols-2">
+          <Field id="name" number="01" label="Name" error={errors.name}>
+            <Input type="text" autoComplete="name" required {...fieldProps('name')} />
+          </Field>
+          <Field id="email" number="02" label="Email Address" error={errors.email}>
+            <Input type="email" autoComplete="email" inputMode="email" required {...fieldProps('email')} />
+          </Field>
         </div>
 
-        <div className="field">
-          <label htmlFor="subject">
-            <i aria-hidden="true">03</i>Subject
-          </label>
-          <div className="control">
-            <input type="text" autoComplete="off" required {...fieldProps('subject')} />
-          </div>
-          {errors.subject && (
-            <span className="err" id="subject-error">
-              {errors.subject}
-            </span>
-          )}
-        </div>
+        <Field id="subject" number="03" label="Subject" error={errors.subject}>
+          <Input type="text" autoComplete="off" required {...fieldProps('subject')} />
+        </Field>
 
-        <div className="field">
-          <label htmlFor="message">
-            <i aria-hidden="true">04</i>Message
-          </label>
-          <div className="control">
-            <textarea rows="5" required {...fieldProps('message')} />
-          </div>
-          {errors.message && (
-            <span className="err" id="message-error">
-              {errors.message}
-            </span>
-          )}
-        </div>
+        <Field id="message" number="04" label="Message" error={errors.message}>
+          <Textarea rows={5} required {...fieldProps('message')} />
+        </Field>
 
-        <div>
-          {/* all three labels share one grid cell, so the button is always as
-              wide as its widest label and never resizes between states */}
-          <motion.button type="submit" className="btn btn-solid" data-status={status || 'idle'} disabled={status === 'sending'} aria-busy={status === 'sending'} whileTap={{ scale: .98 }} animate={status === 'success' && !reducedMotion ? { scale: [1, 1.035, 1] } : { scale: 1 }} transition={{ duration: .32 }}>
-            <span className="lbl">
-              <span data-on={status !== 'sending' && status !== 'success'}>Send Message</span>
-              <span data-on={status === 'sending'}>Sending…</span>
-              <span data-on={status === 'success'}>Sent — thanks!</span>
-            </span>
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-              <path d="M5 19L19 5M19 5H9M19 5v10" />
-            </svg>
-          </motion.button>
-        </div>
-      </motion.form>
+        <SendButton status={status} reduce={reducedMotion} anchorRef={anchorRef} />
+      </form>
 
       {mounted && createPortal(toast, document.body)}
+      {mounted && card && <SendingBar active={status === 'sending'} host={card} />}
+      {mounted && (
+        <ContactSuccess
+          open={status === 'success'}
+          container={card}
+          origin={origin}
+          reduce={reducedMotion}
+          onReset={reset}
+          onClosed={afterScene}
+        />
+      )}
     </>
   );
 }
