@@ -1,4 +1,4 @@
-import { ArrowUpRight, Code } from 'lucide-react';
+import { ArrowUpRight, Code } from '@/components/ui/icons';
 import { SectionHead } from './ui/SectionHead';
 import { Button } from './ui/button';
 import { Magnetic } from './ui/magnetic';
@@ -23,11 +23,10 @@ export function Projects() {
         <SectionHead
           title={
             <>
-              Featured <em>Projects</em>
+              Things I&apos;ve <em>built</em>
             </>
           }
-          index="04"
-          label="Portfolio"
+          label="Projects"
           titleId="projects-title"
         />
 
@@ -64,11 +63,7 @@ export function Projects() {
                     {/* scan order: what it is, what it achieved, where to see it,
                         then the detail */}
                     <div className="project-reveal flex flex-col p-6 md:p-8 lg:p-10">
-                      <p className="flex items-center gap-2 text-sm text-muted-foreground">
-                        <span className="tabular-nums">{String(i + 1).padStart(2, '0')}</span>
-                        <span aria-hidden="true" className="h-px w-6 bg-border-strong" />
-                        <span>{proj.tag}</span>
-                      </p>
+                      <p className="text-sm text-muted-foreground">{proj.tag}</p>
                       <h3
                         id={`project-title-${i + 1}`}
                         className="mt-3 text-[28px] leading-tight font-semibold tracking-[-0.025em] md:text-[32px]"
@@ -125,7 +120,7 @@ export function Projects() {
                       <div className="mt-6 border-t border-border pt-6">
                         <h4 className="sr-only">Overview</h4>
                         <p className="text-[15px] leading-relaxed text-foreground/90">{proj.overview}</p>
-                        <h4 className="mt-4 text-sm font-semibold">Implementation</h4>
+                        <h4 className="mt-4 text-sm font-semibold">How it works</h4>
                         <p className="mt-1 text-[15px] leading-relaxed text-muted-foreground">{proj.features}</p>
                       </div>
 
