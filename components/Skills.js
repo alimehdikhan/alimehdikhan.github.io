@@ -1,14 +1,11 @@
 'use client';
 
+import { Brain, Code, Server, Users } from 'lucide-react';
 import { SectionHead } from './ui/SectionHead';
+import { Card } from './ui/card';
 import { Reveal } from './fx/Reveal';
-import { STAGGER } from './fx/motion';
+import { cn } from '@/lib/utils';
 import { RESUME } from '../data/resume';
-
-/* Each category carries its own viewport observer, so on a phone (where the
-   grid is ~2000px tall) the cells stagger in when their category is actually
-   on screen, not when the top of the block first appears. Cells inherit
-   hidden/visible from the category and land 30ms apart. */
 
 /* Official full-colour logos (devicon "original" set) for skills that have a
    real brand mark; the rest (soft skills, generic terms like SQL / REST APIs /
@@ -35,10 +32,11 @@ const LOGOS = {
   LangChain: { url: 'https://cdn.simpleicons.org/langchain', invDark: true },
   LangGraph: { url: 'https://cdn.simpleicons.org/langgraph', invDark: true },
   Hono: { url: 'https://cdn.simpleicons.org/hono' },
+  NestJS: 'nestjs/nestjs-original.svg',
   'OpenAI Whisper': { url: 'https://cdn.jsdelivr.net/npm/simple-icons@13/icons/openai.svg', invDark: true },
 };
 
-export function SkillLogo({ name }) {
+export function SkillLogo({ name, size = 16, className }) {
   const entry = LOGOS[name];
   if (!entry) return null;
   const path = typeof entry === 'string' ? entry : entry.path;
@@ -48,13 +46,14 @@ export function SkillLogo({ name }) {
     e.currentTarget.parentElement.style.display = 'none';
   };
   return (
-    <span className="skill-logo" aria-hidden="true">
+    <span className={cn('inline-flex shrink-0', className)} aria-hidden="true">
       <img
         className={invDark ? 'inv-dark' : undefined}
         src={src}
         alt=""
-        width="17"
-        height="17"
+        width={size}
+        height={size}
+        style={{ width: size, height: size, objectFit: 'contain' }}
         loading="lazy"
         onError={hide}
       />
@@ -66,81 +65,72 @@ const categories = [
   {
     eyebrow: 'Write',
     title: 'Languages & Web',
-    icon: (
-      <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.6} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
-      </svg>
-    ),
+    Icon: Code,
     skills: ['Python', 'Java', 'JavaScript', 'SQL', 'C', 'C++', 'HTML', 'CSS'],
   },
   {
     eyebrow: 'Build',
     title: 'Backend, Cloud & Tools',
-    icon: (
-      <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.6} d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01" />
-      </svg>
-    ),
-    skills: ['FastAPI', 'REST APIs', 'SvelteKit', 'Next.js', 'Hono', 'Docker', 'Google Cloud', 'Hugging Face', 'Git', 'GitHub'],
+    Icon: Server,
+    skills: ['FastAPI', 'NestJS', 'REST APIs', 'SvelteKit', 'Next.js', 'Hono', 'Docker', 'Google Cloud', 'Hugging Face', 'Git', 'GitHub'],
   },
   {
     eyebrow: 'Train',
     title: 'AI, LLMs & RAG',
-    icon: (
-      <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.6} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-      </svg>
-    ),
+    Icon: Brain,
     skills: ['OpenAI Whisper', 'Prompt Engineering', 'LLM Evaluation', 'NLP', 'TensorFlow', 'Keras', 'LangChain', 'LangGraph', 'RAG Pipelines', 'FAISS'],
   },
   {
     eyebrow: 'Work',
     title: 'Professional Soft Skills',
-    icon: (
-      <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.6} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-      </svg>
-    ),
+    Icon: Users,
     skills: RESUME.skills.soft,
   },
 ];
 
 export function Skills() {
-
   return (
-    <section id="skills" className="sec" aria-labelledby="skills-title">
-      <SectionHead title="Skills & Abilities" index="02" label="Technical Expertise" titleId="skills-title" />
+    <section id="skills" className="section-y" aria-labelledby="skills-title">
+      <div className="container-page">
+        <SectionHead
+          title={
+            <>
+              Skills &amp; <em>Abilities</em>
+            </>
+          }
+          index="02"
+          label="Technical Expertise"
+          titleId="skills-title"
+        />
 
-      <Reveal className="hair hair-2 hair-hover" rise={false}>
-        {categories.map((cat) => (
-          <div
-            key={cat.title}
-            className="cat"
-
-
-
-
-          >
-            <div className="cat-top">
-              <span className="eyebrow">{cat.eyebrow}</span>
-            </div>
-
-            <div className="cat-id">
-              <span className="cat-ic">{cat.icon}</span>
-              <h3 className="p-title">{cat.title}</h3>
-            </div>
-
-            <div className="skill-grid">
-              {cat.skills.map((skill) => (
-                <span key={skill} className="rev-i">
-                  <SkillLogo name={skill} />
-                  {skill}
+        <Reveal stagger={0.06} className="grid gap-4 md:grid-cols-2 lg:gap-6">
+          {categories.map(({ eyebrow, title, Icon, skills }) => (
+            <Card key={title} className="p-6 md:p-8">
+              <div className="mb-6 flex items-center gap-4">
+                <span className="grid size-12 shrink-0 place-items-center rounded-2xl bg-secondary text-foreground">
+                  <Icon className="size-5" aria-hidden="true" />
                 </span>
-              ))}
-            </div>
-          </div>
-        ))}
-      </Reveal>
+                <div>
+                  <span className="text-xs font-semibold tracking-[0.08em] text-muted-foreground uppercase">{eyebrow}</span>
+                  <h3 className="text-xl leading-tight font-semibold tracking-[-0.02em]">{title}</h3>
+                </div>
+              </div>
+
+              <ul className="flex flex-wrap gap-2">
+                {skills.map((skill) => (
+                  <li
+                    key={skill}
+                    className="inline-flex items-center gap-2 rounded-full bg-secondary px-3 py-1.5 text-sm font-medium"
+                  >
+                    <SkillLogo name={skill} size={15} />
+                    {skill}
+                  </li>
+                ))}
+              </ul>
+            </Card>
+          ))}
+        </Reveal>
+      </div>
     </section>
   );
 }
