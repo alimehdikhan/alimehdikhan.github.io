@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'motion/react';
-import { Send } from 'lucide-react';
+import { Send } from '@/components/ui/icons';
 import { Button } from './ui/button';
 import { Magnetic } from './ui/magnetic';
 import { cn } from '@/lib/utils';

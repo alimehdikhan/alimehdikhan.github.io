@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { Check, Copy, Mail } from 'lucide-react';
+import { Check, Copy, Mail } from '@/components/ui/icons';
 import { Button } from './ui/button';
 import { Magnetic } from './ui/magnetic';
 
