@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useTheme } from 'next-themes';
 import { AnimatePresence, motion } from 'motion/react';
-import { Moon, Sun } from 'lucide-react';
+import { Moon, Sun } from '@/components/ui/icons';
 import { Button } from './button';
 import { SPRING } from '../fx/motion';
 
@@ -22,7 +22,7 @@ export function ThemeToggle() {
 
   return (
     <Button
-      variant="ghost"
+      variant="glass"
       size="icon"
       className="overflow-hidden"
       onClick={() => setTheme(isDark ? 'light' : 'dark')}
@@ -38,7 +38,7 @@ export function ThemeToggle() {
           transition={iconSpring}
           aria-hidden="true"
         >
-          {isDark ? <Moon className="size-[17px]" /> : <Sun className="size-[17px]" />}
+          {isDark ? <Moon /> : <Sun />}
         </motion.span>
       </AnimatePresence>
     </Button>
