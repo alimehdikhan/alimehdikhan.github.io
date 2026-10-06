@@ -2,16 +2,15 @@ import { Reveal } from '../fx/Reveal';
 import { MaskReveal } from '../fx/MaskReveal';
 import { cn } from '@/lib/utils';
 
-/* Section heading: a small numbered eyebrow that fades in, then a large,
+/* Section heading: a small eyebrow with a lime dot that fades in, then a large,
    tightly tracked title that rises out of a masked line. Wrap the secondary
    phrase in <em> for the serif-italic lime highlight. */
-export function SectionHead({ title, index, label, titleId, intro, className }) {
+export function SectionHead({ title, label, titleId, intro, className }) {
   return (
     <div className={cn('mb-8 flex flex-col gap-4 md:mb-12', className)}>
       <Reveal y={8}>
-        <span className="text-sm font-semibold text-muted-foreground">
-          <span className="text-link tabular-nums">{index}</span>
-          <span aria-hidden="true"> · </span>
+        <span className="inline-flex items-center gap-2.5 text-sm font-semibold text-muted-foreground">
+          <span aria-hidden="true" className="size-1.5 rounded-full bg-primary shadow-[0_0_8px_rgb(var(--glow)/0.8)]" />
           {label}
         </span>
       </Reveal>
