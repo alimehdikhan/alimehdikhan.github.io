@@ -1,7 +1,7 @@
 'use client';
 
 import { Fragment, useEffect } from 'react';
-import { ArrowDown, Download, Mail } from 'lucide-react';
+import { ArrowDown, BadgeCheck, Download, GithubMark, GraduationCap, LinkedinMark, Mail } from '@/components/ui/icons';
 import { Button } from './ui/button';
 import { Magnetic } from './ui/magnetic';
 import { HeroPortrait } from './HeroPortrait';
@@ -12,19 +12,18 @@ import { Typewriter } from './fx/Typewriter';
 import { LocalClock } from './fx/LocalClock';
 import { RESUME } from '../data/resume';
 
+/* each credential leads with an icon: the real Google Cloud mark where one
+   exists, a duotone seal or cap otherwise */
 const credibilityChips = [
-  {
-    label: 'Google Cloud Certified',
-    logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/googlecloud/googlecloud-original.svg',
-  },
-  { label: 'Deloitte Certified' },
-  { label: 'B.Tech CSE (2026)' },
+  { label: 'Google Cloud skill badges', logo: '/assets/icons/tech/googlecloud.svg' },
+  { label: 'Deloitte job simulation', Icon: BadgeCheck },
+  { label: 'B.Tech CSE, 2026', Icon: GraduationCap },
 ];
 
 const socials = [
-  { href: RESUME.github, label: 'GitHub', img: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/github/github-original.svg', invDark: true },
-  { href: RESUME.linkedin, label: 'LinkedIn', img: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/linkedin/linkedin-original.svg' },
-  { href: `mailto:${RESUME.email}`, label: 'Email' },
+  { href: RESUME.github, label: 'GitHub', Icon: GithubMark },
+  { href: RESUME.linkedin, label: 'LinkedIn', Icon: LinkedinMark },
+  { href: `mailto:${RESUME.email}`, label: 'Email', Icon: Mail },
 ];
 
 
@@ -104,20 +103,11 @@ export function Hero() {
 
           <ul style={{ '--i': 4 }} className="hero-in mt-6 flex flex-wrap gap-2" aria-label="Credentials">
             {credibilityChips.map((chip) => (
-              <li key={chip.label} className="inline-flex items-center gap-2 rounded-full bg-secondary px-3 py-1 text-[13px] font-medium">
-                {chip.logo && (
-                  <img
-                    src={chip.logo}
-                    alt=""
-                    width="14"
-                    height="14"
-                    loading="lazy"
-                    aria-hidden="true"
-                    className="size-3.5 object-contain"
-                    onError={(e) => {
-                      e.currentTarget.style.display = 'none';
-                    }}
-                  />
+              <li key={chip.label} className="inline-flex items-center gap-2 rounded-full bg-secondary px-3 py-1.5 text-[13px] font-medium">
+                {chip.logo ? (
+                  <img src={chip.logo} alt="" width="14" height="14" aria-hidden="true" className="size-3.5 object-contain" />
+                ) : (
+                  <chip.Icon className="size-4" />
                 )}
                 {chip.label}
               </li>
@@ -147,30 +137,18 @@ export function Hero() {
           </div>
 
           <div style={{ '--i': 6 }} className="hero-in mt-8 flex items-center gap-2">
-            {socials.map((social) => {
+            {socials.map(({ href, label, Icon }) => {
               /* mail links open the mail app in place; profiles open a new tab */
-              const external = !social.href.startsWith('mailto:');
+              const external = !href.startsWith('mailto:');
               return (
-                <Button key={social.label} asChild variant="secondary" size="icon">
+                <Button key={label} asChild variant="glass" size="icon">
                   <a
-                    href={social.href}
+                    href={href}
                     target={external ? '_blank' : undefined}
                     rel={external ? 'noopener noreferrer' : undefined}
-                    aria-label={social.label}
+                    aria-label={label}
                   >
-                    {social.img ? (
-                      <img
-                        className={social.invDark ? 'inv-dark' : undefined}
-                        src={social.img}
-                        alt=""
-                        width="16"
-                        height="16"
-                        loading="lazy"
-                        aria-hidden="true"
-                      />
-                    ) : (
-                      <Mail aria-hidden="true" />
-                    )}
+                    <Icon />
                   </a>
                 </Button>
               );
