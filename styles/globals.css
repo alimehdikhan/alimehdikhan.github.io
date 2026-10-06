@@ -490,6 +490,28 @@
   box-shadow: inset 0 0 0 1px var(--tile-ring), inset 0 1px 0 var(--tile-hi);
 }
 
+/* footer wordmark: a giant name that fades out toward its baseline, with a
+   lime light that follows the cursor (--mx/--my set by Footer.js) and eases
+   in and out through the registered --ma property */
+@property --ma {
+  syntax: '<number>';
+  inherits: false;
+  initial-value: 0;
+}
+.footer-word {
+  --mx: -999px;
+  --my: -999px;
+  --ma: 0;
+  background-image:
+    radial-gradient(380px circle at var(--mx) var(--my), rgb(var(--glow) / calc(0.95 * var(--ma))), transparent 70%),
+    linear-gradient(to bottom, color-mix(in srgb, var(--foreground) 24%, transparent), color-mix(in srgb, var(--foreground) 2%, transparent) 88%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  transition: --ma 0.5s var(--ease-out-soft);
+}
+
 /* project artwork: a gentle zoom on card hover, inside its rounded frame */
 .project-art {
   transition: transform 0.8s var(--ease-out-soft);
