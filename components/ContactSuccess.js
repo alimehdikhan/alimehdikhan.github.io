@@ -3,7 +3,7 @@
 import { Fragment, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { AnimatePresence, motion } from 'motion/react';
-import { RotateCcw } from 'lucide-react';
+import { RotateCcw } from '@/components/ui/icons';
 import { Button } from './ui/button';
 
 const EASE = [0.16, 1, 0.3, 1];
@@ -266,7 +266,7 @@ export function ContactSuccess({ open, container, origin, reduce, onReset, onClo
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: T.copy, duration: 0.6, ease: EASE }}
             >
-              Message sent. Your note is in my inbox — I&apos;ll get back to you soon.
+              Message sent. It&apos;s in my inbox, and I&apos;ll reply soon.
             </motion.p>
 
             <motion.div

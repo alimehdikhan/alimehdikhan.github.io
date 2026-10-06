@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
-import { CircleAlert, X } from 'lucide-react';
+import { CircleAlert, X } from '@/components/ui/icons';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Label } from './ui/label';
@@ -11,12 +11,16 @@ import { Textarea } from './ui/textarea';
 import { SendButton } from './SendButton';
 import { ContactSuccess } from './ContactSuccess';
 import { SPRING } from './fx/motion';
+import { cn } from '@/lib/utils';
 
 /* The contact form owns its own state so a keystroke re-renders this
    component only, never the Contact section. */
 
 const ENDPOINT = 'https://formspree.io/f/xjgzwweq';
 const EMPTY = { name: '', email: '', subject: '', message: '' };
+const FIELDS = Object.keys(EMPTY);
+/* one-tap subjects: they fill the Subject field and can be edited after */
+const TOPICS = ['Job opportunity', 'Internship', 'Collaboration', 'Say hello'];
 /* failure toast: SPRING.ui in, a short fade out */
 const TOAST_IN = { y: 30, opacity: 0 };
 const TOAST_SHOWN = { y: 0, opacity: 1 };
@@ -34,15 +38,10 @@ const validate = (name, value) => {
   return '';
 };
 
-function Field({ id, number, label, error, children }) {
+function Field({ id, label, error, children }) {
   return (
     <div className="flex flex-col gap-2">
-      <Label htmlFor={id}>
-        <span className="text-xs font-normal text-muted-foreground tabular-nums" aria-hidden="true">
-          {number}
-        </span>
-        {label}
-      </Label>
+      <Label htmlFor={id}>{label}</Label>
       {children}
       {error && (
         <span className="text-sm text-destructive" id={`${id}-error`}>
@@ -137,6 +136,17 @@ export function ContactForm() {
   /* "Send another message": the scene collapses back into the button, and
      focus returns to the first field once it has */
   const reset = () => setStatus(null);
+
+  /* a topic chip fills the subject; on a desktop the cursor moves on to the
+     message (on a phone that would raise the keyboard uninvited) */
+  const pickTopic = (topic) => {
+    setFormState((prev) => ({ ...prev, subject: topic }));
+    setErrors((prev) => ({ ...prev, subject: '' }));
+    if (matchMedia('(pointer: fine)').matches) document.getElementById('message')?.focus({ preventScroll: true });
+  };
+
+  const ready = FIELDS.map((k) => validate(k, formState[k]) === '');
+  const readyCount = ready.filter(Boolean).length;
   const afterScene = () => document.getElementById('name')?.focus({ preventScroll: true });
 
   const handleSubmit = async (e) => {
@@ -200,9 +210,9 @@ export function ContactForm() {
             <CircleAlert className="size-5" />
           </span>
           <div className="flex-1 pt-0.5">
-            <div className="font-semibold">That didn’t go through</div>
+            <div className="font-semibold">Your message didn’t send</div>
             <div className="mt-1 text-sm text-muted-foreground">
-              Something went wrong sending that. Your message is still in the form — mind trying again?
+              Something went wrong on the way. Your text is still in the form, so you can try again.
             </div>
           </div>
           <Button variant="ghost" size="icon" className="-mt-1 size-9" onClick={dismiss} aria-label="Dismiss Alert">
@@ -220,30 +230,55 @@ export function ContactForm() {
         action={ENDPOINT}
         method="POST"
         onSubmit={handleSubmit}
-        className={`mt-6 flex flex-col gap-6 transition-opacity duration-300 ${status === 'sending' ? '[&_input]:opacity-60 [&_textarea]:opacity-60' : ''}`}
+        className={`flex flex-col gap-6 transition-opacity duration-300 ${status === 'sending' ? '[&_input]:opacity-60 [&_textarea]:opacity-60' : ''}`}
         aria-label="Contact Form"
         aria-describedby="form-note"
         noValidate
         inert={status === 'success' ? '' : undefined}
       >
         <div className="grid gap-6 sm:grid-cols-2">
-          <Field id="name" number="01" label="Name" error={errors.name}>
+          <Field id="name" label="Name" error={errors.name}>
             <Input type="text" autoComplete="name" required {...fieldProps('name')} />
           </Field>
-          <Field id="email" number="02" label="Email Address" error={errors.email}>
+          <Field id="email" label="Email" error={errors.email}>
             <Input type="email" autoComplete="email" inputMode="email" required {...fieldProps('email')} />
           </Field>
         </div>
 
-        <Field id="subject" number="03" label="Subject" error={errors.subject}>
+        <Field id="subject" label="Subject" error={errors.subject}>
           <Input type="text" autoComplete="off" required {...fieldProps('subject')} />
+          <div className="flex flex-wrap gap-2" role="group" aria-label="Quick subjects">
+            {TOPICS.map((topic) => (
+              <button
+                key={topic}
+                type="button"
+                disabled={status === 'sending'}
+                aria-pressed={formState.subject === topic}
+                onClick={() => pickTopic(topic)}
+                className="min-h-10 rounded-full border border-input bg-card/60 px-3.5 text-[13px] font-medium transition-[background-color,color,border-color] duration-200 outline-none hover:border-foreground/40 hover:bg-card focus-visible:ring-4 focus-visible:ring-ring/25 aria-pressed:border-foreground aria-pressed:bg-foreground aria-pressed:text-primary-foreground disabled:opacity-60"
+              >
+                {topic}
+              </button>
+            ))}
+          </div>
         </Field>
 
-        <Field id="message" number="04" label="Message" error={errors.message}>
+        <Field id="message" label="Message" error={errors.message}>
           <Textarea rows={5} required {...fieldProps('message')} />
         </Field>
 
-        <SendButton status={status} reduce={reducedMotion} anchorRef={anchorRef} />
+        <div className="flex flex-wrap items-center gap-x-6 gap-y-4">
+          <SendButton status={status} reduce={reducedMotion} anchorRef={anchorRef} />
+          {/* a quiet progress meter: one pip per field that is ready to send */}
+          <div className="flex items-center gap-3 text-sm text-muted-foreground" aria-hidden="true">
+            <span className="flex gap-1">
+              {ready.map((ok, i) => (
+                <span key={FIELDS[i]} className={cn('h-1.5 w-6 rounded-full transition-colors duration-300', ok ? 'bg-foreground' : 'bg-foreground/15')} />
+              ))}
+            </span>
+            <span className="tabular-nums">{readyCount} of {FIELDS.length} ready</span>
+          </div>
+        </div>
       </form>
 
       {mounted && createPortal(toast, document.body)}
