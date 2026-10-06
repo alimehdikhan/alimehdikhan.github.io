@@ -1,6 +1,6 @@
 'use client';
 
-import { Adapt, Brain, Chat, Code, Database, Evaluate, Exchange, Language, Pipeline, Prompt, Puzzle, Search, Server, Timer, Users } from '@/components/ui/icons';
+import { Adapt, Brain, Chat, Code, Database, Evaluate, Exchange, Language, Pipeline, Prompt, Puzzle, Search, Server, Timer, Users, Layers, Waveform } from '@/components/ui/icons';
 import { SectionHead } from './ui/SectionHead';
 import { Card } from './ui/card';
 import { IconTile } from './ui/icon-tile';
@@ -47,6 +47,8 @@ const GLYPHS = {
   NLP: Language,
   'RAG Pipelines': Pipeline,
   FAISS: Search,
+  Epitran: Waveform,
+  CNN: Layers,
   Communication: Chat,
   'Problem Solving': Puzzle,
   'Team Collaboration': Users,

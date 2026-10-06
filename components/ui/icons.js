@@ -59,6 +59,8 @@ export const Chat = make(P.ChatsCircle);
 export const Puzzle = make(P.PuzzlePiece);
 export const Adapt = make(P.ArrowsClockwise);
 export const Timer = make(P.Timer);
+export const Waveform = make(P.Waveform);
+export const Layers = make(P.Stack);
 
 /* brand marks are monochrome so they sit in the black-and-lime palette */
 export const GithubMark = make(P.GithubLogo, { weight: 'fill' });
