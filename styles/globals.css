@@ -287,10 +287,11 @@
   transform: none;
 }
 
-/* brand marks drawn in black get inverted on the dark ground */
+/* marks that are black or a very dark brand colour turn clean white on the
+   dark ground (brightness(0) flattens any colour before it is inverted) */
 [data-theme="dark"] .inv-dark,
 :root:not([data-theme]) .inv-dark {
-  filter: invert(1) brightness(1.6);
+  filter: brightness(0) invert(1);
 }
 
 /* lime surface: a local token scope, so every component inside (buttons,
