@@ -1,16 +1,21 @@
 'use client';
 
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
+import { motion, useReducedMotion } from 'motion/react';
+import { Download, Menu } from 'lucide-react';
 import { ThemeToggle } from './ui/ThemeToggle';
+import { Button } from './ui/button';
+import { Magnetic } from './ui/magnetic';
+import { Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger } from './ui/dialog';
 import { trackResumeDownload } from './fx/trackDownload';
 import { revealSection } from './fx/revealSection';
 import { scrollToHash } from './fx/scrollTo';
-import { EASE, SPRING, STAGGER } from './fx/motion';
+import { EASE, SPRING } from './fx/motion';
+import { cn } from '@/lib/utils';
 import { RESUME } from '../data/resume';
 
+/* the logo already returns to the top, so there is no separate Home link */
 const navLinks = [
-  { name: 'Home', href: '#hero' },
   { name: 'About', href: '#about' },
   { name: 'Skills', href: '#skills' },
   { name: 'Experience', href: '#experience' },
@@ -20,29 +25,23 @@ const navLinks = [
 ];
 
 /* the section spy reads a 1px band this far below the top edge (clear of
-   the fixed nav); scrollTo.js lands anchors at 92px so the band sits inside
+   the fixed nav); scrollTo.js lands anchors at 72px so the band sits inside
    the arriving section */
-const SPY_LINE = 160;
+const SPY_LINE = 120;
 /* safety release for the click lock if `anchor:done` never arrives
    (native anchor path: reduced motion or a missing target) */
 const LOCK_TIMEOUT = 1500;
 
-const pillSpring = { type: 'spring', ...SPRING.ui };
-const burgerSpring = { type: 'spring', ...SPRING.ui };
-const lineOrigin = { originX: '50%', originY: '50%' };
+const underlineSpring = { type: 'spring', ...SPRING.ui };
 
-/* mobile menu: panel fades first, then links rise in one after another;
-   only the panel fades on exit (children carry no exit variant) */
-const panelVariants = {
-  open: {
-    opacity: 1,
-    transition: { duration: 0.18, when: 'beforeChildren', staggerChildren: 0.018 },
-  },
-  closed: { opacity: 0, transition: { duration: 0.18 } },
+/* mobile menu links rise in one after another once the dialog opens */
+const listVariants = {
+  open: { transition: { staggerChildren: 0.035, delayChildren: 0.06 } },
+  closed: {},
 };
 const linkVariants = {
-  closed: { opacity: 0, y: 14 },
-  open: { opacity: 1, y: 0, transition: { duration: 0.24, ease: EASE } },
+  closed: { opacity: 0, y: 8 },
+  open: { opacity: 1, y: 0, transition: { duration: 0.4, ease: EASE } },
 };
 
 /* keep the URL hash on the visible section: replaceState (no history spam,
@@ -61,10 +60,8 @@ export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const prefersReducedMotion = useReducedMotion();
 
-  const burgerRef = useRef(null);
-  const mobRef = useRef(null);
   /* id the user just clicked: while set, the spy ignores the sections the
-     travel passes through so the pill springs once, straight to the target */
+     travel passes through so the underline moves once, straight to the target */
   const lock = useRef(null);
   const lockTimer = useRef(null);
   /* mirrors `activeSection` for the observer callback (no stale closure) */
@@ -72,6 +69,9 @@ export function Navbar() {
   /* last section the spy saw under the band, tracked even while locked so an
      interrupted travel can settle on whatever is actually on screen */
   const under = useRef('hero');
+  /* a mobile-menu link waits for the dialog to close (and release its
+     scroll lock) before travelling */
+  const pending = useRef(null);
 
   const applyUnder = useCallback(() => {
     const id = under.current;
@@ -88,8 +88,8 @@ export function Navbar() {
     applyUnder();
   }, [applyUnder]);
 
-  /* chrome flag: the only scroll-time work left, with hysteresis so a
-     trackpad hovering near the threshold cannot flutter the bar */
+  /* chrome flag with hysteresis so a trackpad near the threshold cannot
+     flutter the bar */
   useEffect(() => {
     let prev = false;
     const onScroll = () => {
@@ -106,9 +106,7 @@ export function Navbar() {
   }, []);
 
   /* section spy: an IntersectionObserver whose root is a 1px band at
-     SPY_LINE; rootMargin cannot be calc(), so it is rebuilt on resize. Runs
-     its initial pass at mount, so deep links and restored scroll positions
-     start in the right state. */
+     SPY_LINE; rootMargin cannot be calc(), so it is rebuilt on resize */
   useEffect(() => {
     let io = null;
     let raf = 0;
@@ -127,8 +125,10 @@ export function Navbar() {
         },
         { rootMargin: `-${SPY_LINE}px 0px -${below}px 0px`, threshold: 0 }
       );
-      navLinks.forEach((link) => {
-        const el = document.getElementById(link.href.slice(1));
+      /* the hero and the GitHub section have no nav link; observing them too
+         means no link stays highlighted while either is in view */
+      ['#hero', ...navLinks.map((link) => link.href), '#opensource'].forEach((href) => {
+        const el = document.getElementById(href.slice(1));
         if (el) io.observe(el);
       });
     };
@@ -156,188 +156,178 @@ export function Navbar() {
     };
   }, [release]);
 
-  /* mobile menu contract: html.menu-open (the WebGL backdrop pauses on it),
-     body scroll lock, Escape closes and hands focus back to the burger,
-     focus moves to the first link on open */
-  useEffect(() => {
-    if (!isOpen) return undefined;
-    const root = document.documentElement;
-    root.classList.add('menu-open');
-    document.body.style.overflow = 'hidden';
-
-    const onKey = (e) => {
-      if (e.key !== 'Escape') return;
-      setIsOpen(false);
-      if (burgerRef.current) burgerRef.current.focus();
-    };
-    window.addEventListener('keydown', onKey);
-
-    const first = mobRef.current ? mobRef.current.querySelector('a') : null;
-    if (first) first.focus({ preventScroll: true });
-
-    return () => {
-      window.removeEventListener('keydown', onKey);
-      root.classList.remove('menu-open');
-      document.body.style.overflow = '';
-    };
-  }, [isOpen]);
-
-  /* pill/highlight jump to the target at once; the spy stays locked until
-     the travel reports done. scrollToHash pushes the hash itself; when it
-     declines (reduced motion, missing target) the native anchor runs and the
-     section's reveals are snapped visible so the jump never lands blank. */
-  const handleLinkClick = (e, href) => {
+  const travel = (href) => {
     const id = href.slice(1);
     if (lockTimer.current) clearTimeout(lockTimer.current);
     lock.current = id;
     lockTimer.current = setTimeout(release, LOCK_TIMEOUT);
     current.current = id;
     setActiveSection(id);
+    if (scrollToHash(href)) return true;
+    revealSection(href);
+    return false;
+  };
+
+  /* desktop links: the underline jumps to the target at once; the spy stays
+     locked until the travel reports done. When scrollToHash declines
+     (reduced motion, missing target) the native anchor runs. */
+  const handleLinkClick = (e, href) => {
+    if (travel(href)) e.preventDefault();
+  };
+
+  const handleMobileClick = (e, href) => {
+    e.preventDefault();
+    pending.current = href;
     setIsOpen(false);
-    if (scrollToHash(href)) e.preventDefault();
-    else revealSection(href);
+  };
+
+  const onMenuClosed = () => {
+    const href = pending.current;
+    pending.current = null;
+    if (!href) return;
+    requestAnimationFrame(() => {
+      if (!travel(href)) {
+        const el = document.getElementById(href.slice(1));
+        if (el) el.scrollIntoView();
+        try {
+          window.history.pushState(window.history.state, '', href);
+        } catch (err) {
+          /* ignore */
+        }
+      }
+    });
   };
 
   return (
-    <>
-      <nav className={`nav${scrolled ? ' scrolled' : ''}${isOpen ? ' menu-open' : ''}`} role="navigation" aria-label="Main Navigation">
-        <a className="mark" href="#hero" aria-label={`AMK. — ${RESUME.name}`} onClick={(e) => handleLinkClick(e, '#hero')}>
-          AMK<em>.</em>
+    <header
+      className={cn(
+        'fixed inset-x-0 top-0 z-50 border-b transition-[background-color,border-color] duration-300',
+        scrolled
+          ? 'border-border bg-surface/90 backdrop-blur-xl backdrop-saturate-[1.8]'
+          : 'border-transparent bg-surface/0'
+      )}
+    >
+      <nav aria-label="Main Navigation" className="container-page flex h-14 items-center justify-between gap-4">
+        <a
+          href="#hero"
+          className="flex items-center text-[17px] font-semibold tracking-[-0.02em]"
+          aria-label={`AMK. — ${RESUME.name}`}
+          onClick={(e) => handleLinkClick(e, '#hero')}
+        >
+          AMK
+          <span className="ml-0.5 inline-block size-2 rounded-full bg-primary shadow-[0_0_12px_rgb(var(--glow)/0.8)]" />
         </a>
 
-        <div className="nav-links">
+        <div className="hidden items-center gap-1 lg:flex">
           {navLinks.map((link) => {
-            const isActive = activeSection === link.href.substring(1);
+            const isActive = activeSection === link.href.slice(1);
             return (
               <a
                 key={link.name}
                 href={link.href}
                 onClick={(e) => handleLinkClick(e, link.href)}
-                className={isActive ? 'on' : ''}
                 aria-current={isActive ? 'true' : undefined}
+                className={cn(
+                  'group relative rounded-full px-3 py-2 text-[13px] transition-colors duration-200',
+                  isActive ? 'text-foreground' : 'text-muted-foreground hover:text-foreground'
+                )}
               >
-                {isActive &&
-                  (prefersReducedMotion ? (
-                    <span className="nav-pill" aria-hidden="true" style={{ borderRadius: 999 }} />
-                  ) : (
-                    <motion.span
-                      layoutId="nav-pill"
-                      className="nav-pill"
-                      aria-hidden="true"
-                      style={{ borderRadius: 999 }}
-                      transition={pillSpring}
-                    />
-                  ))}
                 {link.name}
+                {/* hover underline for idle links; the active one carries the travelling bar */}
+                {!isActive && (
+                  <span
+                    aria-hidden="true"
+                    className="absolute inset-x-3 bottom-1 h-px origin-left scale-x-0 bg-foreground/40 transition-transform duration-300 ease-out group-hover:scale-x-100 group-focus-visible:scale-x-100"
+                  />
+                )}
+                {/* MotionConfig (reducedMotion="user") makes the travel instant
+                    under reduced motion, so the same element renders on server
+                    and client */}
+                {isActive && (
+                  <motion.span
+                    layoutId="nav-underline"
+                    aria-hidden="true"
+                    className="absolute inset-x-3 bottom-1 h-0.5 rounded-full bg-primary shadow-[0_0_10px_rgb(var(--glow)/0.7)]"
+                    transition={underlineSpring}
+                  />
+                )}
               </a>
             );
           })}
         </div>
 
-        <div className="nav-right">
+        <div className="flex items-center gap-2">
           <ThemeToggle />
-          <a
-            href={RESUME.resumePath}
-            download={RESUME.resumeDownloadName}
-            onClick={() => trackResumeDownload('navbar')}
-            className="btn btn-sm nav-resume"
-            aria-label="Download Resume PDF"
-          >
-            Resume
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true"><path d="M12 3v12m-4-4 4 4 4-4M5 16v5h14v-5" strokeLinecap="round" strokeLinejoin="round"/></svg>
-          </a>
-          <button
-            ref={burgerRef}
-            className="icon-btn burger"
-            onClick={() => setIsOpen((open) => !open)}
-            aria-label="Toggle Navigation Menu"
-            aria-expanded={isOpen}
-            aria-controls="mobile-menu"
-          >
-            <svg
-              width="16"
-              height="16"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth={2}
-              strokeLinecap="round"
-              aria-hidden="true"
+          <Magnetic className="hidden sm:inline-flex" strength={0.25} max={5}>
+            <Button asChild size="sm">
+              <a
+                href={RESUME.resumePath}
+                download={RESUME.resumeDownloadName}
+                onClick={() => trackResumeDownload('navbar')}
+                aria-label="Download Resume PDF"
+              >
+                <Download className="size-3.5" aria-hidden="true" />
+                Resume
+              </a>
+            </Button>
+          </Magnetic>
+
+          <Dialog open={isOpen} onOpenChange={setIsOpen}>
+            <DialogTrigger asChild>
+              <Button variant="ghost" size="icon" className="lg:hidden" aria-label="Open navigation menu">
+                <Menu className="size-[18px]" aria-hidden="true" />
+              </Button>
+            </DialogTrigger>
+            <DialogContent
+              id="mobile-menu"
+              closeLabel="Close navigation menu"
+              onCloseAutoFocus={onMenuClosed}
+              className="top-0 left-0 flex h-dvh max-h-none w-full max-w-none translate-x-0 translate-y-0 flex-col gap-0 rounded-none border-0 bg-surface/95 px-6 pt-20 pb-10 shadow-none backdrop-blur-2xl data-[state=closed]:slide-out-to-top-2 data-[state=open]:slide-in-from-top-2 data-[state=closed]:zoom-out-100 data-[state=open]:zoom-in-100 sm:max-w-none sm:px-8"
             >
-              <motion.line
-                x1="4"
-                y1="7"
-                x2="20"
-                y2="7"
-                style={lineOrigin}
-                initial={false}
-                animate={isOpen ? { rotate: 45, y: 5 } : { rotate: 0, y: 0 }}
-                transition={burgerSpring}
-              />
-              <motion.line
-                x1="4"
-                y1="12"
-                x2="20"
-                y2="12"
-                style={lineOrigin}
-                initial={false}
-                animate={isOpen ? { opacity: 0, scaleX: 0 } : { opacity: 1, scaleX: 1 }}
-                transition={burgerSpring}
-              />
-              <motion.line
-                x1="4"
-                y1="17"
-                x2="20"
-                y2="17"
-                style={lineOrigin}
-                initial={false}
-                animate={isOpen ? { rotate: -45, y: -5 } : { rotate: 0, y: 0 }}
-                transition={burgerSpring}
-              />
-            </svg>
-          </button>
+              <DialogTitle className="sr-only">Navigation</DialogTitle>
+              <DialogDescription className="sr-only">Jump to a section of the page.</DialogDescription>
+              <motion.nav
+                aria-label="Mobile Navigation"
+                className="flex flex-col"
+                variants={listVariants}
+                initial={prefersReducedMotion ? false : 'closed'}
+                animate="open"
+              >
+                {navLinks.map((link) => {
+                  const isActive = activeSection === link.href.slice(1);
+                  return (
+                    <motion.a
+                      key={link.name}
+                      href={link.href}
+                      variants={linkVariants}
+                      onClick={(e) => handleMobileClick(e, link.href)}
+                      aria-current={isActive ? 'true' : undefined}
+                      className={cn(
+                        'py-2 text-[28px] leading-tight font-semibold tracking-[-0.025em] transition-colors',
+                        isActive ? 'text-foreground' : 'text-muted-foreground hover:text-foreground'
+                      )}
+                    >
+                      {link.name}
+                    </motion.a>
+                  );
+                })}
+                <motion.div variants={linkVariants} className="pt-8">
+                  <Button asChild size="lg" className="w-full">
+                    <a
+                      href={RESUME.resumePath}
+                      download={RESUME.resumeDownloadName}
+                      onClick={() => trackResumeDownload('mobile menu')}
+                    >
+                      <Download aria-hidden="true" />
+                      Download Resume
+                    </a>
+                  </Button>
+                </motion.div>
+              </motion.nav>
+            </DialogContent>
+          </Dialog>
         </div>
       </nav>
-
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            id="mobile-menu"
-            ref={mobRef}
-            className="mob"
-            variants={panelVariants}
-            initial={prefersReducedMotion ? false : 'closed'}
-            animate="open"
-            exit="closed"
-          >
-            {navLinks.map((link, i) => {
-              const isActive = activeSection === link.href.substring(1);
-              return (
-                <motion.a
-                  key={link.name}
-                  href={link.href}
-                  variants={linkVariants}
-                  onClick={(e) => handleLinkClick(e, link.href)}
-                  className={isActive ? 'on' : ''}
-                  aria-current={isActive ? 'true' : undefined}
-                >
-                  <span className="n">{String(i + 1).padStart(2, '0')}</span>
-                  {link.name}
-                </motion.a>
-              );
-            })}
-            <motion.a
-              href={RESUME.resumePath}
-              download={RESUME.resumeDownloadName}
-              variants={linkVariants}
-              onClick={() => trackResumeDownload('mobile menu')}
-            >
-              <span className="n">↓</span>
-              Download Resume
-            </motion.a>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </>
+    </header>
   );
 }
