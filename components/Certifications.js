@@ -29,18 +29,25 @@ export function Certifications() {
   return (
     <section id="certifications" className="section-y" aria-labelledby="certifications-title">
       <div className="container-page">
-        <SectionHead title="Certifications" index="05" label="Credentials" titleId="certifications-title" />
+        <SectionHead
+          title={
+            <>
+              Courses I&apos;ve <em>completed</em>
+            </>
+          }
+          label="Certificates"
+          titleId="certifications-title"
+        />
 
         {/* a single list rather than another card grid: one row per
             credential, with the directional wash on each row */}
         <Reveal stagger={0.06} className="overflow-hidden rounded-3xl border border-border bg-card shadow-soft">
-          {RESUME.certifications.map((cert, i) => (
+          {RESUME.certifications.map((cert) => (
             <DirectionalCard
               key={cert.title}
               lift={false}
-              className="grid grid-cols-[auto_1fr] items-center gap-x-4 gap-y-1 rounded-none border-0 border-b bg-transparent px-5 py-5 shadow-none last:border-b-0 hover:border-border sm:grid-cols-[2rem_auto_1fr_auto] sm:gap-x-6 sm:px-8 sm:py-6"
+              className="grid grid-cols-[auto_1fr] items-center gap-x-4 gap-y-1 rounded-none border-0 border-b bg-transparent px-5 py-5 shadow-none last:border-b-0 hover:border-border sm:grid-cols-[auto_1fr_auto] sm:gap-x-6 sm:px-8 sm:py-6"
             >
-              <span className="hidden text-sm text-muted-foreground tabular-nums sm:block">{String(i + 1).padStart(2, '0')}</span>
               <IssuerLogo issuer={cert.issuer} />
               <div className="min-w-0">
                 <h3 className="text-[17px] leading-snug font-semibold tracking-[-0.015em] md:text-[19px]">{cert.title}</h3>
