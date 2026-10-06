@@ -1,4 +1,4 @@
-import { ArrowUpRight } from 'lucide-react';
+import { ArrowUpRight } from '@/components/ui/icons';
 import { SectionHead } from './ui/SectionHead';
 import { Button } from './ui/button';
 import { Magnetic } from './ui/magnetic';
@@ -8,8 +8,8 @@ import { RESUME } from '../data/resume';
 
 const stats = [
   { name: 'Repositories', value: `${RESUME.githubStats.publicRepos}` },
-  { name: 'Primary Lang', value: RESUME.githubStats.primaryLang },
-  { name: 'Focus Area', value: RESUME.githubStats.focusArea },
+  { name: 'Main language', value: RESUME.githubStats.primaryLang },
+  { name: 'Focus', value: RESUME.githubStats.focusArea },
 ];
 
 export function OpenSource() {
@@ -19,11 +19,10 @@ export function OpenSource() {
         <SectionHead
           title={
             <>
-              GitHub &amp; <em>Contributions</em>
+              My code on <em>GitHub</em>
             </>
           }
-          index="06"
-          label="Open Source"
+          label="GitHub"
           titleId="opensource-title"
         />
 
@@ -31,7 +30,7 @@ export function OpenSource() {
           <Reveal stagger={0.08} className="flex flex-col">
             <span className="text-sm font-semibold text-link">@alimehdikhan</span>
             <p className="mt-2 max-w-[52ch] text-muted-foreground md:text-lg">
-              A dozen public repos, mostly Python — the pronunciation coach, the cancer-detection model, and whatever pipeline experiment is currently mid-commit.
+              {RESUME.githubStats.publicRepos} public repositories, mostly Python. The pronunciation coach and the cancer-detection model are the two to start with.
             </p>
 
             <div className="my-8 grid grid-cols-3 gap-2 sm:gap-4">
