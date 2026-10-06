@@ -65,26 +65,22 @@ export function SkillLogo({ name, size = 16, shape = 'rounded', className }) {
 
 const categories = [
   {
-    eyebrow: 'Write',
-    title: 'Languages & Web',
+    title: 'Languages and web',
     Icon: Code,
     skills: ['Python', 'Java', 'JavaScript', 'SQL', 'C', 'C++', 'HTML', 'CSS'],
   },
   {
-    eyebrow: 'Build',
-    title: 'Backend, Cloud & Tools',
+    title: 'Backend, cloud and tools',
     Icon: Server,
     skills: ['FastAPI', 'NestJS', 'REST APIs', 'SvelteKit', 'Next.js', 'Hono', 'Docker', 'Google Cloud', 'Hugging Face', 'Git', 'GitHub'],
   },
   {
-    eyebrow: 'Train',
-    title: 'AI, LLMs & RAG',
+    title: 'AI and machine learning',
     Icon: Brain,
     skills: ['OpenAI Whisper', 'Prompt Engineering', 'LLM Evaluation', 'NLP', 'TensorFlow', 'Keras', 'LangChain', 'LangGraph', 'RAG Pipelines', 'FAISS'],
   },
   {
-    eyebrow: 'Work',
-    title: 'Professional Soft Skills',
+    title: 'Beyond the code',
     Icon: Users,
     skills: RESUME.skills.soft,
   },
@@ -97,16 +93,15 @@ export function Skills() {
         <SectionHead
           title={
             <>
-              Skills &amp; <em>Abilities</em>
+              What I <em>work with</em>
             </>
           }
-          index="02"
-          label="Technical Expertise"
+          label="Skills"
           titleId="skills-title"
         />
 
         <Reveal stagger={0.06} className="grid gap-4 md:grid-cols-2 lg:gap-6">
-          {categories.map(({ eyebrow, title, Icon, skills }) => (
+          {categories.map(({ title, Icon, skills }) => (
             <Card key={title} className="p-6 md:p-8">
               <div className="mb-6 flex items-center gap-4">
                 <IconTile icon={Icon} size="lg" />
