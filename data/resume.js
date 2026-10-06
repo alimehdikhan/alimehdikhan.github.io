@@ -109,6 +109,7 @@ export const RESUME = {
       'SvelteKit',
       'Next.js',
       'Hono',
+      'NestJS',
       'Google Cloud',
       'Git',
       'SQL',
