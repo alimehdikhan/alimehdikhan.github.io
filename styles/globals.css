@@ -412,7 +412,8 @@
 }
 
 /* inside a tile the whole glyph is one hue: the soft layer is a wash of it */
-.icon-tile .icon-duo {
+.icon-tile .icon-duo,
+.logo-plate .icon-duo {
   --icon-accent: currentColor;
   --icon-accent-opacity: 0.3;
 }

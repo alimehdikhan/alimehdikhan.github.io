@@ -47,6 +47,19 @@ export const BadgeCheck = make(P.SealCheck);
 export const GraduationCap = make(P.GraduationCap);
 export const RotateCcw = make(P.ArrowCounterClockwise, { hook: 'ico-ccw' });
 
+/* glyphs for skills that have no brand mark (SQL, REST, RAG, soft skills) */
+export const Database = make(P.Database);
+export const Exchange = make(P.ArrowsLeftRight);
+export const Prompt = make(P.ChatCircleDots);
+export const Evaluate = make(P.ListChecks);
+export const Language = make(P.Translate);
+export const Pipeline = make(P.FlowArrow);
+export const Search = make(P.MagnifyingGlass);
+export const Chat = make(P.ChatsCircle);
+export const Puzzle = make(P.PuzzlePiece);
+export const Adapt = make(P.ArrowsClockwise);
+export const Timer = make(P.Timer);
+
 /* brand marks are monochrome so they sit in the black-and-lime palette */
 export const GithubMark = make(P.GithubLogo, { weight: 'fill' });
 export const LinkedinMark = make(P.LinkedinLogo, { weight: 'fill' });
