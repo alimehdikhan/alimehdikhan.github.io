@@ -14,7 +14,7 @@
 
 ### About Me
 
-B.Tech Computer Science graduate (2026) skilled in Python, Java, Machine Learning, and AI application development. Google Cloud and Deloitte certified. Seeking an entry-level Software Engineering or AI/ML role.
+B.Tech Computer Science graduate (2026) skilled in Python, Java, Machine Learning, and AI application development. Google Cloud skill badges and a Deloitte job simulation. Working as a junior software developer at IMAPRO.
 
 ---
 
@@ -49,6 +49,13 @@ B.Tech Computer Science graduate (2026) skilled in Python, Java, Machine Learnin
 - Build Real-World AI Apps with Gemini and Imagen — Google Cloud Skill Badge (2025)
 - Machine Learning with Python — freeCodeCamp (July 2025)
 - Prompt Design in Vertex AI — Google Cloud Skill Badge (2025)
+
+---
+
+### Credits
+
+- Icons: [Phosphor Icons](https://phosphoricons.com) (MIT) for the interface; brand logos from [devicon](https://devicon.dev) (MIT) and [Simple Icons](https://simpleicons.org) (CC0), self-hosted in `public/assets/icons/tech`.
+- UI primitives: [shadcn/ui](https://ui.shadcn.com) and [Radix](https://www.radix-ui.com); spotlight and 3D card effects adapted from [Aceternity UI](https://ui.aceternity.com).
 
 ---
 
