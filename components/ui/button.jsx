@@ -14,6 +14,9 @@ const buttonVariants = cva(
         outline: 'border border-border-strong bg-transparent text-foreground hover:border-foreground/30 hover:bg-foreground/[0.04]',
         secondary: 'bg-secondary text-secondary-foreground hover:bg-accent',
         ghost: 'text-foreground hover:bg-foreground/[0.06]',
+        /* round glass icon button: the icon tile's surface, for icon-only actions */
+        glass:
+          'icon-tile text-foreground hover:-translate-y-0.5 hover:text-link [&>svg]:size-[18px] [&>img]:size-[18px]',
         link: 'text-link underline-offset-4 hover:underline',
       },
       size: {
