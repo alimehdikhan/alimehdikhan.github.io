@@ -1,10 +1,6 @@
 import { MotionProvider } from '../components/fx/MotionProvider';
-import { ClientEffects } from '../components/fx/ClientEffects';
-import { ScrollMotion } from '../components/fx/ScrollMotion';
-import { MicroInteractions } from '../components/fx/MicroInteractions';
 import { ScrollProgress } from '../components/fx/ScrollProgress';
 import { Ticker } from '../components/fx/Ticker';
-import { InputMode } from '../components/fx/InputMode';
 import { Navbar } from '../components/Navbar';
 import { Hero } from '../components/Hero';
 import { About } from '../components/About';
@@ -25,34 +21,21 @@ export default function Home() {
       </a>
 
       <ScrollProgress />
-      <ClientEffects />
-      <ScrollMotion />
-      <MicroInteractions />
       <Navbar />
-      <InputMode />
 
-      <div className="wrap">
-        <main id="main-content" tabIndex={-1}>
-          <div className="pad">
-            <Hero />
-          </div>
+      <main id="main-content" tabIndex={-1} className="outline-none">
+        <Hero />
+        <About />
+        <Ticker items={RESUME.skills.technical} />
+        <Skills />
+        <Timeline />
+        <Projects />
+        <Certifications />
+        <OpenSource />
+        <Contact />
+      </main>
 
-          <div className="pad">
-            <About />
-            <Ticker items={RESUME.skills.technical} />
-            <Skills />
-            <Timeline />
-            <Projects />
-            <Certifications />
-            <OpenSource />
-            <Contact />
-          </div>
-        </main>
-
-        <div className="pad">
-          <Footer />
-        </div>
-      </div>
+      <Footer />
     </MotionProvider>
   );
 }
