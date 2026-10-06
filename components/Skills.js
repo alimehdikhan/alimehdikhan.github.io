@@ -1,6 +1,6 @@
 'use client';
 
-import { Brain, Code, Server, Users } from '@/components/ui/icons';
+import { Adapt, Brain, Chat, Code, Database, Evaluate, Exchange, Language, Pipeline, Prompt, Puzzle, Search, Server, Timer, Users } from '@/components/ui/icons';
 import { SectionHead } from './ui/SectionHead';
 import { Card } from './ui/card';
 import { IconTile } from './ui/icon-tile';
@@ -10,8 +10,8 @@ import { RESUME } from '../data/resume';
 
 /* Brand marks, self-hosted in /assets/icons/tech (devicon, MIT, and simple-icons,
    CC0), so they load from this site with no third-party requests. Black marks
-   are inverted on the dark theme. Skills without an official mark (SQL, REST
-   APIs, NLP, soft skills) stay text-only. */
+   are inverted on the dark theme. Skills without an official mark get a glyph
+   from the shared icon set instead (see GLYPHS below). */
 const LOGOS = {
   Python: 'python',
   Java: 'java',
@@ -37,10 +37,40 @@ const LOGOS = {
   'OpenAI Whisper': { file: 'openai', invert: true },
 };
 
+/* skills with no official mark get a glyph on the same plate, so every pill
+   in the list leads with an icon */
+const GLYPHS = {
+  SQL: Database,
+  'REST APIs': Exchange,
+  'Prompt Engineering': Prompt,
+  'LLM Evaluation': Evaluate,
+  NLP: Language,
+  'RAG Pipelines': Pipeline,
+  FAISS: Search,
+  Communication: Chat,
+  'Problem Solving': Puzzle,
+  'Team Collaboration': Users,
+  Adaptability: Adapt,
+  'Time Management': Timer,
+};
+
 /* a brand mark on a small glass plate, so every logo has the same footprint */
 export function SkillLogo({ name, size = 16, shape = 'rounded', className }) {
   const entry = LOGOS[name];
-  if (!entry) return null;
+  if (!entry) {
+    const Glyph = GLYPHS[name];
+    if (!Glyph) return null;
+    const plate = size + 10;
+    return (
+      <span
+        className={cn('logo-plate text-link', className)}
+        style={{ width: plate, height: plate, borderRadius: shape === 'circle' ? 9999 : Math.round(plate * 0.3) }}
+        aria-hidden="true"
+      >
+        <Glyph size={Math.round(size * 1.15)} />
+      </span>
+    );
+  }
   const { file, invert } = typeof entry === 'string' ? { file: entry, invert: false } : entry;
   const box = size + 10;
   return (
