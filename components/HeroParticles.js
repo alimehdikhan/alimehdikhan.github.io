@@ -20,6 +20,25 @@ const FADE_AT = 350;
 const FADE_FOR = 1200;
 const SPIN_UP = 3;
 const SPIN_SETTLE = 1100;
+/* the vortex swells outward with the entrance rings, then settles back */
+const SWELL_AT = 700;
+const SWELL = 0.14;
+const SPRITE = 48;
+
+/* a soft round glow, drawn once and stamped under the brightest particles */
+function makeSprite(rgb) {
+  const c = document.createElement('canvas');
+  c.width = SPRITE;
+  c.height = SPRITE;
+  const g = c.getContext('2d');
+  const grad = g.createRadialGradient(SPRITE / 2, SPRITE / 2, 0, SPRITE / 2, SPRITE / 2, SPRITE / 2);
+  grad.addColorStop(0, `rgba(${rgb},0.9)`);
+  grad.addColorStop(0.35, `rgba(${rgb},0.25)`);
+  grad.addColorStop(1, `rgba(${rgb},0)`);
+  g.fillStyle = grad;
+  g.fillRect(0, 0, SPRITE, SPRITE);
+  return c;
+}
 
 function readGlow() {
   const v = getComputedStyle(document.documentElement).getPropertyValue('--glow').trim();
@@ -28,7 +47,7 @@ function readGlow() {
 
 /* Interactive lime particle vortex behind the portrait: particles orbit the
    centre in three depth layers, faster toward the middle, breathing slightly
-   in and out. The light follows a mouse cursor (and wanders on its own
+   in and out, twinkling, with the nearest ones wearing a soft glow. The light follows a mouse cursor (and wanders on its own
    otherwise); the vortex centre leans toward the cursor by depth and
    particles near it are gently pushed aside. Canvas 2D: no WebGL needed.
    Pauses offscreen and in hidden tabs; fewer particles, 30fps and no cursor
@@ -49,6 +68,7 @@ export function HeroParticles({ className }) {
     let w = 0;
     let h = 0;
     let glow = readGlow();
+    let sprite = makeSprite(glow);
     let frame = 0;
     let last = 0;
     let visible = false;
@@ -95,6 +115,9 @@ export function HeroParticles({ className }) {
       t += dt * 0.001;
       const fade = reduce ? 1 : Math.min(1, Math.max(0, (clock - FADE_AT) / FADE_FOR));
       const spin = reduce ? 1 : 1 + SPIN_UP * Math.exp(-clock / SPIN_SETTLE);
+      /* a bump that rises, peaks and falls back: x·e^(1-x) */
+      const sx = reduce ? 0 : Math.max(0, (clock - SWELL_AT) / 450);
+      const swell = 1 + SWELL * sx * Math.exp(1 - sx);
       cur.x += (cur.tx - cur.x) * 0.06;
       cur.y += (cur.ty - cur.y) * 0.06;
       ctx.clearRect(0, 0, w, h);
@@ -118,7 +141,7 @@ export function HeroParticles({ className }) {
       ctx.fillStyle = `rgb(${glow})`;
       for (const p of particles) {
         p.a += p.w * dt * spin;
-        const breathe = 1 + Math.sin(t * 0.6 + p.phase) * 0.04;
+        const breathe = (1 + Math.sin(t * 0.6 + p.phase) * 0.04) * swell;
         const cx = w / 2 - cur.x * PARALLAX * p.d;
         const cy = h / 2 - cur.y * PARALLAX * p.d;
         let x = cx + Math.cos(p.a) * p.r * half * breathe;
@@ -143,10 +166,18 @@ export function HeroParticles({ className }) {
         /* particles on the near half of the ring and under the light glow brighter */
         const front = 0.75 + Math.sin(p.a) * 0.25;
         const lit = Math.max(0, 1 - Math.hypot(x - lx, y - ly) / lr);
-        ctx.globalAlpha = Math.min(1, p.alpha * front * (0.55 + lit * 0.9) * fade);
+        const twinkle = reduce ? 1 : 0.8 + 0.2 * Math.sin(t * 1.4 + p.phase * 3);
+        const a = Math.min(1, p.alpha * front * (0.55 + lit * 0.9) * fade * twinkle);
+        const r = p.size * (0.85 + front * 0.2);
+        ctx.globalAlpha = a;
         ctx.beginPath();
-        ctx.arc(x, y, p.size * (0.85 + front * 0.2), 0, Math.PI * 2);
+        ctx.arc(x, y, r, 0, Math.PI * 2);
         ctx.fill();
+        /* the nearest layer shines: a glow sprite under each dot */
+        if (p.d === 1) {
+          ctx.globalAlpha = a * 0.45;
+          ctx.drawImage(sprite, x - r * 4, y - r * 4, r * 8, r * 8);
+        }
       }
       ctx.globalAlpha = 1;
     };
@@ -194,6 +225,7 @@ export function HeroParticles({ className }) {
     /* follow the theme: particle colour comes from --glow */
     const mo = new MutationObserver(() => {
       glow = readGlow();
+      sprite = makeSprite(glow);
       if (reduce) draw(0);
     });
     mo.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
