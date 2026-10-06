@@ -12,11 +12,10 @@ export function Timeline() {
         <SectionHead
           title={
             <>
-              Experience &amp; <em>Involvement</em>
+              Where I&apos;ve <em>worked</em>
             </>
           }
-          index="03"
-          label="Work History"
+          label="Experience"
           titleId="experience-title"
         />
 
