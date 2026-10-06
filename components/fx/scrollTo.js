@@ -1,10 +1,10 @@
-import { animate } from 'framer-motion';
+import { animate } from 'motion';
 import { EASE } from './motion';
 
-/* Editorial anchor travel: one framer tween drives window.scrollTo with
-   behavior:'instant' (so CSS scroll-behavior:smooth never fights it), on the
-   page's own EASE curve, with duration scaled by distance. Native input
-   (wheel / touch / keys) interrupts it immediately. Dispatches
+/* Anchor travel for in-page links: one Motion tween drives window.scrollTo
+   with behavior:'instant', on the page's own EASE curve, with duration
+   scaled by distance. It only runs on a click; wheel, touch and keys stay
+   native and interrupt it immediately. Dispatches
    `anchor:done` on window when travel ends for any reason, so the nav can
    release its active-section lock.
 
@@ -12,22 +12,11 @@ import { EASE } from './motion';
    instant jump is correct there) or a missing target — so callers can let
    the default anchor behaviour run. */
 
-const NAV_OFFSET = 92;
+const NAV_OFFSET = 72;
 const INTERRUPTS = ['wheel', 'touchstart', 'keydown'];
 
 let travel = null;
 let stopListeners = null;
-let smoothScroller = null;
-export function setSmoothScroller(scroller) { smoothScroller = scroller; }
-
-// Gallery controls share Lenis so native smooth scrolling never fights its RAF.
-export function scrollToPosition(top, { immediate = false } = {}) {
-  if (smoothScroller) {
-    smoothScroller.scrollTo(top, { immediate, duration: .55 });
-  } else {
-    window.scrollTo({ top, behavior: immediate ? 'instant' : 'smooth' });
-  }
-}
 
 function finish(hash) {
   if (stopListeners) stopListeners();
@@ -59,12 +48,6 @@ export function scrollToHash(hash, { push = true } = {}) {
 
   if (travel) travel.stop();
   if (stopListeners) stopListeners();
-
-  if (smoothScroller) {
-    travel = { stop: () => smoothScroller?.scrollTo(window.scrollY, { immediate: true }) };
-    smoothScroller.scrollTo(to, { duration: .8, onComplete: () => finish(hash) });
-    return true;
-  }
 
   const dist = Math.abs(to - from);
   if (dist < 2) {

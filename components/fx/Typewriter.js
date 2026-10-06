@@ -1,27 +1,26 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import { useReducedMotion } from 'framer-motion';
-import { useLoaded } from './useLoaded';
+import { useReducedMotion } from 'motion/react';
 
 /* State-free typewriter: writes textContent through a ref so the parent never
-   re-renders. Waits for the curtain, then types fast, holds the finished
-   phrase, erases faster. Pauses while off-screen or in a hidden tab. Under
-   reduced motion the whole word swaps every 3.5s. SSR output is an empty
-   <b>, identical to the old first render. */
-export function Typewriter({ words, type = 55, erase = 28, hold = 3200, pause = 300, start = 500 }) {
+   re-renders. It starts on the first phrase exactly as the server rendered
+   it, holds it, then erases faster than it types the next one, so the page
+   never flickers from the full word to a single letter on load. Pauses
+   while off-screen or in a hidden tab. Under reduced motion the first
+   phrase simply stays. */
+export function Typewriter({ words, type = 55, erase = 28, hold = 3200, pause = 300 }) {
   const ref = useRef(null);
   const reduce = useReducedMotion();
-  const loaded = useLoaded();
 
   useEffect(() => {
     const el = ref.current;
-    if (!el || !loaded || !words.length) return undefined;
+    if (!el || !words.length) return undefined;
     if (reduce) { el.textContent = words[0]; return; }
 
     let i = 0;
-    let len = 0;
-    let deleting = false;
+    let len = words[0].length;
+    let deleting = true;
     let timer = 0;
     let active = true;
     let visible = true;
@@ -64,14 +63,14 @@ export function Typewriter({ words, type = 55, erase = 28, hold = 3200, pause = 
     });
     io.observe(el);
 
-    schedule(reduce ? 0 : start);
+    schedule(hold);
 
     return () => {
       active = false;
       clearTimeout(timer);
       io.disconnect();
     };
-  }, [words, reduce, loaded, type, erase, hold, pause, start]);
+  }, [words, reduce, type, erase, hold, pause]);
 
   return <b ref={ref}>{words[0]}</b>;
 }

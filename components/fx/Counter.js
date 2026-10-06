@@ -1,9 +1,8 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import { animate, useInView, useReducedMotion } from 'framer-motion';
+import { animate, useInView, useReducedMotion } from 'motion/react';
 import { VIEWPORT } from './motion';
-import { useLoaded } from './useLoaded';
 
 /* Eases a number up the first time it scrolls into view. The final value is
    server-rendered, so the markup reads correctly without JS.
@@ -15,11 +14,10 @@ export function Counter({ to, suffix = '', delay = 0.2, className }) {
   const ref = useRef(null);
   const inView = useInView(ref, VIEWPORT);
   const reduce = useReducedMotion();
-  const loaded = useLoaded();
 
   useEffect(() => {
     const el = ref.current;
-    if (!inView || !loaded || !el || reduce) return undefined;
+    if (!inView || !el || reduce) return undefined;
 
     const small = to < 10;
     const controls = animate(0, to, {
@@ -34,7 +32,7 @@ export function Counter({ to, suffix = '', delay = 0.2, className }) {
       },
     });
     return () => { controls.stop(); el.textContent = `${to}${suffix}`; };
-  }, [inView, loaded, reduce, to, suffix, delay]);
+  }, [inView, reduce, to, suffix, delay]);
 
   return (
     <><span className="sr-only">{to}{suffix}</span><em ref={ref} className={className} aria-hidden="true">
