@@ -12,7 +12,7 @@ export const RESUME = {
   resumeDownloadName: 'AliMehdiKhan_Resume.pdf',
 
   summary:
-    'Final-year B.Tech CS student (2026) who builds AI products end to end — LLM apps, NLP pipelines, and the FastAPI backends behind them. Shipped a Whisper-based pronunciation coach to Hugging Face Spaces, and currently working as a junior developer at IMAPRO. Google Cloud certified in Vertex AI, Gemini, and Imagen.',
+    'B.Tech Computer Science graduate (July 2026) who builds apps on language models and NLP, plus the FastAPI backends that serve them. The AI Pronunciation Coach runs on Hugging Face Spaces. Currently a junior software developer at IMAPRO, with Google Cloud skill badges in Vertex AI, Gemini and Imagen.',
 
   roles: ['Software Engineer', 'AI/ML Developer', 'Python Developer'],
 
@@ -44,10 +44,10 @@ export const RESUME = {
       title: 'AI Pronunciation Coach',
       tag: 'AI / NLP / API',
       overview:
-        'A coaching app that listens to spoken English and scores pronunciation word by word — Whisper handles transcription, a custom Epitran engine extracts the IPA phonemes.',
+        'An app that listens to spoken English and scores the pronunciation of each word. Whisper transcribes the audio, and a custom engine built on Epitran pulls out the IPA phonemes.',
       features:
-        'The FastAPI pipeline scores audio in under a second, and LLM-generated feedback turns raw phoneme scores into advice a learner can actually use. Dockerized, running on Hugging Face Spaces.',
-      outcome: 'Live public API serving per-word pronunciation scores with sub-second responses.',
+        'A FastAPI pipeline scores the audio in under a second. An LLM then turns the raw phoneme scores into feedback a learner can follow. It is containerised with Docker and runs on Hugging Face Spaces.',
+      outcome: 'A public API that returns per-word pronunciation scores in under a second.',
       tech: ['Python', 'FastAPI', 'OpenAI Whisper', 'Epitran', 'Docker', 'Hugging Face'],
       github: 'https://github.com/alimehdikhan/A.I-Pronunciation-Coach',
       demo: 'https://huggingface.co/spaces/Alimehdi973/ai-pronunciation-coach',
@@ -59,8 +59,8 @@ export const RESUME = {
       overview:
         'A binary CNN classifier trained on real medical imaging datasets to flag early-stage cancer.',
       features:
-        'Keras architectures with data augmentation and a systematic hyperparameter search to keep overfitting in check.',
-      outcome: '90%+ accuracy, with F1 tracked on held-out validation sets.',
+        'Built in Keras, with data augmentation and a hyperparameter search to limit overfitting.',
+      outcome: '90%+ accuracy, with F1 score tracked on held-out validation data.',
       tech: ['Python', 'TensorFlow', 'Keras', 'CNN'],
       github: 'https://github.com/alimehdikhan/Cancer-Detection-Model',
       demo: null,
@@ -70,13 +70,13 @@ export const RESUME = {
 
   experience: [
     {
-      role: 'Junior Developer — Web & Mobile',
+      role: 'Junior Software Developer, Web & Mobile',
       company: 'IMAPRO · Lucknow',
       date: 'Aug 2026 – Present',
       details: [
-        'Build features across the full stack using SvelteKit 5 for the frontend, Hono for the backend, and SQLite for the database.',
-        'Leading the production app’s migration to SvelteKit 5, rebuilding existing pages as reusable components to improve speed and consistency.',
-        'Develop and test booking flows end to end, covering the interface, API, backend logic, and database.',
+        'Build features across the stack: SvelteKit 5 on the frontend, Hono on the backend, SQLite for data.',
+        'Leading the production app’s move to SvelteKit 5, rebuilding existing pages as reusable components so they are faster and more consistent.',
+        'Build and test the booking flow from the interface down to the database.',
       ],
       align: 'left',
     },
@@ -85,8 +85,8 @@ export const RESUME = {
       company: 'GrasTech · Lucknow',
       date: 'Jun 2025 – Jul 2025',
       details: [
-        'Built skin-cancer detection and diabetes prediction models in Python with TensorFlow and Keras.',
-        'Most of the work was feature engineering and hyperparameter tuning against messy real-world medical data.',
+        'Built skin-cancer detection and diabetes prediction models in Python, using TensorFlow and Keras.',
+        'Most of the work was feature engineering and hyperparameter tuning on messy real-world medical data.',
       ],
       align: 'right',
     },
@@ -128,7 +128,7 @@ export const RESUME = {
   awards: [
     {
       title: 'Exemplary Discipline Award',
-      detail: 'Maintained 95%+ attendance across all academic terms.',
+      detail: 'For keeping 95%+ attendance in every term.',
     },
   ],
 
