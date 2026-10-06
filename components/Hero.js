@@ -59,7 +59,7 @@ export function Hero() {
           <div style={{ '--i': 0 }} className="hero-in mb-6 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm">
             <span className="inline-flex items-center gap-2 font-medium">
               <span className="size-2 rounded-full bg-primary shadow-[0_0_10px_rgb(var(--glow)/0.8)]" aria-hidden="true" />
-              Actively seeking entry-level opportunities
+              Looking for an entry-level role
             </span>
             <span className="text-muted-foreground">
               {RESUME.location} · <LocalClock timeZone="Asia/Kolkata" />
@@ -98,7 +98,7 @@ export function Hero() {
           </div>
 
           <p style={{ '--i': 3 }} className="hero-in mt-6 max-w-[52ch] text-muted-foreground md:text-lg">
-            Python and AI/ML developer building deployed APIs and applied machine-learning products. Created a Whisper-based pronunciation coach and medical-image classification projects.
+            I write Python, mostly for machine learning and APIs. Two projects stand out so far: a pronunciation coach built on Whisper, and a CNN trained to detect cancer in medical images.
           </p>
 
           <ul style={{ '--i': 4 }} className="hero-in mt-6 flex flex-wrap gap-2" aria-label="Credentials">
