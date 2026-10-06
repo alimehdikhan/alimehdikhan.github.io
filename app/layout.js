@@ -1,6 +1,23 @@
+import localFont from 'next/font/local';
 import '../styles/globals.css';
 import { ThemeProvider } from '../components/ThemeProvider';
 import { RESUME } from '../data/resume';
+
+const manrope = localFont({
+  src: './fonts/Manrope-latin-300-800.woff2',
+  weight: '300 800',
+  style: 'normal',
+  display: 'swap',
+  variable: '--font-manrope',
+});
+
+const instrumentSerif = localFont({
+  src: './fonts/InstrumentSerif-latin-italic.woff2',
+  weight: '400',
+  style: 'italic',
+  display: 'swap',
+  variable: '--font-instrument',
+});
 
 export const metadata = {
   metadataBase: new URL('https://alimehdikhan.github.io'),
@@ -84,8 +101,8 @@ export const metadata = {
   },
   category: 'technology',
   themeColor: [
-    { media: '(prefers-color-scheme: dark)', color: '#06070c' },
-    { media: '(prefers-color-scheme: light)', color: '#f1efea' },
+    { media: '(prefers-color-scheme: dark)', color: '#090a0a' },
+    { media: '(prefers-color-scheme: light)', color: '#f5f5f7' },
   ],
 };
 
@@ -190,11 +207,8 @@ export default function RootLayout({ children }) {
   };
 
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" className={`${manrope.variable} ${instrumentSerif.variable}`} suppressHydrationWarning>
       <head>
-        <noscript>
-          <style>{`.rev,.rev-i{opacity:1!important;transform:none!important}#pre{display:none!important}`}</style>
-        </noscript>
         <link rel="preconnect" href="https://cdn.jsdelivr.net" />
         <link rel="dns-prefetch" href="https://cdn.simpleicons.org" />
         <script
@@ -202,7 +216,7 @@ export default function RootLayout({ children }) {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
-      <body className="antialiased">
+      <body className="font-sans antialiased">
         <ThemeProvider attribute="data-theme" defaultTheme="dark" enableSystem disableTransitionOnChange>
           {children}
         </ThemeProvider>
