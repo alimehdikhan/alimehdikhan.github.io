@@ -213,6 +213,11 @@ export default function RootLayout({ children }) {
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
+        <script
+          data-goatcounter="https://alimehdikhan.goatcounter.com/count"
+          async
+          src="//gc.zgo.at/count.js"
+        />
       </head>
       <body className="font-sans antialiased">
         <ThemeProvider attribute="data-theme" defaultTheme="dark" enableSystem disableTransitionOnChange>
