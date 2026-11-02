@@ -26,9 +26,11 @@ function finish(hash) {
   window.dispatchEvent(new CustomEvent('anchor:done', { detail: hash }));
 }
 
-export function scrollToHash(hash, { push = true } = {}) {
+export function scrollToHash(hash, { push = true, keyboard = false } = {}) {
   if (typeof window === 'undefined' || !hash || hash[0] !== '#') return false;
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return false;
+  /* a keyboard press jumps: actions from the keys never animate */
+  if (keyboard) return false;
 
   const top = hash === '#hero' || hash === '#top' || hash === '#main-content';
   const el = top ? document.body : document.getElementById(hash.slice(1));
