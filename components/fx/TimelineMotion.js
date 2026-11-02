@@ -31,7 +31,8 @@ export function TimelineMotion() {
           );
           section.querySelectorAll('.timeline-node').forEach((node) => {
             gsap.from(node, {
-              scale: 0,
+              scale: 0.4,
+              opacity: 0,
               duration: 0.55,
               ease: 'back.out(2.4)',
               scrollTrigger: { trigger: node, start: 'top 72%', toggleActions: 'play none none reverse' },
