@@ -42,8 +42,9 @@ export function Hero() {
     return () => io.disconnect();
   }, []);
 
+  /* e.detail is 0 when Enter or Space fired the click */
   const goTo = (hash) => (e) => {
-    if (scrollToHash(hash)) e.preventDefault();
+    if (scrollToHash(hash, { keyboard: e.detail === 0 })) e.preventDefault();
     else revealSection(hash);
   };
 
@@ -59,7 +60,7 @@ export function Hero() {
           <div style={{ '--i': 0 }} className="hero-in mb-6 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm">
             <span className="inline-flex items-center gap-2 font-medium">
               <span className="size-2 rounded-full bg-primary shadow-[0_0_10px_rgb(var(--glow)/0.8)]" aria-hidden="true" />
-              Looking for an entry-level role
+              Open to entry-level AI and software roles
             </span>
             <span className="text-muted-foreground">
               {RESUME.location} · <LocalClock timeZone="Asia/Kolkata" />
@@ -98,7 +99,7 @@ export function Hero() {
           </div>
 
           <p style={{ '--i': 3 }} className="hero-in mt-6 max-w-[52ch] text-muted-foreground md:text-lg">
-            I write Python, mostly for machine learning and APIs. Two projects stand out so far: a pronunciation coach built on Whisper, and a CNN trained to detect cancer in medical images.
+            I build AI products end to end: the model, the Python API that serves it, and the app people use. My latest, Vocaly AI, marks every sound you mispronounce in English and shows you how to fix it.
           </p>
 
           <ul style={{ '--i': 4 }} className="hero-in mt-6 flex flex-wrap gap-2" aria-label="Credentials">
