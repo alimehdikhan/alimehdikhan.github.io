@@ -62,7 +62,13 @@ export const Timer = make(P.Timer);
 export const Waveform = make(P.Waveform);
 export const Repo = make(P.GitBranch);
 export const Layers = make(P.Stack);
+export const Browser = make(P.Browser);
+export const Cloud = make(P.Cloud);
+export const Bolt = make(P.Lightning);
+export const Sparkle = make(P.Sparkle);
+export const Expand = make(P.ArrowsOutSimple);
 
 /* brand marks are monochrome so they sit in the black-and-lime palette */
 export const GithubMark = make(P.GithubLogo, { weight: 'fill' });
 export const LinkedinMark = make(P.LinkedinLogo, { weight: 'fill' });
+export const XMark = make(P.XLogo, { weight: 'fill' });
