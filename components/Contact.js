@@ -1,6 +1,5 @@
 import { ArrowUpRight, Check, GithubMark, LinkedinMark, Mail, MapPin, Phone, Send } from '@/components/ui/icons';
 import { Button } from './ui/button';
-import { Card } from './ui/card';
 import { IconTile } from './ui/icon-tile';
 import { Reveal } from './fx/Reveal';
 import { ContactForm } from './ContactForm';
@@ -47,33 +46,21 @@ export function Contact() {
           <div className="contact-inner">
             <div className="grid items-start gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:gap-14">
               <Reveal stagger={0.08}>
-                <div className="flex flex-wrap items-center gap-x-5 gap-y-3 text-sm">
-                  <span className="inline-flex items-center gap-2.5 font-semibold text-muted-foreground">
-                    <span aria-hidden="true" className="size-1.5 rounded-full bg-primary" />
-                    Contact
-                  </span>
-                  <span className="inline-flex items-center gap-2.5 rounded-full bg-foreground/[0.08] py-1.5 pr-3.5 pl-3 text-[13px] font-medium">
-                    <span className="relative flex size-2" aria-hidden="true">
-                      <span className="absolute inline-flex size-full animate-ping rounded-full bg-primary opacity-50 motion-reduce:animate-none" />
-                      <span className="relative inline-flex size-2 rounded-full bg-primary" />
-                    </span>
-                    Available for entry-level roles
-                  </span>
-                </div>
-
-                <div className="mt-7">
+                <div>
                   <VariableContact />
                 </div>
 
                 <p className="mt-6 max-w-[46ch] text-muted-foreground md:text-lg">
-                  I&apos;m looking for entry-level Software Engineering and AI/ML roles, and I&apos;m happy to talk about internships or Python and ML projects. Email is the quickest way to reach me.
+                  I&apos;m looking for entry-level software engineering and AI/ML roles, and I&apos;m open to freelance AI and web projects. Email is the quickest way to reach me.
                 </p>
 
                 <EmailActions email={RESUME.email} />
               </Reveal>
 
+              {/* one panel, no boxes inside it: the details are a column split
+                  off by a hairline, and the form sits under one */}
               <Reveal>
-                <Card className="flex flex-col p-5 md:p-7">
+                <div className="flex flex-col lg:border-l lg:border-foreground/15 lg:pl-12">
                   {/* the one thing a recruiter wonders: is it a sensible hour for them to call or write */}
                   <div className="flex items-end justify-between gap-4 rounded-2xl bg-foreground px-5 py-4 text-primary-foreground">
                     <div>
@@ -97,7 +84,7 @@ export function Contact() {
                         href={href}
                         target={external ? '_blank' : undefined}
                         rel={external ? 'noopener noreferrer' : undefined}
-                        className="group -mx-2 flex items-center gap-4 rounded-2xl px-2 py-3 transition-colors duration-200 hover:bg-foreground/[0.04] focus-visible:bg-foreground/[0.04]"
+                        className="group -mx-2 flex items-center gap-4 rounded-2xl px-2 py-3 transition-[background-color,transform] duration-200 ease-out hover:bg-foreground/[0.04] focus-visible:bg-foreground/[0.04] active:scale-[0.98] motion-reduce:active:scale-100"
                       >
                         <IconTile icon={Icon} size="md" />
                         <span className="flex min-w-0 flex-1 flex-col">
@@ -119,12 +106,14 @@ export function Contact() {
                       </Button>
                     ))}
                   </div>
-                </Card>
+                </div>
               </Reveal>
             </div>
 
-            <Reveal className="mt-6 lg:mt-8">
-              <Card className="p-6 md:p-10">
+            <Reveal className="mt-12 md:mt-14">
+              <div aria-hidden="true" className="h-px bg-foreground/15" />
+              {/* data-form-host: the sending bar and the success scene attach here */}
+              <div data-form-host className="-mx-3 mt-7 rounded-[2rem] px-3 pt-3 md:mt-9">
                 <div className="grid gap-8 lg:grid-cols-[0.62fr_1.38fr] lg:gap-14">
                   <div>
                     <h3 className="text-2xl font-semibold tracking-[-0.025em]">Send a message</h3>
@@ -149,7 +138,7 @@ export function Contact() {
                   </div>
                   <ContactForm />
                 </div>
-              </Card>
+              </div>
             </Reveal>
           </div>
         </div>
