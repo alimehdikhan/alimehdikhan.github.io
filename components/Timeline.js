@@ -15,7 +15,6 @@ export function Timeline() {
               Where I&apos;ve <em>worked</em>
             </>
           }
-          label="Experience"
           titleId="experience-title"
         />
 
@@ -42,7 +41,28 @@ export function Timeline() {
                 </div>
 
                 <Card className="p-6 md:ml-10 md:p-8">
-                  <h3 className="text-xl font-semibold tracking-[-0.02em] md:text-2xl">{exp.role}</h3>
+                  <div className="flex flex-wrap items-start justify-between gap-x-6 gap-y-4">
+                    <h3 className="text-xl font-semibold tracking-[-0.02em] md:text-2xl">{exp.role}</h3>
+                    {/* the company's real logo, on the plate its colours were made for */}
+                    {exp.logo && (
+                      <span
+                        className={cn(
+                          'inline-flex h-10 shrink-0 items-center rounded-xl px-3.5 ring-1',
+                          exp.logo.plate === 'dark' ? 'bg-[#0b0b0b] ring-white/10' : 'bg-white ring-black/10'
+                        )}
+                      >
+                        <img
+                          src={exp.logo.src}
+                          alt=""
+                          width={exp.logo.width}
+                          height={exp.logo.height}
+                          className="h-[18px] w-auto"
+                          loading="lazy"
+                          decoding="async"
+                        />
+                      </span>
+                    )}
+                  </div>
                   <ul className="mt-4 space-y-3">
                     {exp.details.map((detail, dIdx) => (
                       <li key={dIdx} className="flex gap-3 text-muted-foreground">
