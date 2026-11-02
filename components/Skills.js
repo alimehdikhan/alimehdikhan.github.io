@@ -1,6 +1,6 @@
 'use client';
 
-import { Adapt, Brain, Chat, Code, Database, Evaluate, Exchange, Language, Pipeline, Prompt, Puzzle, Search, Server, Timer, Users, Layers, Waveform } from '@/components/ui/icons';
+import { Adapt, Bolt, Brain, Browser, Chat, Cloud, Code, Database, Evaluate, Exchange, Language, Layers, Pipeline, Prompt, Puzzle, Search, Server, Sparkle, Timer, Users, Waveform } from '@/components/ui/icons';
 import { SectionHead } from './ui/SectionHead';
 import { Card } from './ui/card';
 import { IconTile } from './ui/icon-tile';
@@ -35,6 +35,35 @@ const LOGOS = {
   LangGraph: { file: 'langgraph', invert: true },
   Hono: 'hono',
   'OpenAI Whisper': { file: 'openai', invert: true },
+  React: 'react',
+  TypeScript: 'typescript',
+  'Tailwind CSS': 'tailwindcss',
+  Vite: 'vitejs',
+  'Three.js': { file: 'threejs', invert: true },
+  GSAP: { file: 'gsap', invert: true },
+  'Node.js': 'nodejs',
+  Express: { file: 'express', invert: true },
+  Flask: { file: 'flask', invert: true },
+  Prisma: { file: 'prisma', invert: true },
+  Pydantic: { file: 'pydantic', invert: true },
+  PostgreSQL: 'postgresql',
+  MySQL: 'mysql',
+  MongoDB: 'mongodb',
+  Supabase: 'supabase',
+  PyTorch: 'pytorch',
+  'scikit-learn': 'scikitlearn',
+  OpenCV: 'opencv',
+  Pandas: 'pandas',
+  NumPy: 'numpy',
+  Gemini: { file: 'googlegemini', invert: true },
+  'GitHub Actions': 'githubactions',
+  Vercel: { file: 'vercel', invert: true },
+  Render: { file: 'render', invert: true },
+  Linux: { file: 'linux', invert: true },
+  Playwright: 'playwright',
+  Vitest: 'vitest',
+  Jest: 'jest',
+  Prometheus: 'prometheus',
 };
 
 /* skills with no official mark get a glyph on the same plate, so every pill
@@ -48,6 +77,10 @@ const GLYPHS = {
   'RAG Pipelines': Pipeline,
   FAISS: Search,
   Epitran: Waveform,
+  'wav2vec 2.0': Waveform,
+  'ONNX Runtime': Brain,
+  Groq: Bolt,
+  Motion: Sparkle,
   CNN: Layers,
   Communication: Chat,
   'Problem Solving': Puzzle,
@@ -95,25 +128,61 @@ export function SkillLogo({ name, size = 16, shape = 'rounded', className }) {
   );
 }
 
+/* grouped as on the GitHub profile README. AI leads and spans the grid, the
+   four stacks pair up beneath it, and the soft skills close as one row */
 const categories = [
-  {
-    title: 'Languages and web',
-    Icon: Code,
-    skills: ['Python', 'Java', 'JavaScript', 'SQL', 'C', 'C++', 'HTML', 'CSS'],
-  },
-  {
-    title: 'Backend, cloud and tools',
-    Icon: Server,
-    skills: ['FastAPI', 'NestJS', 'REST APIs', 'SvelteKit', 'Next.js', 'Hono', 'Docker', 'Google Cloud', 'Hugging Face', 'Git', 'GitHub'],
-  },
   {
     title: 'AI and machine learning',
     Icon: Brain,
-    skills: ['OpenAI Whisper', 'Prompt Engineering', 'LLM Evaluation', 'NLP', 'TensorFlow', 'Keras', 'LangChain', 'LangGraph', 'RAG Pipelines', 'FAISS'],
+    wide: true,
+    skills: [
+      'PyTorch',
+      'TensorFlow',
+      'Keras',
+      'scikit-learn',
+      'OpenCV',
+      'Pandas',
+      'NumPy',
+      'Hugging Face',
+      'OpenAI Whisper',
+      'Epitran',
+      'wav2vec 2.0',
+      'ONNX Runtime',
+      'Gemini',
+      'Groq',
+      'LangChain',
+      'LangGraph',
+      'RAG Pipelines',
+      'FAISS',
+      'Prompt Engineering',
+      'LLM Evaluation',
+      'NLP',
+    ],
+  },
+  {
+    title: 'Languages',
+    Icon: Code,
+    skills: ['Python', 'TypeScript', 'JavaScript', 'Java', 'C++', 'C', 'SQL'],
+  },
+  {
+    title: 'Frontend',
+    Icon: Browser,
+    skills: ['React', 'Next.js', 'SvelteKit', 'Tailwind CSS', 'Vite', 'Three.js', 'Motion', 'GSAP', 'HTML', 'CSS'],
+  },
+  {
+    title: 'Backend and data',
+    Icon: Server,
+    skills: ['FastAPI', 'Node.js', 'NestJS', 'Express', 'Hono', 'Flask', 'Prisma', 'Pydantic', 'REST APIs', 'PostgreSQL', 'MySQL', 'MongoDB', 'Supabase'],
+  },
+  {
+    title: 'Cloud, DevOps and testing',
+    Icon: Cloud,
+    skills: ['Google Cloud', 'Docker', 'GitHub Actions', 'Vercel', 'Render', 'Linux', 'Git', 'GitHub', 'Playwright', 'Vitest', 'Jest', 'Prometheus'],
   },
   {
     title: 'Beyond the code',
     Icon: Users,
+    wide: true,
     skills: RESUME.skills.soft,
   },
 ];
@@ -125,16 +194,15 @@ export function Skills() {
         <SectionHead
           title={
             <>
-              What I <em>work with</em>
+              The stack I <em>build with</em>
             </>
           }
-          label="Skills"
           titleId="skills-title"
         />
 
         <Reveal stagger={0.06} className="grid gap-4 md:grid-cols-2 lg:gap-6">
-          {categories.map(({ title, Icon, skills }) => (
-            <Card key={title} className="p-6 md:p-8">
+          {categories.map(({ title, Icon, skills, wide }) => (
+            <Card key={title} className={cn('p-6 md:p-8', wide && 'md:col-span-2')}>
               <div className="mb-6 flex items-center gap-4">
                 <IconTile icon={Icon} size="lg" />
                 <h3 className="text-xl leading-tight font-semibold tracking-[-0.02em]">{title}</h3>
@@ -144,7 +212,7 @@ export function Skills() {
                 {skills.map((skill) => (
                   <li
                     key={skill}
-                    className="inline-flex min-h-10 items-center gap-2 rounded-full bg-secondary px-3.5 text-sm font-medium has-[.logo-plate]:pl-1.5"
+                    className="inline-flex min-h-9 items-center gap-2 rounded-full bg-secondary px-3 text-[13px] font-medium has-[.logo-plate]:pl-1.5 sm:min-h-10 sm:px-3.5 sm:text-sm"
                   >
                     <SkillLogo name={skill} size={16} />
                     {skill}
