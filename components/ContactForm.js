@@ -98,7 +98,7 @@ export function ContactForm() {
 
   useEffect(() => {
     setMounted(true);
-    const host = formRef.current?.closest('[data-slot="card"]') || null;
+    const host = formRef.current?.closest('[data-form-host], [data-slot="card"]') || null;
     if (host) {
       host.classList.add('relative', 'overflow-hidden');
       setCard(host);
