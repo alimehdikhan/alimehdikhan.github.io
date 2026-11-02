@@ -8,7 +8,7 @@ import { Reveal } from './fx/Reveal';
 import { RESUME } from '../data/resume';
 
 /* a language with a brand mark shows it on the tile; anything else gets a glyph */
-const LANG_LOGOS = { Python: 'python', Java: 'java', JavaScript: 'javascript' };
+const LANG_LOGOS = { Python: 'python', Java: 'java', JavaScript: 'javascript', TypeScript: 'typescript' };
 
 const stats = [
   { name: 'Repositories', value: `${RESUME.githubStats.publicRepos}`, Icon: Repo },
@@ -26,7 +26,6 @@ export function OpenSource() {
               My code on <em>GitHub</em>
             </>
           }
-          label="GitHub"
           titleId="opensource-title"
         />
 
@@ -34,17 +33,21 @@ export function OpenSource() {
           <Reveal stagger={0.08} className="flex flex-col">
             <span className="text-sm font-semibold text-link">@alimehdikhan</span>
             <p className="mt-2 max-w-[52ch] text-muted-foreground md:text-lg">
-              {RESUME.githubStats.publicRepos} public repositories, mostly Python. The pronunciation coach and the cancer-detection model are the two to start with.
+              {RESUME.githubStats.publicRepos} public repositories, mostly TypeScript and Python. Vocaly AI, the pronunciation coach, and the cancer-detection model are the two to start with.
             </p>
 
-            <div className="my-8 grid grid-cols-3 gap-2 sm:gap-4">
+            {/* a row each on phones (a long value like "TypeScript" never fits a
+                third of the width), three tiles from sm up */}
+            <div className="my-8 grid gap-2 sm:grid-cols-3 sm:gap-4">
               {stats.map((s) => (
-                <Card key={s.name} className="p-4 sm:p-6">
-                  <IconTile icon={s.logo ? undefined : s.Icon} size="sm" className="mb-4">
+                <Card key={s.name} className="flex items-center gap-4 p-4 sm:block sm:p-6">
+                  <IconTile icon={s.logo ? undefined : s.Icon} size="sm" className="sm:mb-4">
                     {s.logo && <img src={`/assets/icons/tech/${s.logo}.svg`} alt="" width="20" height="20" className="size-5 object-contain" loading="lazy" decoding="async" />}
                   </IconTile>
-                  <div className="text-2xl font-semibold tracking-[-0.03em] md:text-[28px]">{s.value}</div>
-                  <div className="mt-1 text-[13px] text-muted-foreground">{s.name}</div>
+                  <div className="min-w-0">
+                    <div className="text-xl font-semibold tracking-[-0.03em] sm:text-2xl md:text-[28px]">{s.value}</div>
+                    <div className="mt-0.5 text-[13px] text-muted-foreground sm:mt-1">{s.name}</div>
+                  </div>
                 </Card>
               ))}
             </div>
@@ -70,7 +73,10 @@ export function OpenSource() {
                   <i className="size-3 rounded-full bg-[#febc2e]" />
                   <i className="size-3 rounded-full bg-[#d5f66b]" />
                 </span>
-                <span className="text-xs text-[#a1a1a6]">A.I-Pronunciation-Coach</span>
+                <span className="inline-flex items-center gap-2 text-xs text-[#a1a1a6]">
+                  <img src="/assets/images/vocaly-mark.webp" alt="" width="16" height="16" className="size-4" loading="lazy" decoding="async" />
+                  A.I-Pronunciation-Coach
+                </span>
               </div>
               <Reveal stagger={0.05} y={6} className="space-y-2 p-6 leading-relaxed">
                 <div className="flex gap-2">
