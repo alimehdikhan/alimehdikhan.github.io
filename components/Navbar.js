@@ -156,14 +156,14 @@ export function Navbar() {
     };
   }, [release]);
 
-  const travel = (href) => {
+  const travel = (href, keyboard = false) => {
     const id = href.slice(1);
     if (lockTimer.current) clearTimeout(lockTimer.current);
     lock.current = id;
     lockTimer.current = setTimeout(release, LOCK_TIMEOUT);
     current.current = id;
     setActiveSection(id);
-    if (scrollToHash(href)) return true;
+    if (scrollToHash(href, { keyboard })) return true;
     revealSection(href);
     return false;
   };
@@ -172,21 +172,22 @@ export function Navbar() {
      locked until the travel reports done. When scrollToHash declines
      (reduced motion, missing target) the native anchor runs. */
   const handleLinkClick = (e, href) => {
-    if (travel(href)) e.preventDefault();
+    /* e.detail is 0 when Enter or Space fired the click */
+    if (travel(href, e.detail === 0)) e.preventDefault();
   };
 
   const handleMobileClick = (e, href) => {
     e.preventDefault();
-    pending.current = href;
+    pending.current = { href, keyboard: e.detail === 0 };
     setIsOpen(false);
   };
 
   const onMenuClosed = () => {
-    const href = pending.current;
+    const { href, keyboard } = pending.current || {};
     pending.current = null;
     if (!href) return;
     requestAnimationFrame(() => {
-      if (!travel(href)) {
+      if (!travel(href, keyboard)) {
         const el = document.getElementById(href.slice(1));
         if (el) el.scrollIntoView();
         try {
