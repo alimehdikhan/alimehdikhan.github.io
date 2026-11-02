@@ -25,7 +25,7 @@ export const metadata = {
     default: 'Ali Mehdi Khan | AI/ML & Python Developer',
     template: '%s | Ali Mehdi Khan',
   },
-  description: 'Portfolio of Ali Mehdi Khan, a B.Tech CS graduate (July 2026) and junior software developer at IMAPRO. Python projects in LLM apps, NLP and FastAPI, plus Google Cloud skill badges and a Deloitte job simulation.',
+  description: 'Portfolio of Ali Mehdi Khan, a Computer Science graduate (July 2026) and junior software developer at IMAPRO who builds AI products end to end: Vocaly AI, an English pronunciation coach, CNN models for medical images, FastAPI backends and React apps.',
   keywords: [
     'Ali Mehdi Khan',
     'Software Engineer',
@@ -50,6 +50,7 @@ export const metadata = {
     'Google Cloud Skill Badges',
     'Deloitte Job Simulation',
     'AI Pronunciation Coach',
+    'Vocaly AI',
     'Cancer Detection System',
     'Portfolio',
     'Lucknow',
@@ -79,7 +80,7 @@ export const metadata = {
     locale: 'en_US',
     url: 'https://alimehdikhan.github.io/',
     title: 'Ali Mehdi Khan | AI/ML & Python Developer',
-    description: 'A Whisper-based pronunciation coach on Hugging Face Spaces, CNN models for medical images, FastAPI backends and Google Cloud skill badges.',
+    description: 'Vocaly AI, a pronunciation coach that marks every mispronounced sound, CNN models for medical images, FastAPI backends and Google Cloud skill badges.',
     siteName: 'Ali Mehdi Khan Portfolio',
     firstName: 'Ali Mehdi',
     lastName: 'Khan',
@@ -93,7 +94,7 @@ export const metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'Ali Mehdi Khan | AI/ML & Python Developer',
-    description: 'B.Tech CSE (2026) · Python · LLM apps and RAG · FastAPI · Junior software developer at IMAPRO.',
+    description: 'B.Tech CSE (2026) · AI products end to end · Python, FastAPI, React · Junior software developer at IMAPRO.',
     images: ['/assets/images/profile.png'],
   },
   alternates: {
