@@ -5,6 +5,7 @@ import { Magnetic } from './ui/magnetic';
 import { SpotlightCard } from './ui/aceternity/spotlight-card';
 import { CardContainer } from './ui/aceternity/3d-card';
 import { SkillLogo } from './Skills';
+import { VocalyShowcase } from './VocalyShowcase';
 import { Counter } from './fx/Counter';
 import { ProjectSequence } from './fx/ProjectSequence';
 import { RESUME } from '../data/resume';
@@ -27,7 +28,6 @@ export function Projects() {
               Things I&apos;ve <em>built</em>
             </>
           }
-          label="Projects"
           titleId="projects-title"
         />
 
@@ -49,15 +49,21 @@ export function Projects() {
                   >
                     <div className="project-art-wrap relative overflow-hidden bg-[#111214] lg:h-full">
                       <div className="project-art-inner h-full">
-                        <img
-                          className="project-art aspect-[16/10] h-full w-full object-cover lg:aspect-auto"
-                          src={`/assets/images/project-${i + 1}.svg`}
-                          alt=""
-                          width="800"
-                          height="500"
-                          loading="lazy"
-                          decoding="async"
-                        />
+                        {proj.logo ? (
+                          /* a product with its own brand gets a showcase: its real
+                             mark, the README demo and its measured accuracy */
+                          <VocalyShowcase logo={proj.logo} />
+                        ) : (
+                          <img
+                            className="project-art aspect-[16/10] h-full w-full object-cover lg:aspect-auto"
+                            src={`/assets/images/project-${i + 1}.svg`}
+                            alt=""
+                            width="800"
+                            height="500"
+                            loading="lazy"
+                            decoding="async"
+                          />
+                        )}
                       </div>
                     </div>
 
@@ -72,9 +78,10 @@ export function Projects() {
                         {proj.title}
                       </h3>
 
-                      <div className="mt-4 rounded-2xl border border-border bg-secondary/60 px-4 py-3">
+                      {/* the result reads as the lead line, set by type rather than boxed */}
+                      <div className="mt-4">
                         <h4 className="text-xs font-semibold tracking-[0.08em] text-link uppercase">Results</h4>
-                        <p className="mt-1 text-[15px] leading-snug font-medium [&_em]:font-semibold [&_em]:text-link [&_em]:not-italic">
+                        <p className="mt-1.5 max-w-[46ch] text-[17px] leading-snug font-medium tracking-[-0.01em] [&_em]:font-semibold [&_em]:text-link [&_em]:not-italic">
                           {proj.outcome.startsWith('90%+') ? (
                             <>
                               <Counter to={90} suffix="%+" delay={0} />
