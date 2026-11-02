@@ -29,6 +29,15 @@ B.Tech Computer Science graduate (2026) skilled in Python, Java, Machine Learnin
   <img src="https://img.shields.io/badge/Keras-D00000?style=for-the-badge&logo=keras&logoColor=white" alt="Keras" />
   <img src="https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white" alt="Git" />
   <img src="https://img.shields.io/badge/Google%20Cloud-4285F4?style=for-the-badge&logo=googlecloud&logoColor=white" alt="Google Cloud" />
+  <img src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript" />
+  <img src="https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" alt="React" />
+  <img src="https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white" alt="Next.js" />
+  <img src="https://img.shields.io/badge/Node.js-5FA04E?style=for-the-badge&logo=nodedotjs&logoColor=white" alt="Node.js" />
+  <img src="https://img.shields.io/badge/PyTorch-EE4C2C?style=for-the-badge&logo=pytorch&logoColor=white" alt="PyTorch" />
+  <img src="https://img.shields.io/badge/Hugging%20Face-FFD21E?style=for-the-badge&logo=huggingface&logoColor=black" alt="Hugging Face" />
+  <img src="https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white" alt="PostgreSQL" />
+  <img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white" alt="Docker" />
+  <img src="https://img.shields.io/badge/Tailwind%20CSS-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white" alt="Tailwind CSS" />
 </div>
 
 ---
@@ -37,18 +46,21 @@ B.Tech Computer Science graduate (2026) skilled in Python, Java, Machine Learnin
 
 | Project | Description | Link |
 |---------|-------------|------|
-| **AI Pronunciation Coach** | OpenAI Whisper + FastAPI audio scoring for spoken English feedback | [GitHub](https://github.com/alimehdikhan/A.I-Pronunciation-Coach) |
+| **Vocaly AI** (AI Pronunciation Coach) | Marks every mispronounced sound and shows how to fix it. Whisper on Groq plus a wav2vec 2.0 phoneme model on ONNX Runtime, a FastAPI backend and a React + TypeScript app; flags slips at 0.94 AUC against expert ratings (speechocean762) | [GitHub](https://github.com/alimehdikhan/A.I-Pronunciation-Coach) · [Live](https://alimehdi973-ai-pronunciation-coach.hf.space) |
 | **Cancer Detection System** | Keras binary classification on medical datasets (90%+ accuracy) | [GitHub](https://github.com/alimehdikhan/Cancer-Detection-Model) |
-| **Portfolio Website** | This site — Next.js, Tailwind CSS, shadcn/ui, Aceternity UI, Motion, GSAP | [Live](https://alimehdikhan.github.io) |
+| **Portfolio Website** | This site: Next.js, Tailwind CSS, shadcn/ui, Aceternity UI, Motion, GSAP, Canvas 2D | [Live](https://alimehdikhan.github.io) |
 
 ---
 
 ### Certifications
 
-- Technology Job Simulation — Deloitte via Forage (July 2025)
-- Build Real-World AI Apps with Gemini and Imagen — Google Cloud Skill Badge (2025)
-- Machine Learning with Python — freeCodeCamp (July 2025)
-- Prompt Design in Vertex AI — Google Cloud Skill Badge (2025)
+The site shows each certificate as the real image, with a link to verify it where the issuer offers one.
+
+- Project-based Summer Training in Machine Learning, GRAStech (June to July 2025, at BBD University, Lucknow) · certificate no. GRAS/PBT/ML/1220432084
+- Technology Job Simulation, Deloitte via Forage (July 2025) · [verify](https://forage-uploads-prod.s3.amazonaws.com/completion-certificates/9PBTqmSxAf6zZTseP/udmxiyHeqYQLkTPvf_9PBTqmSxAf6zZTseP_KzLDtoE8E3EyhFYQv_1753301699579_completion_certificate.pdf)
+- Build Real-World AI Apps with Gemini and Imagen, Google Cloud Skill Badge (July 2025) · [verify](https://www.credly.com/badges/38ba1161-84d4-4975-8972-b633b389f8cd)
+- Machine Learning with Python, freeCodeCamp (July 2025) · [verify](https://www.freecodecamp.org/certification/alimehdikhan/machine-learning-with-python-v7)
+- Prompt Design in Vertex AI, Google Cloud Skill Badge (July 2025) · [verify](https://www.credly.com/badges/7b347535-2bb6-419f-b130-1019f9a9ed38)
 
 ---
 
