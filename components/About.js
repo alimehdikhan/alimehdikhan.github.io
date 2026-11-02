@@ -7,11 +7,11 @@ import { RESUME } from '../data/resume';
 const stats = [
   { label: 'Certificates', value: `${RESUME.certifications.length} earned` },
   { label: 'Currently', value: 'Junior Software Developer · IMAPRO' },
-  { label: 'Teaching', value: '30+ students mentored' },
+  { label: 'Volunteering', value: '30+ students taught to code' },
   { label: 'Education', value: 'B.Tech CSE, 2026' },
 ];
 
-const focusAreas = ['LLM apps', 'RAG and vector databases', 'FastAPI backends', 'Machine learning'];
+const focusAreas = ['Speech and NLP models', 'LLM apps and RAG', 'FastAPI and Node.js backends', 'Full-stack web apps'];
 
 /* Large figure where the value leads with a number, plain text otherwise.
    The counter eases up once the card is on screen. */
@@ -38,10 +38,9 @@ export function About() {
         <SectionHead
           title={
             <>
-              B.Tech graduate, <em>working developer</em>
+              Model, API and <em>the app on top</em>
             </>
           }
-          label="About"
           titleId="about-title"
         />
 
@@ -59,23 +58,23 @@ export function About() {
             <Card className="h-full p-6 md:p-10">
               <h3 className="text-xs font-semibold tracking-[0.08em] text-muted-foreground uppercase">In short</h3>
               <p className="mt-4 text-lg leading-relaxed font-medium tracking-[-0.01em] md:text-xl">
-                I finished my B.Tech in Computer Science in July 2026. I build apps on top of language models and NLP, along with the FastAPI backends that serve them. My pronunciation coach runs on Hugging Face Spaces.
+                I&apos;m a Computer Science graduate (July 2026) and a junior software developer at IMAPRO. I like the whole path from a research model to a tool someone uses: training it, serving it from a FastAPI backend and building the interface. Vocaly AI, my pronunciation coach, is built that way and runs on Hugging Face Spaces.
               </p>
               <p className="mt-6 text-muted-foreground">
-                At IMAPRO I&apos;m moving a production app&apos;s frontend to SvelteKit 5. Before that I interned at GrasTech, training models on medical data, and spent three months teaching programming with Tech for Good.
+                At IMAPRO I&apos;m leading a production app&apos;s move to SvelteKit 5 and building its booking flow. Before that I interned at GRAStech, training models on medical data, and spent three months teaching programming to 30+ students with Tech for Good.
               </p>
 
               <div className="mt-8 grid gap-6 border-t border-border pt-8 sm:grid-cols-2 sm:gap-8">
                 <div>
                   <h4 className="text-[17px] font-semibold tracking-[-0.015em]">Software Development</h4>
                   <p className="mt-2 text-[15px] leading-relaxed text-muted-foreground">
-                    I write REST APIs in Python with FastAPI and build frontends in SvelteKit and Next.js. I also know Java, OOP and SQL.
+                    REST APIs in FastAPI, Node.js and Hono; frontends in React, Next.js and SvelteKit; data in PostgreSQL and SQLite. I also write Java, C++ and SQL.
                   </p>
                 </div>
                 <div>
                   <h4 className="text-[17px] font-semibold tracking-[-0.015em]">Machine Learning</h4>
                   <p className="mt-2 text-[15px] leading-relaxed text-muted-foreground">
-                    CNN image classifiers in TensorFlow and Keras, a speech pipeline built on Whisper, and LLM prompts that turn pronunciation scores into feedback.
+                    CNN classifiers in TensorFlow and Keras, speech scoring with Whisper and wav2vec 2.0, and LLM features built on Groq, Gemini and LangChain.
                   </p>
                 </div>
               </div>
@@ -93,7 +92,7 @@ export function About() {
                 ))}
               </ul>
               <p className="mt-4 text-[15px] leading-relaxed text-muted-foreground">
-                I&apos;ve also finished Google Cloud&apos;s Gemini, Imagen and Vertex AI prompt design skill badges, and Deloitte&apos;s technology job simulation on Forage.
+                I&apos;ve also earned Google Cloud skill badges in Gemini, Imagen and Vertex AI prompt design, freeCodeCamp&apos;s Machine Learning with Python certification, and Deloitte&apos;s technology job simulation on Forage.
               </p>
             </Card>
 
