@@ -18,7 +18,7 @@ node scripts/serve-preview.cjs   # serves out/ at http://127.0.0.1:4173
 - **Motion** for interface motion: portrait tilt, parallax and badge entrance, expanding entrance rings, masked heading reveals, scroll reveals, magnetic buttons, card highlights, directional hover, nav underline, menu, toast, counters, anchor travel.
 - **GSAP ScrollTrigger** (`components/fx/gsap.js`, loaded on demand once the browser is idle) for the three scroll-linked sequences: projects, timeline rail, contact panel. GSAP and Motion never animate the same element; each sequence file lists which layer it owns.
 - **Icons**: Phosphor duotone (`@phosphor-icons/react`, MIT) wrapped in `components/ui/icons.js`, so the rest of the code keeps one import path and each icon carries its hover-motion hook. Brand logos are self-hosted SVGs in `public/assets/icons/tech/` (devicon, MIT; simple-icons, CC0), so the page makes no third-party image requests. `IconTile` (a glass tile) and `.logo-plate` give every glyph and logo the same footprint.
-- **Canvas 2D** for the hero particle vortex. Three.js was not needed: depth-layered particles give the parallax at a fraction of the cost.
+- **Canvas 2D** for the hero particle vortex and the footer's dot-matrix name. Three.js was not needed: depth-layered particles give the parallax at a fraction of the cost.
 - Native scrolling throughout (no smooth-scroll library, no CSS `scroll-behavior`); deep links land instantly.
 
 ## Design (Apple-inspired layout, black and lime)
@@ -31,11 +31,11 @@ node scripts/serve-preview.cjs   # serves out/ at http://127.0.0.1:4173
   - **About**: bento of stat cards (2×2 on phones) with the cursor-following highlight.
   - **Skills**: 2×2 category cards.
   - **Experience**: timeline whose rail draws with scroll and whose nodes pop as it reaches them.
-  - **Projects**: two-column cards that stack in 3D on desktop.
-  - **Certifications**: a single list with a directional lime wash per row.
+  - **Projects**: two-column cards that stack in 3D on desktop. Vocaly AI's art panel is a product showcase (`components/VocalyShowcase.js`): the real Vocaly logo, the README's demo transcript with a word inspector (tap a word to see its sounds; "third" is flagged *Worth checking*, /θ/ heard as /f/), and a dumbbell chart of agreement with expert raters before and after the sound model. It plays once on first sight; the server HTML and reduced motion show the finished state.
+  - **Certifications**: the real certificate images, the GRAStech training as one wide featured card (scan left, details right) above a 2×2 gallery of the rest, (`public/assets/certificates/`, picked up at build time with their pixel sizes) in spotlight cards with cursor tilt; a click lifts the image out of its card into a full-size lightbox (Motion shared layout, Radix dialog) and it settles back on close.
   - **GitHub**: text, stats and a terminal.
   - **Contact**: a lime panel that expands into view.
-  - **Footer**: monogram, link pills, a giant wordmark that lights up under the cursor, and a back-to-top button wrapped in a scroll-progress ring.
+  - **Footer**: near-black in both themes. Name, roles and availability; email, GitHub and LinkedIn as pills; a meta row with the local time and Back to top; then the name across the full width as white dots that clear an ~80px hole around the cursor or a finger and spring back (`components/fx/ParticleWord.js`, paused off screen).
 
 ## Choreography
 
@@ -60,7 +60,7 @@ node scripts/serve-preview.cjs   # serves out/ at http://127.0.0.1:4173
 ## UX conventions
 
 - Navigation: six section links, no Home link (the logo returns to the top). No link is highlighted while the hero or the GitHub section is in view, and the bar turns 90% opaque on scroll so its links stay readable over the lime panel.
-- Headings: section titles are h2, written as a plain, specific phrase with one serif-italic word ("Things I've *built*", "Where I've *worked*"). The eyebrow above is the section name with a lime dot, and nothing is numbered: no "01 ·" prefixes on sections, projects, certificates or form fields. Card labels ("In short", "Where I'm focused", "Award", stat names) share one small caps label style; subsections inside a card are h4.
+- Headings: section titles are h2, written as a plain, specific phrase with one serif-italic word ("Things I've *built*", "Where I've *worked*"). There is no eyebrow label above them (the phrase names the section), and nothing is numbered: no "01 ·" prefixes on sections, projects, certificates or form fields. Card labels ("In short", "Where I'm focused", "Award", stat names) share one small caps label style; subsections inside a card are h4.
 - Copy: first person and plain words, with no slogans or em-dash chains. Credentials are named for what they are (Google Cloud skill badges, a Deloitte job simulation on Forage), never "certified". Facts live in `data/resume.js` and the About text: the degree was completed in July 2026 and the role is Junior Software Developer at IMAPRO.
 - Project cards scan top-down: category, title, a highlighted Results callout, the Live Demo / Code actions, then overview, implementation and the technology list.
 - Hover feedback only where something is clickable: buttons, links, contact rows and project cards. Static cards and skill pills do not move. The certification rows' directional wash is a reading highlight.
@@ -69,9 +69,9 @@ node scripts/serve-preview.cjs   # serves out/ at http://127.0.0.1:4173
 
 ## Interaction, feedback and accessibility
 
-- Primary buttons are magnetic (up to 8px, mouse only) with press feedback.
+- Primary buttons are magnetic (up to 8px, mouse only) with press feedback. At rest they carry a plain elevation shadow; the lime ring and glow arrive on hover.
 - Contact puts the main actions first: an email button and a copy button that confirms "Copied" (announced via a live region).
-- The contact panel is one composition (`components/Contact.js`): the heading and email actions on the left; on the right a details card with the live local time in Lucknow, email, phone and map rows, and GitHub and LinkedIn; below, a wide form card with a three-step "what happens next" list (desktop), one-tap subject chips and a ready meter (one pip per valid field). An ink-dot field and a cursor-following light sit behind it (`ContactBackdrop`, mouse only).
+- The contact panel is one composition with no boxes nested inside it (`components/Contact.js`): the heading and email actions on the left; on the right, split off by a hairline, the live local time in Lucknow, email, phone and map rows, and GitHub and LinkedIn; below another hairline, the form with a three-step "what happens next" list (desktop), one-tap subject chips and a ready meter (one pip per valid field). The form region carries `data-form-host`, which the sending bar and the success scene attach to. An ink-dot field and a cursor-following light sit behind it (`ContactBackdrop`, mouse only).
 - Contact form, sending (`components/SendButton.js`): a light sweeps through the button, the paper plane flies in place and the label's dots pulse; a progress bar runs along the card's top edge and the fields lock (read-only and dimmed) so nothing changes mid-send. Focus stays on the button.
 - Contact form, success (`components/ContactSuccess.js`), about two seconds:
   1. An ink circle floods out of the Send button and fills the whole card.
