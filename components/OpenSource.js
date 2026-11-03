@@ -6,6 +6,8 @@ import { Card } from './ui/card';
 import { IconTile } from './ui/icon-tile';
 import { Reveal } from './fx/Reveal';
 import { GithubActivity } from './GithubActivity';
+import { Contributions } from './Contributions';
+import { contributions } from '@/lib/github';
 import { RESUME } from '../data/resume';
 
 /* a language with a brand mark shows it on the tile; anything else gets a glyph */
@@ -17,7 +19,8 @@ const stats = [
   { name: 'Focus', value: RESUME.githubStats.focusArea, Icon: Brain },
 ];
 
-export function OpenSource() {
+export async function OpenSource() {
+  const prs = await contributions();
   return (
     <section id="opensource" className="section-y" aria-labelledby="opensource-title">
       <div className="container-page">
@@ -99,7 +102,9 @@ export function OpenSource() {
           </Reveal>
         </div>
 
-        {/* the last year of contributions, read when the site is built */}
+        {/* pull requests to other people's projects, then the last year of
+            contributions; both read when the site is built */}
+        <Contributions items={prs} />
         <GithubActivity />
       </div>
     </section>
