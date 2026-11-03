@@ -1,4 +1,4 @@
-import { ArrowUpRight, Code, Star } from '@/components/ui/icons';
+import { ArrowUpRight, Code } from '@/components/ui/icons';
 import { SectionHead } from './ui/SectionHead';
 import { Button } from './ui/button';
 import { Magnetic } from './ui/magnetic';
@@ -8,6 +8,7 @@ import { SkillLogo } from './Skills';
 import { VocalyShowcase } from './VocalyShowcase';
 import { Counter } from './fx/Counter';
 import { ProjectSequence } from './fx/ProjectSequence';
+import { StarButton } from './StarRepo';
 import { RESUME } from '../data/resume';
 
 /* Layer ownership, so GSAP and Motion never drive the same element:
@@ -19,7 +20,8 @@ import { RESUME } from '../data/resume';
    .project-art       hover zoom (CSS)
    .project-reveal>*  staggered detail reveal (GSAP) */
 
-/* the project whose repo visitors are asked to star gets a Star button too */
+/* the project whose repo visitors are asked to star trades its Code button
+   for a Star one (both open the same repo): one clear ask, with its reason */
 const STAR_URL = `https://github.com/${RESUME.starRepo.path}`;
 
 export function Projects() {
@@ -108,7 +110,9 @@ export function Projects() {
                             </Button>
                           </Magnetic>
                         )}
-                        {proj.demo ? (
+                        {proj.github === STAR_URL ? (
+                          <StarButton placement="project" />
+                        ) : proj.demo ? (
                           <Button asChild variant="outline">
                             <a href={proj.github} target="_blank" rel="noopener noreferrer" aria-label={`View code for ${proj.title} on GitHub`}>
                               <Code aria-hidden="true" />
@@ -127,15 +131,10 @@ export function Projects() {
                             </Button>
                           </Magnetic>
                         )}
-                        {proj.github === STAR_URL && (
-                          <Button asChild variant="outline">
-                            <a href={proj.github} target="_blank" rel="noopener noreferrer" aria-label={`Star ${proj.title} on GitHub (opens in a new tab)`}>
-                              <Star aria-hidden="true" />
-                              Star on GitHub
-                            </a>
-                          </Button>
-                        )}
                       </div>
+                      {proj.github === STAR_URL && (
+                        <p className="mt-3 text-[13px] text-muted-foreground">Free and open source. A star helps more learners find it.</p>
+                      )}
 
                       <div className="mt-6 border-t border-border pt-6">
                         <h4 className="sr-only">Overview</h4>
