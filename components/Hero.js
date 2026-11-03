@@ -1,7 +1,7 @@
 'use client';
 
 import { Fragment, useEffect, useRef } from 'react';
-import { ArrowDown, ArrowUpRight, BadgeCheck, Download, GithubMark, GraduationCap, LinkedinMark, Mail, Star } from '@/components/ui/icons';
+import { ArrowDown, ArrowUpRight, BadgeCheck, Download, GitMerge, GithubMark, GraduationCap, LinkedinMark, Mail, Star } from '@/components/ui/icons';
 import { Button } from './ui/button';
 import { Magnetic } from './ui/magnetic';
 import { HeroPortrait } from './HeroPortrait';
@@ -34,7 +34,9 @@ const STAR_URL = `https://github.com/${RESUME.starRepo.path}`;
 const articleFor = (word) => (/^[aeiou]/i.test(word) ? 'an' : 'a');
 
 
-export function Hero() {
+/* `merged`: the best-known open-source project with a merged pull request
+   of mine, read from GitHub when the site is built (lib/github.js) */
+export function Hero({ merged }) {
   const roles = RESUME.roles;
   /* the typewriter swaps the article as each role starts, in place */
   const article = useRef(null);
@@ -150,6 +152,20 @@ export function Hero() {
                 {chip.label}
               </li>
             ))}
+            {merged && (
+              <li>
+                <a
+                  href={merged.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 rounded-full bg-secondary px-3 py-1.5 text-[13px] font-medium transition-[background-color,transform] duration-200 hover:bg-accent active:scale-[0.97] motion-reduce:active:scale-100"
+                >
+                  <GitMerge className="size-4" />
+                  Merged PR in {merged.name}
+                  <span className="text-muted-foreground tabular-nums">★ {merged.stars}</span>
+                </a>
+              </li>
+            )}
           </ul>
 
           <div style={{ '--i': 5 }} className="hero-in mt-8 flex flex-wrap items-center gap-3">
