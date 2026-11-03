@@ -1,6 +1,6 @@
 'use client';
 
-import { Fragment, useEffect } from 'react';
+import { Fragment, useEffect, useRef } from 'react';
 import { ArrowDown, BadgeCheck, Download, GithubMark, GraduationCap, LinkedinMark, Mail } from '@/components/ui/icons';
 import { Button } from './ui/button';
 import { Magnetic } from './ui/magnetic';
@@ -26,9 +26,14 @@ const socials = [
   { href: `mailto:${RESUME.email}`, label: 'Email', Icon: Mail },
 ];
 
+/* "an AI/ML Engineer", "a Software Engineer" */
+const articleFor = (word) => (/^[aeiou]/i.test(word) ? 'an' : 'a');
+
 
 export function Hero() {
   const roles = RESUME.roles;
+  /* the typewriter swaps the article as each role starts, in place */
+  const article = useRef(null);
 
   const [first, ...rest] = RESUME.name.split(' ');
   const lineOne = `${first} ${rest.slice(0, -1).join(' ')}`.trim();
@@ -90,9 +95,16 @@ export function Hero() {
             {/* complete phrase for screen readers; the typewriter is decorative */}
             <span className="sr-only">I&apos;m a {roles.join(', ')}.</span>
             <span aria-hidden="true" className="inline-flex items-baseline">
-              <span className="text-muted-foreground">I&apos;m a&nbsp;</span>
+              <span className="text-muted-foreground">
+                I&apos;m <span ref={article}>{articleFor(roles[0])}</span>&nbsp;
+              </span>
               <span className="[&_b]:font-semibold [&_b]:text-link">
-                <Typewriter words={roles} />
+                <Typewriter
+                  words={roles}
+                  onWord={(word) => {
+                    if (article.current) article.current.textContent = articleFor(word);
+                  }}
+                />
               </span>
               <span className="ml-0.5 inline-block h-[1em] w-[2px] translate-y-[0.12em] animate-pulse bg-primary motion-reduce:animate-none" />
             </span>
