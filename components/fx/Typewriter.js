@@ -8,10 +8,13 @@ import { useReducedMotion } from 'motion/react';
    it, holds it, then erases faster than it types the next one, so the page
    never flickers from the full word to a single letter on load. Pauses
    while off-screen or in a hidden tab. Under reduced motion the first
-   phrase simply stays. */
-export function Typewriter({ words, type = 55, erase = 28, hold = 3200, pause = 300 }) {
+   phrase simply stays. `onWord` hears each phrase as it starts, so text
+   around it (an article) can follow without a re-render. */
+export function Typewriter({ words, type = 55, erase = 28, hold = 3200, pause = 300, onWord }) {
   const ref = useRef(null);
   const reduce = useReducedMotion();
+  const wordListener = useRef(onWord);
+  wordListener.current = onWord;
 
   useEffect(() => {
     const el = ref.current;
@@ -53,6 +56,7 @@ export function Typewriter({ words, type = 55, erase = 28, hold = 3200, pause = 
       } else if (deleting && len === 0) {
         deleting = false;
         i = (i + 1) % words.length;
+        wordListener.current?.(words[i]);
         wait = pause;
       }
       schedule(wait);
