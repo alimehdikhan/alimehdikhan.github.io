@@ -16,8 +16,14 @@ import { KineticBand } from '../components/KineticBand';
 import { Contact } from '../components/Contact';
 import { Footer } from '../components/Footer';
 import { RESUME } from '../data/resume';
+import { compact, contributions } from '../lib/github';
 
-export default function Home() {
+export default async function Home() {
+  /* the hero names the best-known project a pull request was merged into
+     (the same request the GitHub section makes, so it is fetched once) */
+  const best = (await contributions()).filter((pr) => pr.merged).sort((a, b) => b.repo.stars - a.repo.stars)[0];
+  const merged = best && { name: best.repo.path.split('/')[1], stars: compact(best.repo.stars), url: best.url };
+
   return (
     <MotionProvider>
       <a href="#main-content" className="skip">
@@ -30,7 +36,7 @@ export default function Home() {
       <Navbar />
 
       <main id="main-content" tabIndex={-1} className="outline-none">
-        <Hero />
+        <Hero merged={merged} />
         <About />
         <Ticker items={RESUME.skills.technical} />
         <Skills />
