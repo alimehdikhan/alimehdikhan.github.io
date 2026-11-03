@@ -7,7 +7,10 @@ import { Button } from './ui/button';
 import { Magnetic } from './ui/magnetic';
 import { IconTile } from './ui/icon-tile';
 import { SpotlightCard } from './ui/aceternity/spotlight-card';
+import { StarTutorial } from './StarTutorial';
 import { Reveal } from './fx/Reveal';
+import { revealSection } from './fx/revealSection';
+import { scrollToHash } from './fx/scrollTo';
 import { trackClick } from './fx/trackClick';
 import { cn } from '@/lib/utils';
 import { RESUME } from '../data/resume';
@@ -135,6 +138,12 @@ export function StarRepo() {
   const stars = persuasive(counts?.stars);
   const followers = persuasive(counts?.followers);
 
+  /* down to the walkthrough; e.detail is 0 when Enter or Space fired it */
+  const seeHow = (e) => {
+    if (scrollToHash('#how-to-star', { keyboard: e.detail === 0 })) e.preventDefault();
+    else revealSection('#how-to-star');
+  };
+
   return (
     <section id="star" className="section-y" aria-labelledby="star-title">
       <div className="container-page">
@@ -233,11 +242,21 @@ export function StarRepo() {
                     </a>
                   </Button>
                 </div>
-                <p className="mt-3 text-[13px] text-muted-foreground">Takes two seconds if you&apos;re signed in to GitHub.</p>
+                <p className="mt-3 text-[13px] text-muted-foreground">
+                  Takes two seconds once you&apos;re signed in.{' '}
+                  <a href="#how-to-star" onClick={seeHow} className="link-underline font-medium text-foreground">
+                    New to GitHub? See how
+                  </a>
+                </p>
               </div>
             </div>
           </SpotlightCard>
         </Reveal>
+
+        {/* for visitors who have never starred anything */}
+        <StarTutorial>
+          <StarButton placement="tutorial" className="w-full sm:w-auto" />
+        </StarTutorial>
       </div>
     </section>
   );
