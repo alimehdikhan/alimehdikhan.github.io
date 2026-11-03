@@ -5,6 +5,7 @@ import { Magnetic } from './ui/magnetic';
 import { Card } from './ui/card';
 import { IconTile } from './ui/icon-tile';
 import { Reveal } from './fx/Reveal';
+import { GithubActivity } from './GithubActivity';
 import { RESUME } from '../data/resume';
 
 /* a language with a brand mark shows it on the tile; anything else gets a glyph */
@@ -97,6 +98,9 @@ export function OpenSource() {
             </div>
           </Reveal>
         </div>
+
+        {/* the last year of contributions, read when the site is built */}
+        <GithubActivity />
       </div>
     </section>
   );
