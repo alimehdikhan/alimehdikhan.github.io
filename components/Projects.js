@@ -1,4 +1,4 @@
-import { ArrowUpRight, Code } from '@/components/ui/icons';
+import { ArrowUpRight, Code, Star } from '@/components/ui/icons';
 import { SectionHead } from './ui/SectionHead';
 import { Button } from './ui/button';
 import { Magnetic } from './ui/magnetic';
@@ -18,6 +18,10 @@ import { RESUME } from '../data/resume';
    .project-art-wrap  wipe reveal (GSAP); .project-art-inner scale (GSAP);
    .project-art       hover zoom (CSS)
    .project-reveal>*  staggered detail reveal (GSAP) */
+
+/* the project whose repo visitors are asked to star gets a Star button too */
+const STAR_URL = `https://github.com/${RESUME.starRepo.path}`;
+
 export function Projects() {
   return (
     <section id="projects" className="section-y" aria-labelledby="projects-title">
@@ -122,6 +126,14 @@ export function Projects() {
                               </a>
                             </Button>
                           </Magnetic>
+                        )}
+                        {proj.github === STAR_URL && (
+                          <Button asChild variant="outline">
+                            <a href={proj.github} target="_blank" rel="noopener noreferrer" aria-label={`Star ${proj.title} on GitHub (opens in a new tab)`}>
+                              <Star aria-hidden="true" />
+                              Star on GitHub
+                            </a>
+                          </Button>
                         )}
                       </div>
 
