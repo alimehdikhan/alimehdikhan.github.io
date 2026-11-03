@@ -101,10 +101,9 @@ export const metadata = {
     canonical: 'https://alimehdikhan.github.io/',
   },
   category: 'technology',
-  themeColor: [
-    { media: '(prefers-color-scheme: dark)', color: '#090a0a' },
-    { media: '(prefers-color-scheme: light)', color: '#f5f5f7' },
-  ],
+  /* the site opens dark whatever the OS prefers; ThemeProvider retints the
+     tag when the visitor switches */
+  themeColor: '#090a0a',
 };
 
 export default function RootLayout({ children }) {
