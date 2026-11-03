@@ -76,6 +76,13 @@ export const Heart = make(P.HeartStraight);
 export const StarFill = make(P.Star, { weight: 'fill' });
 export const Bell = make(P.BellSimple);
 export const Lock = make(P.LockSimple);
+/* the command palette: its key, Enter, and a glyph per section */
+export const Command = make(P.Command);
+export const CornerDownLeft = make(P.ArrowElbowDownLeft);
+export const Home = make(P.House);
+export const User = make(P.User);
+export const Briefcase = make(P.Briefcase);
+export const Pulse = make(P.Pulse);
 
 /* brand marks are monochrome so they sit in the black-and-lime palette */
 export const GithubMark = make(P.GithubLogo, { weight: 'fill' });
