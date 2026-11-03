@@ -6,6 +6,7 @@ import { Button } from './ui/button';
 import { Magnetic } from './ui/magnetic';
 import { HeroPortrait } from './HeroPortrait';
 import { trackResumeDownload } from './fx/trackDownload';
+import { trackClick } from './fx/trackClick';
 import { revealSection } from './fx/revealSection';
 import { scrollToHash } from './fx/scrollTo';
 import { Typewriter } from './fx/Typewriter';
@@ -70,14 +71,17 @@ export function Hero() {
             href={STAR_URL}
             target="_blank"
             rel="noopener noreferrer"
-            aria-label="Star Vocaly AI on GitHub (opens in a new tab)"
+            aria-label="Vocaly AI is open source: star it on GitHub (opens in a new tab)"
+            onClick={() => trackClick('star-hero')}
             style={{ '--i': 0 }}
             className="hero-in star-shine mb-5 inline-flex max-w-full items-center gap-2.5 rounded-full border border-border-strong bg-secondary py-1 pr-3.5 pl-1 text-[13px] font-medium transition-[border-color,transform] duration-200 [--shine:rgb(var(--glow)/0.22)] hover:border-link/50 active:scale-[0.98] motion-reduce:active:scale-100"
           >
             <span className="grid size-7 shrink-0 place-items-center rounded-full bg-primary text-primary-foreground [--icon-accent:currentColor] [--icon-accent-opacity:0.25]">
               <Star className="size-4" />
             </span>
+            {/* the why leads where there's room for it; the ask always fits */}
             <span className="truncate">
+              <span className="hidden text-muted-foreground min-[390px]:inline">Open source · </span>
               Star <span className="text-link">Vocaly AI</span> on GitHub
             </span>
             <ArrowUpRight className="size-3.5 text-muted-foreground" />
