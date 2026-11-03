@@ -79,11 +79,10 @@ function Matte() {
   );
 }
 
-/* the single 0-min track gives the scan a definite box to fit inside;
-   an auto track would size itself from the image and let it spill out of
-   the frame, clipping its bottom edge on phones */
-const FRAME =
-  'relative m-2 grid aspect-[3/2] grid-cols-[minmax(0,1fr)] grid-rows-[minmax(0,1fr)] place-items-center overflow-hidden rounded-[1.15rem] bg-secondary/60';
+/* the frame keeps an exact 3:2 in every engine: its 8px gap lives on a
+   wrapper (Safari counts a margin into an aspect-ratio box that a flex
+   column stretches, making it taller than 3:2) */
+const FRAME = 'relative grid aspect-[3/2] w-full place-items-center overflow-hidden rounded-[1.15rem] bg-secondary/60';
 
 function CertificateCard({ cert, onOpen }) {
   const { scan, featured } = cert;
@@ -97,42 +96,47 @@ function CertificateCard({ cert, onOpen }) {
           whileHover="hover"
           className={cn('flex h-full flex-col', featured && 'md:grid md:grid-cols-[1.25fr_1fr] md:items-center')}
         >
-          {scan ? (
-            <button
-              type="button"
-              onClick={(e) => onOpen(cert, e.currentTarget)}
-              aria-label={`View the ${cert.title} certificate full size`}
-              className={`${FRAME} group/scan cursor-zoom-in p-5 outline-none transition-transform duration-150 ease-out focus-visible:ring-[3px] focus-visible:ring-ring/40 active:scale-[0.985] motion-reduce:active:scale-100 sm:p-7`}
-            >
-              <Matte />
-              <motion.div variants={SCAN} className="relative flex size-full items-center justify-center">
-                <motion.img
-                  layoutId={`cert-${cert.image}`}
-                  transition={MORPH}
-                  src={scan.src}
-                  width={scan.width}
-                  height={scan.height}
-                  alt=""
-                  loading="lazy"
-                  decoding="async"
-                  className="h-auto max-h-full w-auto max-w-full rounded-md [filter:drop-shadow(0_18px_24px_rgb(0_0_0/0.35))]"
+          <div className="p-2">
+            {scan ? (
+              <button
+                type="button"
+                onClick={(e) => onOpen(cert, e.currentTarget)}
+                aria-label={`View the ${cert.title} certificate full size`}
+                className={`${FRAME} group/scan cursor-zoom-in outline-none transition-transform duration-150 ease-out focus-visible:ring-[3px] focus-visible:ring-ring/40 active:scale-[0.985] motion-reduce:active:scale-100`}
+              >
+                <Matte />
+                {/* the scan's box is inset from the frame rather than sized from
+                    its content, so its height never depends on the image and the
+                    scan always fits whole, whenever it loads */}
+                <motion.div variants={SCAN} className="absolute inset-5 flex items-center justify-center sm:inset-7">
+                  <motion.img
+                    layoutId={`cert-${cert.image}`}
+                    transition={MORPH}
+                    src={scan.src}
+                    width={scan.width}
+                    height={scan.height}
+                    alt=""
+                    loading="lazy"
+                    decoding="async"
+                    className="h-auto max-h-full w-auto max-w-full rounded-md [filter:drop-shadow(0_18px_24px_rgb(0_0_0/0.35))]"
+                  />
+                </motion.div>
+                <motion.span
+                  variants={SHEEN}
+                  aria-hidden="true"
+                  className="pointer-events-none absolute inset-0 bg-[linear-gradient(100deg,transparent_38%,rgb(var(--glow)/0.22)_50%,transparent_62%)]"
                 />
-              </motion.div>
-              <motion.span
-                variants={SHEEN}
-                aria-hidden="true"
-                className="pointer-events-none absolute inset-0 bg-[linear-gradient(100deg,transparent_38%,rgb(var(--glow)/0.22)_50%,transparent_62%)]"
-              />
-              <motion.span variants={CHIP} aria-hidden="true" className="absolute top-3 right-3 group-focus-visible/scan:!opacity-100">
-                <IconTile size="sm" icon={Expand} />
-              </motion.span>
-            </button>
-          ) : (
-            <div className={FRAME}>
-              <Matte />
-              <IssuerLogo issuer={cert.issuer} size="lg" />
-            </div>
-          )}
+                <motion.span variants={CHIP} aria-hidden="true" className="absolute top-3 right-3 group-focus-visible/scan:!opacity-100">
+                  <IconTile size="sm" icon={Expand} />
+                </motion.span>
+              </button>
+            ) : (
+              <div className={FRAME}>
+                <Matte />
+                <IssuerLogo issuer={cert.issuer} size="lg" />
+              </div>
+            )}
+          </div>
 
           <div className={cn('flex flex-1 flex-col px-5 pt-4 pb-5 sm:px-6 sm:pb-6', featured && 'md:px-8 md:py-8 md:pl-6')}>
             <div className="flex items-center gap-2.5 text-[13px] text-muted-foreground">
