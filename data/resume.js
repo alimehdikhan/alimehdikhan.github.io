@@ -173,6 +173,15 @@ export const RESUME = {
     focusArea: 'AI/ML',
   },
 
+  /* the open-source repo the "Star Vocaly" section asks visitors to star;
+     the description is the repo's own, as GitHub shows it */
+  starRepo: {
+    path: 'alimehdikhan/A.I-Pronunciation-Coach',
+    description:
+      'Vocaly AI: an English pronunciation coach. Say a sentence and it marks each sound you got wrong, then shows you how to fix it. Also mock interviews, drills and a voice coach.',
+    language: 'Python',
+  },
+
   githubCommits: [
     { sha: '74b7066', message: "feat(web): the drills' record buttons use the lit disc" },
     { sha: 'df5f93a', message: "feat(web): the coach page's record buttons use the lit disc" },
