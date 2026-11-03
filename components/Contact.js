@@ -44,7 +44,9 @@ export function Contact() {
         <div className="contact-panel theme-lime relative isolate overflow-hidden rounded-[2.5rem] px-5 py-12 sm:px-10 md:px-14 md:py-16 lg:px-16">
           <ContactBackdrop />
           <div className="contact-inner">
-            <div className="grid items-start gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:gap-14">
+            {/* minmax(0,1fr): on a narrow phone the column keeps to the panel
+                instead of growing to fit the email button */}
+            <div className="grid grid-cols-[minmax(0,1fr)] items-start gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:gap-14">
               <Reveal stagger={0.08}>
                 <div>
                   <VariableContact />
@@ -84,12 +86,13 @@ export function Contact() {
                         href={href}
                         target={external ? '_blank' : undefined}
                         rel={external ? 'noopener noreferrer' : undefined}
-                        className="group -mx-2 flex items-center gap-4 rounded-2xl px-2 py-3 transition-[background-color,transform] duration-200 ease-out hover:bg-foreground/[0.04] focus-visible:bg-foreground/[0.04] active:scale-[0.98] motion-reduce:active:scale-100"
+                        className="group -mx-2 flex items-center gap-3 rounded-2xl px-2 py-3 transition-[background-color,transform] duration-200 ease-out hover:bg-foreground/[0.04] focus-visible:bg-foreground/[0.04] active:scale-[0.98] motion-reduce:active:scale-100 sm:gap-4"
                       >
                         <IconTile icon={Icon} size="md" />
                         <span className="flex min-w-0 flex-1 flex-col">
                           <span className="text-[13px] text-muted-foreground">{title}</span>
-                          <span className="truncate text-[15px] font-medium">{value}</span>
+                          {/* wraps rather than cutting the address off on a narrow phone */}
+                          <span className="text-[15px] font-medium [overflow-wrap:anywhere]">{value}</span>
                         </span>
                         <ArrowUpRight className="size-4 text-muted-foreground transition-colors group-hover:text-foreground" />
                       </a>
@@ -114,7 +117,7 @@ export function Contact() {
               <div aria-hidden="true" className="h-px bg-foreground/15" />
               {/* data-form-host: the sending bar and the success scene attach here */}
               <div data-form-host className="-mx-3 mt-7 rounded-[2rem] px-3 pt-3 md:mt-9">
-                <div className="grid gap-8 lg:grid-cols-[0.62fr_1.38fr] lg:gap-14">
+                <div className="grid grid-cols-[minmax(0,1fr)] gap-8 lg:grid-cols-[0.62fr_1.38fr] lg:gap-14">
                   <div>
                     <h3 className="text-2xl font-semibold tracking-[-0.025em]">Send a message</h3>
                     <p className="mt-2 text-muted-foreground" id="form-note">
