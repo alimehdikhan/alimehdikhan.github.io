@@ -23,7 +23,8 @@ const buttonVariants = cva(
         default: 'h-12 px-6',
         sm: 'h-8 px-4 text-[13px]',
         lg: 'h-12 px-7 text-base',
-        icon: 'size-10',
+        /* 44px under a finger (Apple's minimum touch target), 40px for a mouse */
+        icon: 'size-10 pointer-coarse:size-11',
       },
     },
     defaultVariants: {
