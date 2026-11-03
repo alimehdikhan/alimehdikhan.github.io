@@ -4,8 +4,9 @@ import { useEffect, useRef, useState } from 'react';
 
 /* The Vocaly AI README's own demo: a synthetic voice reads "I think this is
    the third time" but says "furd", and the app marks "third" as Worth
-   checking because /θ/ came out as /f/. Sounds are General American IPA. */
-const WORDS = [
+   checking because /θ/ came out as /f/. Sounds are General American IPA.
+   The hero's Vocaly tile shows the same sentence. */
+export const WORDS = [
   { word: 'I', sounds: ['aɪ'] },
   { word: 'think', sounds: ['θ', 'ɪ', 'ŋ', 'k'] },
   { word: 'this', sounds: ['ð', 'ɪ', 's'] },
