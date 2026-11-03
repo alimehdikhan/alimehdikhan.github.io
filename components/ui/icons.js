@@ -72,6 +72,10 @@ export const GitFork = make(P.GitFork);
 export const Bookmark = make(P.BookmarkSimple);
 export const TrendUp = make(P.TrendUp);
 export const Heart = make(P.HeartStraight);
+/* the starring walkthrough: GitHub's starred star and its page furniture */
+export const StarFill = make(P.Star, { weight: 'fill' });
+export const Bell = make(P.BellSimple);
+export const Lock = make(P.LockSimple);
 
 /* brand marks are monochrome so they sit in the black-and-lime palette */
 export const GithubMark = make(P.GithubLogo, { weight: 'fill' });
