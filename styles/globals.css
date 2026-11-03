@@ -698,3 +698,27 @@
   transform: scale(0.96);
   transition-duration: 120ms;
 }
+
+/* ───────── star asks (Vocaly AI on GitHub) ───────── */
+
+/* a soft band of light crosses the call to action every few seconds, so the
+   ask catches the eye without moving the layout. --shine sets its colour;
+   under reduced motion the global rule above ends it out of sight */
+.star-shine {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+.star-shine::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(105deg, transparent 35%, var(--shine, rgb(255 255 255 / 0.45)) 50%, transparent 65%);
+  transform: translateX(-100%);
+  animation: star-shine 5s cubic-bezier(0.4, 0, 0.2, 1) 1.6s infinite;
+}
+@keyframes star-shine {
+  0% { transform: translateX(-100%); }
+  28%, 100% { transform: translateX(100%); }
+}
