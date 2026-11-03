@@ -1,16 +1,15 @@
 'use client';
 
 import { Fragment, useEffect, useRef } from 'react';
-import { ArrowDown, ArrowUpRight, BadgeCheck, Download, GitMerge, GithubMark, GraduationCap, LinkedinMark, Mail, Star } from '@/components/ui/icons';
+import { ArrowDown, ArrowUpRight, BadgeCheck, Download, GithubMark, GraduationCap, LinkedinMark, Mail, Star } from '@/components/ui/icons';
 import { Button } from './ui/button';
 import { Magnetic } from './ui/magnetic';
-import { HeroPortrait } from './HeroPortrait';
+import { HeroBento } from './HeroBento';
 import { trackResumeDownload } from './fx/trackDownload';
 import { trackClick } from './fx/trackClick';
 import { revealSection } from './fx/revealSection';
 import { scrollToHash } from './fx/scrollTo';
 import { Typewriter } from './fx/Typewriter';
-import { LocalClock } from './fx/LocalClock';
 import { RESUME } from '../data/resume';
 
 /* each credential leads with an icon: the real Google Cloud mark where one
@@ -35,7 +34,8 @@ const articleFor = (word) => (/^[aeiou]/i.test(word) ? 'an' : 'a');
 
 
 /* `merged`: the best-known open-source project with a merged pull request
-   of mine, read from GitHub when the site is built (lib/github.js) */
+   of mine, read from GitHub when the site is built (lib/github.js); the
+   bento shows it */
 export function Hero({ merged }) {
   const roles = RESUME.roles;
   /* the typewriter swaps the article as each role starts, in place */
@@ -89,13 +89,11 @@ export function Hero({ merged }) {
             <ArrowUpRight className="size-3.5 text-muted-foreground" />
           </a>
 
+          {/* where and what time it is moved into the bento's clock tile */}
           <div style={{ '--i': 0 }} className="hero-in mb-6 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm">
             <span className="inline-flex items-center gap-2 font-medium">
               <span className="size-2 rounded-full bg-primary shadow-[0_0_10px_rgb(var(--glow)/0.8)]" aria-hidden="true" />
               Open to entry-level AI and software roles
-            </span>
-            <span className="text-muted-foreground">
-              {RESUME.location} · <LocalClock timeZone="Asia/Kolkata" />
             </span>
           </div>
 
@@ -152,23 +150,6 @@ export function Hero({ merged }) {
                 {chip.label}
               </li>
             ))}
-            {merged && (
-              <li>
-                <a
-                  href={merged.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 rounded-full bg-secondary px-3 py-1.5 text-[13px] font-medium transition-[background-color,transform] duration-200 hover:bg-accent active:scale-[0.97] motion-reduce:active:scale-100"
-                >
-                  <GitMerge className="size-4" />
-                  {/* one line on every phone: the project from 360px, its stars from 640px */}
-                  <span>
-                    Open source contribution<span className="max-[359px]:hidden"> · {merged.name}</span>
-                  </span>
-                  <span className="hidden text-muted-foreground tabular-nums sm:inline">★ {merged.stars}</span>
-                </a>
-              </li>
-            )}
           </ul>
 
           <div style={{ '--i': 5 }} className="hero-in mt-8 flex flex-wrap items-center gap-3">
@@ -213,9 +194,8 @@ export function Hero({ merged }) {
           </div>
         </div>
 
-        <div className="hero-portrait relative">
-          <HeroPortrait />
-        </div>
+        {/* the portrait among the proof: what I do now, open source, time, Vocaly */}
+        <HeroBento merged={merged} />
       </div>
 
       <a
