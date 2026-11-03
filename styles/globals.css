@@ -169,6 +169,9 @@
     /* the browser's own surfaces take the palette too */
     scrollbar-color: var(--border-strong) var(--background);
     accent-color: var(--primary);
+    /* no grey rectangle flashed over rounded cards and pills on tap: every
+       control answers a press itself (:active) */
+    -webkit-tap-highlight-color: transparent;
   }
 
   input,
