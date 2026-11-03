@@ -69,6 +69,9 @@ export const Sparkle = make(P.Sparkle);
 export const Expand = make(P.ArrowsOutSimple);
 export const Star = make(P.Star);
 export const GitFork = make(P.GitFork);
+export const Bookmark = make(P.BookmarkSimple);
+export const TrendUp = make(P.TrendUp);
+export const Heart = make(P.HeartStraight);
 
 /* brand marks are monochrome so they sit in the black-and-lime palette */
 export const GithubMark = make(P.GithubLogo, { weight: 'fill' });
