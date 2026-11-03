@@ -7,6 +7,7 @@
      https://abacus.jasoncameron.dev/get/alimehdikhan-github-io/star-hero
      https://abacus.jasoncameron.dev/get/alimehdikhan-github-io/star-project
      https://abacus.jasoncameron.dev/get/alimehdikhan-github-io/star-section
+     https://abacus.jasoncameron.dev/get/alimehdikhan-github-io/star-tutorial
      https://abacus.jasoncameron.dev/get/alimehdikhan-github-io/follow-section */
 export function trackClick(counter) {
   try {
