@@ -722,3 +722,11 @@
   0% { transform: translateX(-100%); }
   28%, 100% { transform: translateX(100%); }
 }
+
+/* theme switch (fx/themeSwitch.js): the new theme opens as a circle over a
+   snapshot of the old one, so the page's default crossfade is turned off */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
