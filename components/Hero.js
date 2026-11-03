@@ -1,7 +1,7 @@
 'use client';
 
 import { Fragment, useEffect, useRef } from 'react';
-import { ArrowDown, BadgeCheck, Download, GithubMark, GraduationCap, LinkedinMark, Mail } from '@/components/ui/icons';
+import { ArrowDown, ArrowUpRight, BadgeCheck, Download, GithubMark, GraduationCap, LinkedinMark, Mail, Star } from '@/components/ui/icons';
 import { Button } from './ui/button';
 import { Magnetic } from './ui/magnetic';
 import { HeroPortrait } from './HeroPortrait';
@@ -25,6 +25,9 @@ const socials = [
   { href: RESUME.linkedin, label: 'LinkedIn', Icon: LinkedinMark },
   { href: `mailto:${RESUME.email}`, label: 'Email', Icon: Mail },
 ];
+
+/* the open-source repo the hero's announcement pill asks visitors to star */
+const STAR_URL = `https://github.com/${RESUME.starRepo.path}`;
 
 /* "an AI/ML Engineer", "a Software Engineer" */
 const articleFor = (word) => (/^[aeiou]/i.test(word) ? 'an' : 'a');
@@ -62,6 +65,24 @@ export function Hero() {
 
       <div className="container-page relative z-10 grid w-full items-center gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16">
         <div className="flex flex-col items-start">
+          {/* announcement: straight to the repo, where the Star button is */}
+          <a
+            href={STAR_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Star Vocaly AI on GitHub (opens in a new tab)"
+            style={{ '--i': 0 }}
+            className="hero-in star-shine mb-5 inline-flex max-w-full items-center gap-2.5 rounded-full border border-border-strong bg-secondary py-1 pr-3.5 pl-1 text-[13px] font-medium transition-[border-color,transform] duration-200 [--shine:rgb(var(--glow)/0.22)] hover:border-link/50 active:scale-[0.98] motion-reduce:active:scale-100"
+          >
+            <span className="grid size-7 shrink-0 place-items-center rounded-full bg-primary text-primary-foreground [--icon-accent:currentColor] [--icon-accent-opacity:0.25]">
+              <Star className="size-4" />
+            </span>
+            <span className="truncate">
+              Star <span className="text-link">Vocaly AI</span> on GitHub
+            </span>
+            <ArrowUpRight className="size-3.5 text-muted-foreground" />
+          </a>
+
           <div style={{ '--i': 0 }} className="hero-in mb-6 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm">
             <span className="inline-flex items-center gap-2 font-medium">
               <span className="size-2 rounded-full bg-primary shadow-[0_0_10px_rgb(var(--glow)/0.8)]" aria-hidden="true" />
