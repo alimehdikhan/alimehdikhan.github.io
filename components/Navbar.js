@@ -4,6 +4,8 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, useReducedMotion } from 'motion/react';
 import { Download, Menu } from '@/components/ui/icons';
 import { ThemeToggle } from './ui/ThemeToggle';
+import { CommandPalette } from './CommandPalette';
+import { RollText } from './fx/RollText';
 import { Button } from './ui/button';
 import { Magnetic } from './ui/magnetic';
 import { Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger } from './ui/dialog';
@@ -233,7 +235,7 @@ export function Navbar() {
                   isActive ? 'text-foreground' : 'text-muted-foreground hover:text-foreground'
                 )}
               >
-                {link.name}
+                <RollText>{link.name}</RollText>
                 {/* hover underline for idle links; the active one carries the travelling bar */}
                 {!isActive && (
                   <span
@@ -258,6 +260,7 @@ export function Navbar() {
         </div>
 
         <div className="flex items-center gap-2">
+          <CommandPalette className="hidden md:inline-flex" />
           <ThemeToggle />
           <Magnetic className="hidden sm:inline-flex" strength={0.25} max={5}>
             <Button asChild size="sm" className="h-10">
@@ -274,11 +277,15 @@ export function Navbar() {
           </Magnetic>
 
           <Dialog open={isOpen} onOpenChange={setIsOpen}>
-            <DialogTrigger asChild>
-              <Button variant="glass" size="icon" className="lg:hidden" aria-label="Open navigation menu">
-                <Menu />
-              </Button>
-            </DialogTrigger>
+            {/* hidden from lg on a wrapper: the glass button's own display
+                (.icon-tile, outside the layers) wins over lg:hidden */}
+            <div className="flex lg:hidden">
+              <DialogTrigger asChild>
+                <Button variant="glass" size="icon" aria-label="Open navigation menu">
+                  <Menu />
+                </Button>
+              </DialogTrigger>
+            </div>
             <DialogContent
               id="mobile-menu"
               closeLabel="Close navigation menu"
