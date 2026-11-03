@@ -79,7 +79,11 @@ function Matte() {
   );
 }
 
-const FRAME = 'relative m-2 grid aspect-[3/2] place-items-center overflow-hidden rounded-[1.15rem] bg-secondary/60';
+/* the single 0-min track gives the scan a definite box to fit inside;
+   an auto track would size itself from the image and let it spill out of
+   the frame, clipping its bottom edge on phones */
+const FRAME =
+  'relative m-2 grid aspect-[3/2] grid-cols-[minmax(0,1fr)] grid-rows-[minmax(0,1fr)] place-items-center overflow-hidden rounded-[1.15rem] bg-secondary/60';
 
 function CertificateCard({ cert, onOpen }) {
   const { scan, featured } = cert;
@@ -153,7 +157,7 @@ function CertificateCard({ cert, onOpen }) {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={`Verify ${cert.title} (opens in a new tab)`}
-                  className="inline-flex min-h-10 items-center gap-1.5 rounded-full px-2 text-sm font-medium text-link underline-offset-4 outline-none hover:underline focus-visible:ring-[3px] focus-visible:ring-ring/40"
+                  className="inline-flex min-h-10 items-center gap-1.5 rounded-full px-2 text-sm font-medium text-link underline-offset-4 outline-none transition-opacity duration-150 hover:underline focus-visible:ring-[3px] focus-visible:ring-ring/40 active:opacity-60"
                 >
                   Verify
                   <ArrowUpRight className="size-4" />
@@ -210,8 +214,11 @@ export function CertificateGallery({ items }) {
                   trigger.current?.focus({ preventScroll: true });
                 }}
               >
+                {/* a phone turned sideways to read a landscape certificate is
+                    short, not narrow: the frame and caption tighten so the
+                    scan grows instead of shrinking */}
                 <div
-                  className="fixed inset-0 z-[60] flex flex-col items-center justify-center gap-4 p-4 outline-none sm:gap-5 sm:p-8"
+                  className="fixed inset-0 z-[60] flex flex-col items-center justify-center gap-4 p-4 outline-none sm:gap-5 sm:p-8 [@media(max-height:500px)]:gap-3 [@media(max-height:500px)]:py-3"
                   onClick={(e) => e.target === e.currentTarget && close()}
                 >
                   <motion.img
@@ -221,11 +228,11 @@ export function CertificateGallery({ items }) {
                     width={active.scan.width}
                     height={active.scan.height}
                     alt={`${active.title} certificate from ${active.issuer}`}
-                    className="h-auto max-h-[calc(100dvh-12rem)] w-auto max-w-full rounded-xl shadow-[0_40px_90px_-30px_rgb(0_0_0/0.8)]"
+                    className="h-auto max-h-[calc(100dvh-12rem)] w-auto max-w-full rounded-xl shadow-[0_40px_90px_-30px_rgb(0_0_0/0.8)] [@media(max-height:500px)]:max-h-[calc(100dvh-7.5rem)]"
                   />
 
                   <motion.div
-                    className="flex w-full max-w-3xl flex-wrap items-center justify-between gap-x-6 gap-y-3 rounded-2xl border border-border bg-card/90 px-5 py-4 text-card-foreground shadow-lift"
+                    className="flex w-full max-w-3xl flex-wrap items-center justify-between gap-x-6 gap-y-3 rounded-2xl border border-border bg-card/90 px-5 py-4 text-card-foreground shadow-lift [@media(max-height:500px)]:py-3"
                     initial={{ opacity: 0, y: 16 }}
                     animate={{ opacity: 1, y: 0, transition: { delay: 0.18, duration: DUR.slow, ease: EASE } }}
                     exit={{ opacity: 0, y: 10, transition: { duration: DUR.fast, ease: EASE_FADE } }}
