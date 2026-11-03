@@ -161,7 +161,7 @@ export function Hero({ merged }) {
                   className="inline-flex items-center gap-2 rounded-full bg-secondary px-3 py-1.5 text-[13px] font-medium transition-[background-color,transform] duration-200 hover:bg-accent active:scale-[0.97] motion-reduce:active:scale-100"
                 >
                   <GitMerge className="size-4" />
-                  Merged PR in {merged.name}
+                  Open source contribution · {merged.name}
                   <span className="text-muted-foreground tabular-nums">★ {merged.stars}</span>
                 </a>
               </li>
