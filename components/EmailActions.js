@@ -27,11 +27,13 @@ export function EmailActions({ email }) {
 
   return (
     <div className="mt-8 flex flex-wrap items-center gap-3">
-      <Magnetic>
-        <Button asChild size="lg">
+      {/* the address is the button's label, so on the narrowest phones the
+          button tightens and may shrink to the panel rather than overflow it */}
+      <Magnetic className="max-w-full">
+        <Button asChild size="lg" className="max-w-full px-5 text-[15px] sm:px-7 sm:text-base">
           <a href={`mailto:${email}`}>
             <Mail aria-hidden="true" />
-            {email}
+            <span className="min-w-0 truncate">{email}</span>
           </a>
         </Button>
       </Magnetic>
