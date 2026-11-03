@@ -125,9 +125,9 @@ export function Navbar() {
         },
         { rootMargin: `-${SPY_LINE}px 0px -${below}px 0px`, threshold: 0 }
       );
-      /* the hero and the GitHub section have no nav link; observing them too
-         means no link stays highlighted while either is in view */
-      ['#hero', ...navLinks.map((link) => link.href), '#opensource'].forEach((href) => {
+      /* the hero, the GitHub section and the star ask have no nav link;
+         observing them too means no link stays highlighted while one is in view */
+      ['#hero', ...navLinks.map((link) => link.href), '#opensource', '#star'].forEach((href) => {
         const el = document.getElementById(href.slice(1));
         if (el) io.observe(el);
       });
