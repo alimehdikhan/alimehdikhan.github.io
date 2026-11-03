@@ -9,12 +9,14 @@ import { cn } from '@/lib/utils';
 
 /* Skill chips around the portrait. Positions are percentages of the stage;
    `depth` sets how far a chip drifts with the cursor (parallax) and `delay`
-   offsets its float so they never bob in unison. */
+   offsets its float so they never bob in unison. On phones the stage is the
+   full content width, so the chips tuck inside it instead of hanging over
+   the screen edge. */
 const badges = [
-  { name: 'Python', note: 'Language', className: 'left-[-2%] top-[20%]', depth: 16, delay: 0, pace: 9, from: [-28, 10] },
-  { name: 'FastAPI', note: 'Backend', className: 'right-[-4%] top-[14%]', depth: 12, delay: 1.6, pace: 10.5, from: [28, 10] },
+  { name: 'Python', note: 'Language', className: 'left-[2%] top-[20%] sm:left-[-2%]', depth: 16, delay: 0, pace: 9, from: [-28, 10] },
+  { name: 'FastAPI', note: 'Backend', className: 'right-[1%] top-[14%] sm:right-[-4%]', depth: 12, delay: 1.6, pace: 10.5, from: [28, 10] },
   { name: 'TensorFlow', note: 'Deep learning', className: 'right-[-6%] top-[60%]', depth: 20, delay: 3.1, pace: 8.5, hideSm: true, from: [28, 10] },
-  { name: 'OpenAI Whisper', note: 'Speech AI', className: 'left-[-4%] top-[66%]', depth: 18, delay: 4.4, pace: 11, from: [-28, 10] },
+  { name: 'OpenAI Whisper', note: 'Speech AI', className: 'left-[1%] top-[66%] sm:left-[-4%]', depth: 18, delay: 4.4, pace: 11, from: [-28, 10] },
 ];
 
 /* soft lime specks in front of the stage: they drift further than anything
