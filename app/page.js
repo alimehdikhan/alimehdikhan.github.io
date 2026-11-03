@@ -9,6 +9,7 @@ import { Timeline } from '../components/Timeline';
 import { Projects } from '../components/Projects';
 import { Certifications } from '../components/Certifications';
 import { OpenSource } from '../components/OpenSource';
+import { StarRepo } from '../components/StarRepo';
 import { Contact } from '../components/Contact';
 import { Footer } from '../components/Footer';
 import { RESUME } from '../data/resume';
@@ -32,6 +33,7 @@ export default function Home() {
         <Projects />
         <Certifications />
         <OpenSource />
+        <StarRepo />
         <Contact />
       </main>
 
