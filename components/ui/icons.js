@@ -67,6 +67,8 @@ export const Cloud = make(P.Cloud);
 export const Bolt = make(P.Lightning);
 export const Sparkle = make(P.Sparkle);
 export const Expand = make(P.ArrowsOutSimple);
+export const Star = make(P.Star);
+export const GitFork = make(P.GitFork);
 
 /* brand marks are monochrome so they sit in the black-and-lime palette */
 export const GithubMark = make(P.GithubLogo, { weight: 'fill' });
