@@ -6,6 +6,7 @@ import { AnimatePresence, motion } from 'motion/react';
 import { Moon, Sun } from '@/components/ui/icons';
 import { Button } from './button';
 import { SPRING } from '../fx/motion';
+import { switchTheme } from '../fx/themeSwitch';
 
 const iconSpring = { type: 'spring', ...SPRING.ui };
 
@@ -25,7 +26,9 @@ export function ThemeToggle() {
       variant="glass"
       size="icon"
       className="overflow-hidden"
-      onClick={() => setTheme(isDark ? 'light' : 'dark')}
+      data-theme-toggle
+      /* the new theme opens out of the button itself */
+      onClick={() => switchTheme(isDark ? 'light' : 'dark', setTheme)}
       aria-label={mounted ? `Switch to ${isDark ? 'light' : 'dark'} mode` : 'Toggle theme'}
     >
       <AnimatePresence mode="popLayout" initial={false}>
