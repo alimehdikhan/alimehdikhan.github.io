@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
 import { AnimatePresence, motion } from 'motion/react';
 import { ArrowUpRight, BadgeCheck, Expand, X } from '@/components/ui/icons';
@@ -188,6 +188,30 @@ export function CertificateGallery({ items }) {
     setOpenSlug(cert.image);
   };
   const close = () => setOpenSlug(null);
+
+  /* Lazy scans only began downloading as the visitor arrived (later still
+     in Safari), so the frames showed up empty. Once the page has loaded,
+     fetch them in the background: the hero keeps the connection to itself
+     at first, and the scans are cached long before anyone scrolls down. */
+  useEffect(() => {
+    const sources = items.filter((c) => c.scan).map((c) => c.scan.src);
+    const idle = 'requestIdleCallback' in window;
+    let task = 0;
+    const fetchScans = () => {
+      const run = () => sources.forEach((src) => {
+        new Image().src = src;
+      });
+      if (idle) task = window.requestIdleCallback(run, { timeout: 1500 });
+      else task = setTimeout(run, 200);
+    };
+    if (document.readyState === 'complete') fetchScans();
+    else window.addEventListener('load', fetchScans, { once: true });
+    return () => {
+      window.removeEventListener('load', fetchScans);
+      if (idle) window.cancelIdleCallback(task);
+      else clearTimeout(task);
+    };
+  }, [items]);
 
   return (
     <>
