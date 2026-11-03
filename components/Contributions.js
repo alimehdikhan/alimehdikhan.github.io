@@ -31,7 +31,9 @@ export function Contributions({ items }) {
   return (
     <Reveal className="mt-4 lg:mt-6">
       <SpotlightCard borderGlow className="bg-card p-6 md:p-8 lg:p-10">
-        <h3 className="text-xs font-semibold tracking-[0.08em] text-muted-foreground uppercase">Contributions to other projects</h3>
+        <h3 className="text-xs font-semibold tracking-[0.08em] text-muted-foreground uppercase">
+          Open source contribution{items.length > 1 ? 's' : ''}
+        </h3>
         <ul className="mt-6 divide-y divide-border">
           {items.map((pr) => {
             const [owner, name] = pr.repo.path.split('/');
