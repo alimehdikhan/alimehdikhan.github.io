@@ -83,6 +83,9 @@ export const Home = make(P.House);
 export const User = make(P.User);
 export const Briefcase = make(P.Briefcase);
 export const Pulse = make(P.Pulse);
+/* pull requests to other projects: merged, or still open */
+export const GitMerge = make(P.GitMerge);
+export const GitPullRequest = make(P.GitPullRequest);
 
 /* brand marks are monochrome so they sit in the black-and-lime palette */
 export const GithubMark = make(P.GithubLogo, { weight: 'fill' });
