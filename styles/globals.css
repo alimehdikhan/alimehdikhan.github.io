@@ -172,6 +172,12 @@
     /* no grey rectangle flashed over rounded cards and pills on tap: every
        control answers a press itself (:active) */
     -webkit-tap-highlight-color: transparent;
+    /* the page never stretches or bounces at its top and bottom edges
+       (Android's overscroll stretch reads as the whole page resizing) */
+    overscroll-behavior-y: none;
+    /* with body clipping its own content below, nothing can ever make the
+       page wider than the screen, so a phone never zooms out to fit it */
+    overflow-x: hidden;
   }
 
   input,
@@ -195,7 +201,10 @@
     letter-spacing: -0.01em;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    overflow-x: hidden;
+    /* clip, not hidden: body stays out of the scroll-container business, so
+       sticky elements still stick to the viewport */
+    overflow-x: clip;
+    overscroll-behavior-y: none;
     text-rendering: optimizeLegibility;
   }
 
