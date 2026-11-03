@@ -2,6 +2,7 @@ import { SectionHead } from './ui/SectionHead';
 import { Card } from './ui/card';
 import { Reveal } from './fx/Reveal';
 import { Counter } from './fx/Counter';
+import { ScrollWords } from './fx/ScrollWords';
 import { RESUME } from '../data/resume';
 
 const stats = [
@@ -57,9 +58,11 @@ export function About() {
           <Reveal>
             <Card className="h-full p-6 md:p-10">
               <h3 className="text-xs font-semibold tracking-[0.08em] text-muted-foreground uppercase">In short</h3>
-              <p className="mt-4 text-lg leading-relaxed font-medium tracking-[-0.01em] md:text-xl">
-                I&apos;m a Computer Science graduate (July 2026) and a junior software developer at IMAPRO. I like the whole path from a research model to a tool someone uses: training it, serving it from a FastAPI backend and building the interface. Vocaly AI, my pronunciation coach, is built that way and runs on Hugging Face Spaces.
-              </p>
+              {/* the lead reads itself in as it scrolls up */}
+              <ScrollWords
+                className="mt-4 text-lg leading-relaxed font-medium tracking-[-0.01em] md:text-xl"
+                text="I'm a Computer Science graduate (July 2026) and a junior software developer at IMAPRO. I like the whole path from a research model to a tool someone uses: training it, serving it from a FastAPI backend and building the interface. Vocaly AI, my pronunciation coach, is built that way and runs on Hugging Face Spaces."
+              />
               <p className="mt-6 text-muted-foreground">
                 At IMAPRO I&apos;m leading a production app&apos;s move to SvelteKit 5 and building its booking flow. Before that I interned at GRAStech, training models on medical data, and spent three months teaching programming to 30+ students with Tech for Good.
               </p>
