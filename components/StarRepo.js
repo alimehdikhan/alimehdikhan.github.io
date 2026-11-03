@@ -156,7 +156,7 @@ export function StarRepo() {
                   tablet, stacked again beside the repo on a wide screen */}
               <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap lg:flex-col">
                 <Magnetic className="w-full sm:w-auto lg:w-full">
-                  <Button asChild size="lg" className="w-full px-5 sm:px-7">
+                  <Button asChild size="lg" className="star-shine w-full px-5 sm:px-7">
                     <a href={REPO_URL} target="_blank" rel="noopener noreferrer" aria-label={`Star ${repoName} on GitHub (opens in a new tab)`}>
                       <Star aria-hidden="true" />
                       Star on GitHub
