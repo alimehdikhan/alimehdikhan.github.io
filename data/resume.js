@@ -16,6 +16,7 @@ export const RESUME = {
 
   roles: ['Software Engineer', 'AI/ML Engineer', 'Full-Stack Developer', 'Python Developer'],
 
+
   certifications: [
     {
       /* the photographed certificate; featured as the widest card */
@@ -74,14 +75,14 @@ export const RESUME = {
       gradient: 'from-indigo-600 to-blue-500',
     },
     {
-      title: 'Cancer Detection System',
-      tag: 'Machine Learning',
+      title: 'Skin Lesion Classifier',
+      tag: 'Skin Cancer Screening · Computer Vision',
       overview:
-        'A binary CNN classifier trained on real medical imaging datasets to flag early-stage cancer.',
+        'Trained on the 10,015 dermoscopic images of HAM10000, it sorts a photo of a mole or spot into one of seven lesion types, melanoma and basal cell carcinoma among them, with a calibrated confidence and a plain-language risk level. A research and teaching tool, not a diagnosis.',
       features:
-        'Built in Keras. Data augmentation and a hyperparameter search keep it from overfitting, and F1 is tracked next to accuracy so the rarer class is not ignored.',
-      outcome: '90%+ accuracy, with F1 score tracked on held-out validation data.',
-      tech: ['Python', 'TensorFlow', 'Keras', 'CNN'],
+        'An EfficientNet-B2, fine-tuned end to end in PyTorch on splits made by lesion rather than by image, so near-duplicate photos never leak into the test set. Class-weighted loss and checkpoints picked by balanced accuracy keep rare cancers from being drowned out by benign moles, and temperature scaling makes the confidence mean something. The model is exported to ONNX and served by a FastAPI service with a Redis cache, behind a React and TypeScript app, all in Docker.',
+      outcome: 'Runs in about 20 ms per image on a plain CPU, so it needs no GPU to serve.',
+      tech: ['Python', 'PyTorch', 'CNN', 'ONNX Runtime', 'FastAPI', 'React', 'TypeScript', 'Docker'],
       github: 'https://github.com/alimehdikhan/Cancer-Detection-Model',
       demo: null,
       gradient: 'from-emerald-600 to-teal-500',

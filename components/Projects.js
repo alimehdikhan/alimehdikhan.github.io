@@ -6,7 +6,6 @@ import { SpotlightCard } from './ui/aceternity/spotlight-card';
 import { CardContainer } from './ui/aceternity/3d-card';
 import { SkillLogo } from './Skills';
 import { VocalyShowcase } from './VocalyShowcase';
-import { Counter } from './fx/Counter';
 import { ProjectSequence } from './fx/ProjectSequence';
 import { StarButton } from './StarRepo';
 import { RESUME } from '../data/resume';
@@ -88,14 +87,7 @@ export function Projects() {
                       <div className="mt-4">
                         <h4 className="text-xs font-semibold tracking-[0.08em] text-link uppercase">Results</h4>
                         <p className="mt-1.5 max-w-[46ch] text-[17px] leading-snug font-medium tracking-[-0.01em] [&_em]:font-semibold [&_em]:text-link [&_em]:not-italic">
-                          {proj.outcome.startsWith('90%+') ? (
-                            <>
-                              <Counter to={90} suffix="%+" delay={0} />
-                              {proj.outcome.slice(4)}
-                            </>
-                          ) : (
-                            proj.outcome
-                          )}
+                          {proj.outcome}
                         </p>
                       </div>
 

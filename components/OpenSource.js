@@ -37,7 +37,7 @@ export async function OpenSource() {
           <Reveal stagger={0.08} className="flex flex-col">
             <span className="text-sm font-semibold text-link">@alimehdikhan</span>
             <p className="mt-2 max-w-[52ch] text-muted-foreground md:text-lg">
-              {RESUME.githubStats.publicRepos} public repositories, mostly TypeScript and Python. Vocaly AI, the pronunciation coach, and the cancer-detection model are the two to start with.
+              {RESUME.githubStats.publicRepos} public repositories, mostly TypeScript and Python. Vocaly AI, the pronunciation coach, and the skin-cancer classifier are the two to start with.
             </p>
 
             {/* a row each on phones (a long value like "TypeScript" never fits a
