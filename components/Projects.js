@@ -1,4 +1,5 @@
-import { ArrowUpRight, Code } from '@/components/ui/icons';
+import Link from 'next/link';
+import { ArrowUpRight, ChevronRight, Code } from '@/components/ui/icons';
 import { SectionHead } from './ui/SectionHead';
 import { Button } from './ui/button';
 import { Magnetic } from './ui/magnetic';
@@ -126,6 +127,15 @@ export function Projects() {
                       </div>
                       {proj.github === STAR_URL && (
                         <p className="mt-3 text-[13px] text-muted-foreground">Free and open source. A star helps more learners find it.</p>
+                      )}
+                      {proj.slug && (
+                        <Link
+                          href={`/projects/${proj.slug}`}
+                          className="group/case mt-4 inline-flex items-center gap-1.5 self-start rounded-sm text-[15px] font-medium text-link underline-offset-4 outline-none hover:underline focus-visible:ring-[3px] focus-visible:ring-ring/40"
+                        >
+                          How I built it: the case study
+                          <ChevronRight className="size-4 transition-transform group-hover/case:translate-x-0.5 motion-reduce:transition-none" />
+                        </Link>
                       )}
 
                       <div className="mt-6 border-t border-border pt-6">

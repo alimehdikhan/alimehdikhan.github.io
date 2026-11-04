@@ -76,6 +76,7 @@ export const RESUME = {
   projects: [
     {
       title: 'Vocaly AI',
+      slug: 'vocaly-ai', // its case study: /projects/vocaly-ai
       tag: 'AI Pronunciation Coach · Speech & NLP',
       overview:
         'An English pronunciation coach. Say a sentence and it marks every sound that came out wrong (a "th" heard as "f", a "v" heard as "w"), then shows how to fix it. It also runs mock interviews, minimal-pair drills and a spoken coach.',
@@ -91,6 +92,7 @@ export const RESUME = {
     },
     {
       title: 'Skin Lesion Classifier',
+      slug: 'skin-lesion-classifier',
       tag: 'Skin Cancer Screening · Computer Vision',
       overview:
         'Trained on the 10,015 dermoscopic images of HAM10000, it sorts a photo of a mole or spot into one of seven lesion types, melanoma and basal cell carcinoma among them, with a calibrated confidence and a plain-language risk level. A research and teaching tool, not a diagnosis.',

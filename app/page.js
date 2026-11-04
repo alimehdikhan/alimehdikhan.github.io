@@ -14,6 +14,7 @@ import { Certifications } from '../components/Certifications';
 import { OpenSource } from '../components/OpenSource';
 import { StarRepo } from '../components/StarRepo';
 import { Faq } from '../components/Faq';
+import { HomeSchema } from '../components/HomeSchema';
 import { KineticBand } from '../components/KineticBand';
 import { Contact } from '../components/Contact';
 import { Footer } from '../components/Footer';
@@ -28,6 +29,7 @@ export default async function Home() {
 
   return (
     <MotionProvider>
+      <HomeSchema />
       <a href="#main-content" className="skip">
         Skip to main content
       </a>

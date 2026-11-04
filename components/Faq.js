@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { ChevronRight } from '@/components/ui/icons';
 import { SectionHead } from './ui/SectionHead';
 import { Reveal } from './fx/Reveal';
@@ -35,8 +36,12 @@ export function Faq() {
           ))}
         </Reveal>
 
-        <Reveal className="mt-6">
+        <Reveal className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-3">
           <AskByte />
+          <Link href="/projects/byte" className="inline-flex items-center gap-1.5 rounded-sm text-[15px] font-medium text-link underline-offset-4 outline-none hover:underline focus-visible:ring-[3px] focus-visible:ring-ring/40">
+            How I built Byte
+            <ChevronRight className="size-4" />
+          </Link>
         </Reveal>
       </div>
     </section>
