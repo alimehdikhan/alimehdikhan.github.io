@@ -60,3 +60,18 @@ jobs:
         if: steps.deployment.outcome == 'failure'
         id: deployment_retry
         uses: actions/deploy-pages@v4
+
+      # IndexNow tells Bing (and through it ChatGPT search and Copilot),
+      # Yandex and others that the page changed, so they re-read it within
+      # minutes. The key is public by design: the file of the same name in
+      # public/ proves the site owns it.
+      - name: Tell search engines the site changed (IndexNow)
+        continue-on-error: true
+        env:
+          KEY: d4897ca4820a916be4ebef3eaa23bf21
+          SITE: https://alimehdikhan.github.io
+        run: >-
+          curl -sS -o /dev/null -w "IndexNow: HTTP %{http_code}\n"
+          -X POST https://api.indexnow.org/indexnow
+          -H 'Content-Type: application/json; charset=utf-8'
+          -d "{\"host\":\"alimehdikhan.github.io\",\"key\":\"$KEY\",\"keyLocation\":\"$SITE/$KEY.txt\",\"urlList\":[\"$SITE/\",\"$SITE/llms.txt\",\"$SITE/llms-full.txt\"]}"

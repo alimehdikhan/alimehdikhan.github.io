@@ -2,6 +2,7 @@ import localFont from 'next/font/local';
 import '../styles/globals.css';
 import { ThemeProvider } from '../components/ThemeProvider';
 import { RESUME } from '../data/resume';
+import { ASSISTANT } from '../data/assistant';
 
 const manrope = localFont({
   src: './fonts/Manrope-latin-300-800.woff2',
@@ -180,6 +181,7 @@ export default function RootLayout({ children }) {
         "@id": `${SITE}/#website`,
         "url": `${SITE}/`,
         "name": "Ali Mehdi Khan Portfolio",
+        "alternateName": ["Ali Mehdi Khan", "AMK"],
         "description": "Portfolio of Ali Mehdi Khan, a B.Tech CS graduate who builds LLM apps, NLP pipelines and FastAPI backends in Python.",
         "publisher": { "@id": `${SITE}/#person` },
         "author": { "@id": `${SITE}/#person` },
@@ -196,6 +198,8 @@ export default function RootLayout({ children }) {
         "about": { "@id": `${SITE}/#person` },
         "primaryImageOfPage": { "@id": `${SITE}/#portrait` },
         "inLanguage": "en",
+        /* the repository's first day; dateModified is this build */
+        "dateCreated": "2026-05-21T16:37:54Z",
         "dateModified": buildDate,
         /* Google's ProfilePage rich result reads the person from mainEntity */
         "mainEntity": { "@id": `${SITE}/#person` },
@@ -221,6 +225,20 @@ export default function RootLayout({ children }) {
             "operatingSystem": "Web",
             "author": { "@id": `${SITE}/#person` }
           }
+        }))
+      },
+      /* the "Questions recruiters ask" section, for answer engines */
+      {
+        "@type": "FAQPage",
+        "@id": `${SITE}/#faq`,
+        "url": `${SITE}/#faq`,
+        "isPartOf": { "@id": `${SITE}/#website` },
+        "about": { "@id": `${SITE}/#person` },
+        "inLanguage": "en",
+        "mainEntity": ASSISTANT.faq.map(({ q, a }) => ({
+          "@type": "Question",
+          "name": q,
+          "acceptedAnswer": { "@type": "Answer", "text": a }
         }))
       }
     ]

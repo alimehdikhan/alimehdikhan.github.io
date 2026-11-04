@@ -11,14 +11,27 @@ export const ASSISTANT = {
 
   focus: ['Speech and NLP models', 'LLM apps and RAG', 'FastAPI and Node.js backends', 'Full-stack web apps'],
 
-  /* recruiter questions, answered by Ali */
+  /* Recruiter questions, answered by Ali in a line or two. The page shows
+     them ("Questions recruiters ask", components/Faq.js) and describes them
+     to search and answer engines as a FAQPage (app/layout.js); Byte knows
+     them too. */
   faq: [
+    {
+      q: 'Who is Ali Mehdi Khan?',
+      a: 'Ali Mehdi Khan is an AI/ML and Python developer in Lucknow, India, and a junior software developer at IMAPRO. He finished his B.Tech in Computer Science in July 2026 and builds AI products end to end: the model, the Python API that serves it and the app on top.',
+    },
     { q: 'Is he open to work?', a: 'Yes: entry-level software engineering and AI/ML roles, plus freelance AI and web projects.' },
-    { q: 'Where would he work?', a: 'Anywhere in India or abroad: he is open to relocating.' },
-    { q: 'How soon could he join?', a: 'Immediately.' },
-    { q: 'What salary does he expect?', a: 'He is happy to discuss that directly. Email him at ali973mehdi@gmail.com.' },
+    { q: 'Where would he work, and how soon could he join?', a: 'Anywhere in India or abroad: he is open to relocating, and he can join immediately.' },
+    {
+      q: 'What has he built?',
+      a: 'Vocaly AI, an English pronunciation coach that flags mispronounced sounds at 0.94 AUC against expert ratings, and a skin lesion classifier that sorts dermoscopic images into seven types in about 20 ms per image on a CPU.',
+    },
+    {
+      q: 'What is his tech stack?',
+      a: 'Python, FastAPI, PyTorch, TensorFlow and ONNX Runtime for AI; React, TypeScript, Next.js and SvelteKit for the web; Hono and SQLite at IMAPRO; Docker and Google Cloud to ship it.',
+    },
     { q: 'Which languages does he speak?', a: 'English, Hindi and Urdu.' },
-    { q: 'Where is he based?', a: 'Lucknow, India (IST, UTC+5:30).' },
+    { q: 'What salary does he expect?', a: 'He is happy to discuss that directly. Email him at ali973mehdi@gmail.com.' },
     { q: 'How do I reach him?', a: 'Email is the quickest: ali973mehdi@gmail.com. LinkedIn and phone work too.' },
   ],
 

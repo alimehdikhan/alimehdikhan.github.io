@@ -13,6 +13,7 @@ import { Projects } from '../components/Projects';
 import { Certifications } from '../components/Certifications';
 import { OpenSource } from '../components/OpenSource';
 import { StarRepo } from '../components/StarRepo';
+import { Faq } from '../components/Faq';
 import { KineticBand } from '../components/KineticBand';
 import { Contact } from '../components/Contact';
 import { Footer } from '../components/Footer';
@@ -47,6 +48,7 @@ export default async function Home() {
         <Certifications />
         <OpenSource />
         <StarRepo />
+        <Faq />
         <KineticBand />
         <Contact />
       </main>
