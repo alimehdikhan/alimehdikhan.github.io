@@ -7,22 +7,160 @@ import { SpotlightCard } from './ui/aceternity/spotlight-card';
 import { CardContainer } from './ui/aceternity/3d-card';
 import { SkillLogo } from './Skills';
 import { VocalyShowcase } from './VocalyShowcase';
-import { ProjectSequence } from './fx/ProjectSequence';
+import { LatencyShowcase } from './LatencyShowcase';
+import { ByteShowcase } from './ByteShowcase';
 import { StarButton } from './StarRepo';
+import { AskByte } from './AskByte';
+import { Reveal } from './fx/Reveal';
+import { cn } from '@/lib/utils';
 import { RESUME } from '../data/resume';
 
-/* Layer ownership, so GSAP and Motion never drive the same element:
-   .project-slot      sticky stacking position (CSS) + entrance (GSAP)
-   .project-scaler    scale/dim as the next card stacks over it (GSAP)
-   CardContainer      cursor tilt (Motion)
-   SpotlightCard      spotlight + border glow (Motion), hover lift (CSS)
-   .project-art-wrap  wipe reveal (GSAP); .project-art-inner scale (GSAP);
-   .project-art       hover zoom (CSS)
-   .project-reveal>*  staggered detail reveal (GSAP) */
+/* The showcase grid: Vocaly AI as a wide featured card, the Skin Lesion
+   Classifier and Byte side by side under it. Each card opens with its own
+   live demo (Vocaly's word inspector and expert-agreement chart, a latency
+   chart that runs in, a chat with Byte that plays out), then the result in
+   one line and what to do next.
 
-/* the project whose repo visitors are asked to star trades its Code button
-   for a Star one (both open the same repo): one clear ask, with its reason */
+   The whole card opens the case study: the title's link stretches over it,
+   so hover lift, cursor spotlight, border glow and the demo's slow zoom all
+   answer something clickable. Buttons and Vocaly's word inspector sit above
+   that link and keep their own actions.
+
+   Layer ownership: CardContainer tilts (Motion), SpotlightCard lifts and
+   glows (CSS hover-lift, Motion spotlight), .project-demo-inner zooms on
+   hover (CSS), and each demo animates its own contents once on first sight. */
+
 const STAR_URL = `https://github.com/${RESUME.starRepo.path}`;
+
+function Demo({ proj }) {
+  if (proj.showcase === 'vocaly') return <VocalyShowcase logo={proj.logo} />;
+  if (proj.showcase === 'latency') return <LatencyShowcase />;
+  if (proj.showcase === 'byte') return <ByteShowcase />;
+  return null;
+}
+
+/* the result line, its key figure set in lime */
+function Result({ text, highlight }) {
+  const at = highlight ? text.indexOf(highlight) : -1;
+  if (at < 0) return text;
+  return (
+    <>
+      {text.slice(0, at)}
+      <em>{highlight}</em>
+      {text.slice(at + highlight.length)}
+    </>
+  );
+}
+
+function CaseStudyButton({ proj, primary }) {
+  const button = (
+    <Button asChild variant={primary ? 'default' : 'outline'}>
+      <Link href={`/projects/${proj.slug}`} aria-label={`Case study: how I built ${proj.title}`}>
+        <Article aria-hidden="true" />
+        Case study
+        <ChevronRight className="case-chevron" aria-hidden="true" />
+      </Link>
+    </Button>
+  );
+  return primary ? <Magnetic>{button}</Magnetic> : button;
+}
+
+/* what to do next: try it if you can, then the case study, then the code */
+function Actions({ proj }) {
+  if (proj.showcase === 'byte') {
+    return (
+      <>
+        <Magnetic>
+          <AskByte label="Ask Byte" variant="default" />
+        </Magnetic>
+        <CaseStudyButton proj={proj} />
+      </>
+    );
+  }
+  if (proj.demo) {
+    return (
+      <>
+        <Magnetic>
+          <Button asChild>
+            <a href={proj.demo} target="_blank" rel="noopener noreferrer" aria-label={`Live demo of ${proj.title}`}>
+              Live demo
+              <ArrowUpRight aria-hidden="true" />
+            </a>
+          </Button>
+        </Magnetic>
+        <CaseStudyButton proj={proj} />
+        {proj.github === STAR_URL && <StarButton placement="project" />}
+      </>
+    );
+  }
+  return (
+    <>
+      <CaseStudyButton proj={proj} primary />
+      <Button asChild variant="outline">
+        <a href={proj.github} target="_blank" rel="noopener noreferrer" aria-label={`Code for ${proj.title} on GitHub`}>
+          <Code aria-hidden="true" />
+          Code
+          <ArrowUpRight aria-hidden="true" />
+        </a>
+      </Button>
+    </>
+  );
+}
+
+function ProjectCard({ proj, index, featured }) {
+  const titleId = `project-title-${index + 1}`;
+  return (
+    <CardContainer maxTilt={featured ? 1.5 : 3} containerClassName={cn(featured && 'lg:col-span-2')}>
+      <SpotlightCard
+        as="article"
+        interactive
+        borderGlow
+        id={`project-${index + 1}`}
+        aria-labelledby={titleId}
+        className={cn('project-card group/card flex h-full flex-col bg-card', featured && 'lg:grid lg:grid-cols-[0.95fr_1.05fr]')}
+      >
+        {/* Vocaly's demo is interactive, so it sits above the card's link */}
+        <div className={cn('project-demo relative overflow-hidden', proj.showcase === 'vocaly' ? 'z-10' : 'sm:aspect-[16/10]')}>
+          <div className="project-demo-inner h-full">
+            <Demo proj={proj} />
+          </div>
+        </div>
+
+        <div className={cn('flex flex-1 flex-col p-6 md:p-8', featured && 'lg:justify-center lg:p-10')}>
+          <h3 id={titleId} className={cn('leading-tight font-semibold tracking-[-0.025em]', featured ? 'text-[30px] md:text-[36px]' : 'text-[26px] md:text-[30px]')}>
+            <Link
+              href={`/projects/${proj.slug}`}
+              className="outline-none after:absolute after:inset-0 after:z-[1] after:rounded-[inherit] after:content-[''] focus-visible:after:ring-[3px] focus-visible:after:ring-ring/50"
+            >
+              {proj.title}
+            </Link>
+          </h3>
+          <p className="mt-3 max-w-[60ch] text-[15px] leading-relaxed text-muted-foreground">{proj.overview}</p>
+
+          {/* side by side, the pair's results and buttons line up along the bottom */}
+          <div className={cn(!featured && 'mt-auto')}>
+            <p className="mt-5 max-w-[46ch] text-[17px] leading-snug font-medium tracking-[-0.01em] [&_em]:font-semibold [&_em]:text-link [&_em]:not-italic">
+              <Result text={proj.outcome} highlight={proj.highlight} />
+            </p>
+
+            <div className="relative z-10 mt-6 flex flex-wrap gap-3">
+              <Actions proj={proj} />
+            </div>
+
+            <ul className="mt-6 flex flex-wrap gap-2" aria-label="Technologies">
+              {proj.tech.map((t) => (
+                <li key={t} className="inline-flex min-h-8 items-center gap-2 rounded-full border border-border px-3 text-[13px] text-muted-foreground has-[.logo-plate]:pl-1.5">
+                  <SkillLogo name={t} size={14} />
+                  {t}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </SpotlightCard>
+    </CardContainer>
+  );
+}
 
 export function Projects() {
   return (
@@ -38,15 +176,15 @@ export function Projects() {
           intro={
             <>
               Each has a case study on how I built it, how I measured it and where it still falls short:{' '}
-              <Link href="/projects/vocaly-ai" className="font-medium text-link underline underline-offset-4 decoration-current/40 hover:decoration-current">
+              <Link href="/projects/vocaly-ai" className="font-medium text-link underline decoration-current/40 underline-offset-4 hover:decoration-current">
                 Vocaly AI
               </Link>
               ,{' '}
-              <Link href="/projects/skin-lesion-classifier" className="font-medium text-link underline underline-offset-4 decoration-current/40 hover:decoration-current">
+              <Link href="/projects/skin-lesion-classifier" className="font-medium text-link underline decoration-current/40 underline-offset-4 hover:decoration-current">
                 the Skin Lesion Classifier
               </Link>{' '}
               and{' '}
-              <Link href="/projects/byte" className="font-medium text-link underline underline-offset-4 decoration-current/40 hover:decoration-current">
+              <Link href="/projects/byte" className="font-medium text-link underline decoration-current/40 underline-offset-4 hover:decoration-current">
                 Byte
               </Link>
               , the robot in the corner.
@@ -54,132 +192,11 @@ export function Projects() {
           }
         />
 
-        <ProjectSequence />
-        <div className="project-stack flex flex-col gap-6">
+        <Reveal stagger={0.08} className="grid gap-4 lg:grid-cols-2 lg:gap-6">
           {RESUME.projects.map((proj, i) => (
-            <div key={proj.title} className="project-slot" style={{ '--i': i, zIndex: i + 1 }}>
-              <span className="project-marker block h-0" aria-hidden="true" />
-              <div className="project-scaler origin-top">
-                <CardContainer maxTilt={3}>
-                  <SpotlightCard
-                    as="article"
-                    interactive
-                    borderGlow
-                    id={`project-${i + 1}`}
-                    aria-labelledby={`project-title-${i + 1}`}
-                    tabIndex={-1}
-                    className="group grid scroll-mt-24 overflow-hidden bg-card lg:grid-cols-[0.95fr_1.05fr]"
-                  >
-                    <div className="project-art-wrap relative overflow-hidden bg-[#111214] lg:h-full">
-                      <div className="project-art-inner h-full">
-                        {proj.logo ? (
-                          /* a product with its own brand gets a showcase: its real
-                             mark, the README demo and its measured accuracy */
-                          <VocalyShowcase logo={proj.logo} />
-                        ) : (
-                          <img
-                            className="project-art aspect-[16/10] h-full w-full object-cover lg:aspect-auto"
-                            src={`/assets/images/project-${i + 1}.svg`}
-                            alt=""
-                            width="800"
-                            height="500"
-                            loading="lazy"
-                            decoding="async"
-                          />
-                        )}
-                      </div>
-                    </div>
-
-                    {/* scan order: what it is, what it achieved, where to see it,
-                        then the detail */}
-                    <div className="project-reveal flex flex-col p-6 md:p-8 lg:p-10">
-                      <p className="text-sm text-muted-foreground">{proj.tag}</p>
-                      <h3
-                        id={`project-title-${i + 1}`}
-                        className="mt-3 text-[28px] leading-tight font-semibold tracking-[-0.025em] md:text-[32px]"
-                      >
-                        {proj.title}
-                      </h3>
-
-                      {/* the result reads as the lead line, set by type rather than boxed */}
-                      <div className="mt-4">
-                        <h4 className="text-xs font-semibold tracking-[0.08em] text-link uppercase">Results</h4>
-                        <p className="mt-1.5 max-w-[46ch] text-[17px] leading-snug font-medium tracking-[-0.01em] [&_em]:font-semibold [&_em]:text-link [&_em]:not-italic">
-                          {proj.outcome}
-                        </p>
-                      </div>
-
-                      <div className="mt-5 flex flex-wrap gap-3">
-                        {proj.demo && (
-                          <Magnetic>
-                            <Button asChild>
-                              <a href={proj.demo} target="_blank" rel="noopener noreferrer" aria-label={`View live demo of ${proj.title}`}>
-                                Live Demo
-                                <ArrowUpRight aria-hidden="true" />
-                              </a>
-                            </Button>
-                          </Magnetic>
-                        )}
-                        {proj.github === STAR_URL ? (
-                          <StarButton placement="project" />
-                        ) : proj.demo ? (
-                          <Button asChild variant="outline">
-                            <a href={proj.github} target="_blank" rel="noopener noreferrer" aria-label={`View code for ${proj.title} on GitHub`}>
-                              <Code aria-hidden="true" />
-                              Code
-                              <ArrowUpRight aria-hidden="true" />
-                            </a>
-                          </Button>
-                        ) : (
-                          <Magnetic>
-                            <Button asChild>
-                              <a href={proj.github} target="_blank" rel="noopener noreferrer" aria-label={`View code for ${proj.title} on GitHub`}>
-                                <Code aria-hidden="true" />
-                                Code
-                                <ArrowUpRight aria-hidden="true" />
-                              </a>
-                            </Button>
-                          </Magnetic>
-                        )}
-                        {proj.slug && (
-                          <Button asChild variant="outline">
-                            <Link href={`/projects/${proj.slug}`} aria-label={`Case study: how I built ${proj.title}`}>
-                              <Article aria-hidden="true" />
-                              Case study
-                              <ChevronRight aria-hidden="true" />
-                            </Link>
-                          </Button>
-                        )}
-                      </div>
-                      {proj.github === STAR_URL && (
-                        <p className="mt-3 text-[13px] text-muted-foreground">Free and open source. A star helps more learners find it.</p>
-                      )}
-
-                      <div className="mt-6 border-t border-border pt-6">
-                        <h4 className="sr-only">Overview</h4>
-                        <p className="text-[15px] leading-relaxed text-foreground/90">{proj.overview}</p>
-                        <h4 className="mt-4 text-sm font-semibold">How it works</h4>
-                        <p className="mt-1 text-[15px] leading-relaxed text-muted-foreground">{proj.features}</p>
-                      </div>
-
-                      <ul className="mt-5 flex flex-wrap gap-2" aria-label="Technologies">
-                        {proj.tech.map((t) => (
-                          <li
-                            key={t}
-                            className="inline-flex min-h-9 items-center gap-2 rounded-full border border-border px-3 text-[13px] text-muted-foreground has-[.logo-plate]:pl-1.5"
-                          >
-                            <SkillLogo name={t} size={14} />
-                            {t}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  </SpotlightCard>
-                </CardContainer>
-              </div>
-            </div>
+            <ProjectCard key={proj.slug} proj={proj} index={i} featured={i === 0} />
           ))}
-        </div>
+        </Reveal>
       </div>
     </section>
   );

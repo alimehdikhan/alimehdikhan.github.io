@@ -117,9 +117,9 @@ export function HomeSchema() {
             /* the case study is the project's page here; code and demo stay linked */
             "url": proj.slug ? `${SITE}/projects/${proj.slug}` : proj.demo || proj.github,
             "codeRepository": proj.github,
-            "programmingLanguage": "Python",
+            "programmingLanguage": proj.language,
             "keywords": proj.tech.join(', '),
-            "applicationCategory": i === 0 ? "EducationalApplication" : "HealthApplication",
+            "applicationCategory": proj.category,
             "operatingSystem": "Web",
             "author": { "@id": `${SITE}/#person` }
           }

@@ -24,7 +24,7 @@ export const ASSISTANT = {
     { q: 'Where would he work, and how soon could he join?', a: 'Anywhere in India or abroad: he is open to relocating, and he can join immediately.' },
     {
       q: 'What has he built?',
-      a: 'Vocaly AI, an English pronunciation coach that flags mispronounced sounds at 0.94 AUC against expert ratings, and a skin lesion classifier that sorts dermoscopic images into seven types in about 20 ms per image on a CPU.',
+      a: 'Vocaly AI, an English pronunciation coach that flags mispronounced sounds at 0.94 AUC against expert ratings; a skin lesion classifier that sorts dermoscopic images into seven types in about 20 ms per image on a CPU; and Byte, the AI assistant on his portfolio that answers recruiters’ questions.',
     },
     {
       q: 'What is his tech stack?',

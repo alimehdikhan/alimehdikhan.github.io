@@ -77,6 +77,12 @@ export const RESUME = {
     {
       title: 'Vocaly AI',
       slug: 'vocaly-ai', // its case study: /projects/vocaly-ai
+      /* the card's live demo (Projects.js), the part of the result set in lime,
+         and how the structured data describes it */
+      showcase: 'vocaly',
+      highlight: '0.94 AUC',
+      language: 'Python',
+      category: 'EducationalApplication',
       tag: 'AI Pronunciation Coach · Speech & NLP',
       overview:
         'An English pronunciation coach. Say a sentence and it marks every sound that came out wrong (a "th" heard as "f", a "v" heard as "w"), then shows how to fix it. It also runs mock interviews, minimal-pair drills and a spoken coach.',
@@ -93,6 +99,10 @@ export const RESUME = {
     {
       title: 'Skin Lesion Classifier',
       slug: 'skin-lesion-classifier',
+      showcase: 'latency',
+      highlight: 'about 20 ms',
+      language: 'Python',
+      category: 'HealthApplication',
       tag: 'Skin Cancer Screening · Computer Vision',
       overview:
         'Trained on the 10,015 dermoscopic images of HAM10000, it sorts a photo of a mole or spot into one of seven lesion types, melanoma and basal cell carcinoma among them, with a calibrated confidence and a plain-language risk level. A research and teaching tool, not a diagnosis.',
@@ -103,6 +113,24 @@ export const RESUME = {
       github: 'https://github.com/alimehdikhan/Cancer-Detection-Model',
       demo: null,
       gradient: 'from-emerald-600 to-teal-500',
+    },
+    {
+      title: 'Byte',
+      slug: 'byte',
+      showcase: 'byte',
+      highlight: 'about 1.5 s',
+      language: 'JavaScript',
+      category: 'CommunicationApplication',
+      tag: 'AI Assistant · LLM App',
+      overview:
+        'The 3D robot in the corner of this site. It answers recruiters’ questions from my own notes, matches me against a pasted job description and passes a recruiter’s email to me.',
+      features:
+        'A three.js scene that loads after the visitor’s first move, and a Cloudflare Worker that holds the Groq key and grounds gpt-oss-120b in this site’s llms-full.txt, with a rate limit and a fallback model.',
+      outcome: 'Answers in about 1.5 s, with no three.js in the first page load.',
+      tech: ['Three.js', 'React', 'Next.js', 'Cloudflare Workers', 'Groq', 'Prompt Engineering'],
+      github: 'https://github.com/alimehdikhan/alimehdikhan.github.io',
+      demo: null,
+      gradient: 'from-lime-500 to-emerald-500',
     },
   ],
 

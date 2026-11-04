@@ -405,18 +405,6 @@
   animation-play-state: paused !important;
 }
 
-/* featured projects: sticky stacking, switched on by ProjectSequence only
-   when every card fits under the nav (88px, then 28px per earlier card) */
-@media (min-width: 1024px) {
-  .is-stacked .project-slot {
-    position: sticky;
-    top: calc(88px + var(--i, 0) * 28px);
-  }
-  .is-stacked .project-slot + .project-slot {
-    margin-top: 28vh;
-  }
-}
-
 /* cursor-following border glow: the layer is masked down to a 1px ring, so
    only the part of the moving highlight under the border shows */
 .border-glow {
@@ -604,15 +592,6 @@
   }
 }
 
-/* project artwork: a gentle zoom on card hover, inside its rounded frame */
-.project-art {
-  transition: transform 0.8s var(--ease-out-soft);
-}
-@media (hover: hover) and (prefers-reduced-motion: no-preference) {
-  .group:hover .project-art {
-    transform: scale(1.03);
-  }
-}
 
 @media (prefers-reduced-motion: reduce) {
   :is(.hero-in, .hero-word, .hero-portrait) {
@@ -888,4 +867,71 @@
 .robot[data-mood='sleep'] .robot-bulb {
   animation: none;
   opacity: 0.35;
+}
+
+/* ───────── Projects: the showcase grid (Projects.js) ───────── */
+
+/* Hovering a card (the whole card opens its case study): the demo eases a
+   little closer, the case study's arrow leans forward and Byte hops. The
+   card's own lift, spotlight and border glow come from SpotlightCard. */
+.project-demo-inner {
+  transition: transform 0.7s var(--ease-out-soft);
+}
+.case-chevron {
+  transition: transform 0.2s var(--ease-out-soft);
+}
+.byte-hop {
+  transform-origin: 50% 100%;
+}
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .project-card:hover .project-demo-inner {
+    transform: scale(1.025);
+  }
+  .project-card:hover .case-chevron,
+  a:hover > .case-chevron {
+    transform: translateX(3px);
+  }
+  .project-card:hover .byte-hop {
+    animation: robot-hop 0.7s ease-in-out;
+  }
+}
+
+/* the latency chart runs in once (LatencyShowcase.js); the finished chart is
+   the default, so nothing hides without script */
+.latency .lat-bar {
+  transform-origin: left center;
+  transition: transform 0.9s cubic-bezier(0.23, 1, 0.32, 1) calc(var(--i, 0) * 0.11s);
+}
+.latency .lat-value {
+  transition: opacity 0.4s ease calc(0.45s + var(--i, 0) * 0.11s);
+}
+.latency .lat-chosen {
+  transition: opacity 0.35s ease 0.95s, transform 0.45s cubic-bezier(0.23, 1, 0.32, 1) 0.95s;
+}
+.latency[data-state='armed'] .lat-bar {
+  transform: scaleX(0);
+}
+.latency[data-state='armed'] :is(.lat-value, .lat-chosen) {
+  opacity: 0;
+}
+.latency[data-state='armed'] .lat-chosen {
+  transform: translateY(6px);
+}
+
+/* Byte's chat plays out once (ByteShowcase.js): the question, dots while it
+   "types", the answer */
+.byte-demo :is(.bd-q, .bd-a) {
+  transition: opacity 0.3s ease, transform 0.45s cubic-bezier(0.23, 1, 0.32, 1);
+}
+.byte-demo .bd-dots {
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+.byte-demo[data-state='typing'] .bd-dots {
+  opacity: 1;
+}
+.byte-demo[data-state='armed'] .bd-q,
+.byte-demo:is([data-state='armed'], [data-state='asking'], [data-state='typing']) .bd-a {
+  opacity: 0;
+  transform: translateY(8px);
 }
