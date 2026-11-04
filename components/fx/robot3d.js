@@ -74,6 +74,8 @@ const SINK = 2.2; // how far Byte ducks to hide below the canvas edge
 export const ACTS = { dance: 2.6, peek: 2.8, stretch: 2.2, idea: 1.6, wave: 2.2, scan: 2.4, love: 1.8, spin: 1.2, jump: 0.8 };
 
 const smooth = (x) => x * x * (3 - 2 * x);
+/* hands the main thread back between the heavy steps of setting up */
+const breathe = () => new Promise((resolve) => setTimeout(resolve, 0));
 
 /* a soft round spot, for glows and the floor shadow */
 function spot(rgb, alpha) {
@@ -139,8 +141,10 @@ function glyph(kind) {
 }
 
 /* width and height are the canvas's CSS size; the robot fills `fit` pixels
-   of that height with its feet `foot` pixels above the bottom edge */
-export function createRobot({ width, height, fit, foot, dark = true, reduce = false, onLost }) {
+   of that height with its feet `foot` pixels above the bottom edge.
+   Asynchronous: the set-up pauses between its heavy steps and compiles the
+   shaders in the background, so the page never freezes for it. */
+export async function createRobot({ width, height, fit, foot, dark = true, reduce = false, onLost }) {
   const renderer = new WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'low-power' });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
   renderer.setSize(width, height, false);
@@ -157,6 +161,7 @@ export function createRobot({ width, height, fit, foot, dark = true, reduce = fa
   scene.environmentIntensity = 0.65;
   room.dispose?.();
   pmrem.dispose();
+  await breathe();
 
   const view = (TALL * height) / fit;
   const centre = view / 2 - (foot / height) * view;
@@ -656,8 +661,10 @@ export function createRobot({ width, height, fit, foot, dark = true, reduce = fa
     onLost?.();
   });
 
-  /* compile the shaders now, while the page is idle, not on first sight */
-  renderer.compile(scene, camera);
+  /* compile the shaders now, off the main thread where the browser can
+     (KHR_parallel_shader_compile), not on first sight */
+  await breathe();
+  await renderer.compileAsync(scene, camera);
   once();
 
   let active = false;

@@ -20,10 +20,11 @@ import { RESUME } from '../data/resume';
    do (a résumé download, a copied email, a fast scroll, a pat, a mouse
    coming close), dozes off when ignored, and opens a chat about Ali above
    itself. Byte is a
-   three.js scene (fx/robot3d.js), loaded once the page is idle. Without
-   WebGL or on a phone saving data, the drawn twin in Robot.js stands in;
-   when the scene is just slow to arrive, the twin holds the corner and
-   Byte spins into 3D the moment it is ready.
+   three.js scene (fx/robot3d.js), loaded after the visitor's first move so
+   it never weighs on the first load. Without WebGL or on a phone saving
+   data, the drawn twin in Robot.js stands in; when the scene is just slow
+   to arrive, the twin holds the corner and Byte spins into 3D the moment
+   it is ready.
 
    The page is static, so questions go to a Cloudflare Worker (chat-worker/)
    that holds the Groq key, adds what /llms-full.txt says about Ali and streams
@@ -119,7 +120,7 @@ const SHOW_FOR = 7000;
 const IDLE_AFTER = 35000;
 const SLEEP_AFTER = 60000;
 const ARRIVE_AFTER = 1500; // lets the hero's entrance finish first
-const GIVE_UP_3D = 5000; // after this the drawn robot comes instead
+const GIVE_UP_3D = 8000; // no move by then: the drawn robot comes, and spins into 3D later
 const WELCOME_AFTER = 30 * 60 * 1000; // a visit after this long is a return
 
 /* this visit (sessionStorage) and across visits (localStorage, only the
@@ -683,11 +684,16 @@ export function ChatWidget() {
     return () => Object.entries(on).forEach(([name, fn]) => window.removeEventListener(name, fn));
   }, []);
 
-  /* Byte in 3D, loaded while the page is idle. Data saver, no WebGL or a
-     lost context keep the drawn robot; a slow load only delays the 3D. */
+  /* Byte in 3D waits for the visitor's first move (a scroll, a touch, the
+     mouse, a key), then an idle moment, so three.js and its shaders never
+     land on the page's first load, nor on a lab test that never moves.
+     Data saver, no WebGL or a lost context keep the drawn robot; a visitor
+     who hasn't moved after 8s gets the drawn one, which spins into 3D once
+     they do. */
   const lost = useRef(false);
   useEffect(() => {
     let gone = false;
+    let idle = 0;
     const drawn = () => setMode((m) => (m === 'pending' ? 'svg' : m));
     if (navigator.connection?.saveData) {
       drawn();
@@ -695,26 +701,41 @@ export function ChatWidget() {
     }
     const load = () =>
       import('./fx/robot3d')
-        .then(({ createRobot }) => {
-          if (gone || lost.current) return;
-          bot.current = createRobot({
-            ...CANVAS,
-            dark: live.current.dark,
-            reduce: live.current.reduce,
-            onLost: () => {
-              lost.current = true;
-              bot.current?.dispose();
-              bot.current = null;
-              setMode('svg');
-            },
-          });
+        .then(({ createRobot }) =>
+          gone || lost.current
+            ? null
+            : createRobot({
+                ...CANVAS,
+                dark: live.current.dark,
+                reduce: live.current.reduce,
+                onLost: () => {
+                  lost.current = true;
+                  bot.current?.dispose();
+                  bot.current = null;
+                  setMode('svg');
+                },
+              })
+        )
+        .then((robot) => {
+          if (!robot) return;
+          if (gone) {
+            robot.dispose();
+            return;
+          }
+          bot.current = robot;
           setMode('3d');
         })
         .catch(drawn);
-    const idle = window.requestIdleCallback ? window.requestIdleCallback(load, { timeout: 1500 }) : setTimeout(load, 300);
+    const FIRST_MOVES = ['pointermove', 'pointerdown', 'scroll', 'wheel', 'keydown', 'touchstart'];
+    const begin = () => {
+      FIRST_MOVES.forEach((e) => window.removeEventListener(e, begin));
+      idle = window.requestIdleCallback ? window.requestIdleCallback(load, { timeout: 1500 }) : setTimeout(load, 200);
+    };
+    FIRST_MOVES.forEach((e) => window.addEventListener(e, begin, { passive: true }));
     const late = setTimeout(drawn, GIVE_UP_3D);
     return () => {
       gone = true;
+      FIRST_MOVES.forEach((e) => window.removeEventListener(e, begin));
       clearTimeout(late);
       if (window.cancelIdleCallback) window.cancelIdleCallback(idle);
       else clearTimeout(idle);

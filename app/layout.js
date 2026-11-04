@@ -161,6 +161,14 @@ export default function RootLayout({ children }) {
           "name": "IMAPRO",
           "url": "https://imapro.in/"
         },
+        /* the résumé, as a document about him */
+        "subjectOf": {
+          "@type": "DigitalDocument",
+          "name": "Ali Mehdi Khan, résumé",
+          "url": `${SITE}${encodeURI(RESUME.resumePath)}`,
+          "encodingFormat": "application/pdf",
+          "inLanguage": "en"
+        },
         "knowsAbout": RESUME.skills.technical,
         "knowsLanguage": ["English", "Hindi", "Urdu"],
         "award": RESUME.awards.map((a) => a.title),
@@ -257,6 +265,7 @@ export default function RootLayout({ children }) {
         <link rel="me" href={RESUME.linkedin} />
         <link rel="me" href="https://huggingface.co/Alimehdi973" />
         <link rel="alternate" type="text/markdown" href="/llms.txt" title="Ali Mehdi Khan, for AI tools (llms.txt)" />
+        <link rel="alternate" type="text/markdown" href="/llms-full.txt" title="Ali Mehdi Khan, full profile for AI tools (llms-full.txt)" />
         <script
           data-goatcounter="https://alimehdikhan.goatcounter.com/count"
           async
