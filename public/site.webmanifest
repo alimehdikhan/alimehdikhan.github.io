@@ -1,19 +1,25 @@
 {
-  "name": "Ali Mehdi Khan Portfolio",
-  "short_name": "Ali.Codes",
+  "id": "/",
+  "name": "Ali Mehdi Khan",
+  "short_name": "AMK",
+  "description": "Ali Mehdi Khan, AI/ML and Python developer: Vocaly AI, a skin lesion classifier, FastAPI backends and React apps.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "theme_color": "#090a0a",
+  "background_color": "#090a0a",
   "icons": [
     {
       "src": "/assets/icons/icon-192x192.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any"
     },
     {
       "src": "/assets/icons/icon-512x512.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any"
     }
-  ],
-  "theme_color": "#0a0e1a",
-  "background_color": "#0a0e1a",
-  "display": "standalone"
+  ]
 }

@@ -25,7 +25,8 @@ export const metadata = {
     default: 'Ali Mehdi Khan | AI/ML & Python Developer',
     template: '%s | Ali Mehdi Khan',
   },
-  description: 'Portfolio of Ali Mehdi Khan, a Computer Science graduate (July 2026) and junior software developer at IMAPRO who builds AI products end to end: Vocaly AI, an English pronunciation coach, CNN models for medical images, FastAPI backends and React apps.',
+  /* under 160 characters, so search results show all of it */
+  description: 'Ali Mehdi Khan, AI/ML and Python developer in Lucknow. Builds AI products end to end: Vocaly AI, a skin lesion classifier, FastAPI backends, React apps.',
   keywords: [
     'Ali Mehdi Khan',
     'Software Engineer',
@@ -51,12 +52,18 @@ export const metadata = {
     'Deloitte Job Simulation',
     'AI Pronunciation Coach',
     'Vocaly AI',
-    'Cancer Detection System',
+    'Skin Lesion Classifier',
+    'Skin Cancer Detection',
+    'EfficientNet',
+    'PyTorch',
+    'ONNX Runtime',
+    'AI Portfolio Chatbot',
     'Portfolio',
     'Lucknow',
     'India',
   ],
   authors: [{ name: 'Ali Mehdi Khan', url: 'https://alimehdikhan.github.io/' }],
+  manifest: '/site.webmanifest',
   creator: 'Ali Mehdi Khan',
   publisher: 'Ali Mehdi Khan',
   formatDetection: {
@@ -80,22 +87,24 @@ export const metadata = {
     locale: 'en_US',
     url: 'https://alimehdikhan.github.io/',
     title: 'Ali Mehdi Khan | AI/ML & Python Developer',
-    description: 'Vocaly AI, a pronunciation coach that marks every mispronounced sound, CNN models for medical images, FastAPI backends and Google Cloud skill badges.',
+    description: 'Vocaly AI, a pronunciation coach that marks every mispronounced sound, a skin lesion classifier and FastAPI backends. Ask Byte, the site’s AI assistant, anything about Ali.',
     siteName: 'Ali Mehdi Khan Portfolio',
     firstName: 'Ali Mehdi',
     lastName: 'Khan',
+    username: 'alimehdikhan',
+    /* a 1200×630 card (from the hero), the size LinkedIn, X and WhatsApp crop to */
     images: [{
-      url: '/assets/images/profile.png',
+      url: '/assets/images/og-card.png',
       width: 1200,
-      height: 1200,
-      alt: 'Ali Mehdi Khan — Portfolio',
+      height: 630,
+      alt: 'Ali Mehdi Khan, AI/ML and Python developer: Vocaly AI at 0.94 AUC, a skin lesion classifier at about 20 ms per image, junior software developer at IMAPRO',
     }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Ali Mehdi Khan | AI/ML & Python Developer',
     description: 'B.Tech CSE (2026) · AI products end to end · Python, FastAPI, React · Junior software developer at IMAPRO.',
-    images: ['/assets/images/profile.png'],
+    images: [{ url: '/assets/images/og-card.png', alt: 'Ali Mehdi Khan, AI/ML and Python developer' }],
   },
   alternates: {
     canonical: 'https://alimehdikhan.github.io/',
@@ -146,8 +155,14 @@ export default function RootLayout({ children }) {
           "name": "Babu Banarasi Das University",
           "sameAs": "https://bbdu.ac.in/"
         },
+        "worksFor": {
+          "@type": "Organization",
+          "name": "IMAPRO",
+          "url": "https://imapro.in/"
+        },
         "knowsAbout": RESUME.skills.technical,
-        "knowsLanguage": "en",
+        "knowsLanguage": ["English", "Hindi", "Urdu"],
+        "award": RESUME.awards.map((a) => a.title),
         "hasCredential": RESUME.certifications.map((cert) => ({
           "@type": "EducationalOccupationalCredential",
           "name": cert.title,
@@ -156,7 +171,8 @@ export default function RootLayout({ children }) {
         })),
         "sameAs": [
           RESUME.github,
-          "https://www.linkedin.com/in/ali-mehdi-khan-b4062b2a3/"
+          "https://www.linkedin.com/in/ali-mehdi-khan-b4062b2a3/",
+          "https://huggingface.co/Alimehdi973"
         ]
       },
       {
@@ -181,27 +197,31 @@ export default function RootLayout({ children }) {
         "primaryImageOfPage": { "@id": `${SITE}/#portrait` },
         "inLanguage": "en",
         "dateModified": buildDate,
-        "mainEntity": {
-          "@type": "ItemList",
-          "name": "Featured Projects",
-          "numberOfItems": RESUME.projects.length,
-          "itemListElement": RESUME.projects.map((proj, i) => ({
-            "@type": "ListItem",
-            "position": i + 1,
-            "item": {
-              "@type": ["SoftwareApplication", "SoftwareSourceCode"],
-              "name": proj.title,
-              "description": proj.overview,
-              "url": proj.demo || proj.github,
-              "codeRepository": proj.github,
-              "programmingLanguage": "Python",
-              "keywords": proj.tech.join(', '),
-              "applicationCategory": i === 0 ? "EducationalApplication" : "HealthApplication",
-              "operatingSystem": "Web",
-              "author": { "@id": `${SITE}/#person` }
-            }
-          }))
-        }
+        /* Google's ProfilePage rich result reads the person from mainEntity */
+        "mainEntity": { "@id": `${SITE}/#person` },
+        "hasPart": { "@id": `${SITE}/#projects` }
+      },
+      {
+        "@type": "ItemList",
+        "@id": `${SITE}/#projects`,
+        "name": "Featured Projects",
+        "numberOfItems": RESUME.projects.length,
+        "itemListElement": RESUME.projects.map((proj, i) => ({
+          "@type": "ListItem",
+          "position": i + 1,
+          "item": {
+            "@type": ["SoftwareApplication", "SoftwareSourceCode"],
+            "name": proj.title,
+            "description": proj.overview,
+            "url": proj.demo || proj.github,
+            "codeRepository": proj.github,
+            "programmingLanguage": "Python",
+            "keywords": proj.tech.join(', '),
+            "applicationCategory": i === 0 ? "EducationalApplication" : "HealthApplication",
+            "operatingSystem": "Web",
+            "author": { "@id": `${SITE}/#person` }
+          }
+        }))
       }
     ]
   };
@@ -213,6 +233,12 @@ export default function RootLayout({ children }) {
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
+        {/* the profiles that are also Ali (rel=me ties them to this site), and
+            the plain-text profile AI tools look for (lib/llms.js) */}
+        <link rel="me" href={RESUME.github} />
+        <link rel="me" href={RESUME.linkedin} />
+        <link rel="me" href="https://huggingface.co/Alimehdi973" />
+        <link rel="alternate" type="text/markdown" href="/llms.txt" title="Ali Mehdi Khan, for AI tools (llms.txt)" />
         <script
           data-goatcounter="https://alimehdikhan.goatcounter.com/count"
           async
