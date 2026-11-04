@@ -18,6 +18,7 @@ export function EmailActions({ email }) {
     try {
       await navigator.clipboard.writeText(email);
       setCopied(true);
+      window.dispatchEvent(new Event('byte:copied'));
       clearTimeout(timer.current);
       timer.current = setTimeout(() => setCopied(false), 2200);
     } catch {

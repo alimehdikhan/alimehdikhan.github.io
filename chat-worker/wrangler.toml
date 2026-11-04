@@ -1,0 +1,22 @@
+name = "portfolio-chat"
+main = "src/index.js"
+compatibility_date = "2026-11-01"
+workers_dev = true
+
+[vars]
+# what the assistant knows: the site's /llms-full.txt, built from data/resume.js and data/assistant.js
+PROFILE_URL = "https://alimehdikhan.github.io/llms-full.txt"
+# pages allowed to call it (comma-separated)
+ALLOWED_ORIGINS = "https://alimehdikhan.github.io"
+MODEL = "openai/gpt-oss-120b"
+# used when MODEL is over its per-minute limit
+FALLBACK_MODEL = "openai/gpt-oss-20b"
+
+# GROQ_API_KEY is a secret, never written here: `npx wrangler secret put GROQ_API_KEY`
+# (locally it comes from .dev.vars, which git ignores)
+
+# 8 questions a minute per visitor, so nobody can drain the Groq quota
+[[ratelimits]]
+name = "LIMITER"
+namespace_id = "1001"
+simple = { limit = 8, period = 60 }

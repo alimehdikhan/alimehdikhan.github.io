@@ -16,6 +16,21 @@ export const RESUME = {
 
   roles: ['Software Engineer', 'AI/ML Engineer', 'Full-Stack Developer', 'Python Developer'],
 
+  /* facts the page states in its own words (hero, About, Contact), kept here
+     as data too so the AI assistant can read them from /llms.txt */
+  availability:
+    'Looking for entry-level software engineering and AI/ML roles, and open to freelance AI and web projects. Email is the quickest way to reach him.',
+  education: {
+    degree: 'B.Tech in Computer Science and Engineering',
+    school: 'Babu Banarasi Das University (BBDU), Lucknow',
+    date: '2022 – 2026, completed July 2026',
+  },
+  volunteering: {
+    role: 'Programming Instructor (volunteer)',
+    org: 'Tech for Good, Lucknow',
+    date: '2025',
+    detail: 'Taught programming to 30+ underprivileged students over three months; each one built a first working application.',
+  },
 
   certifications: [
     {

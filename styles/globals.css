@@ -730,3 +730,162 @@
   animation: none;
   mix-blend-mode: normal;
 }
+
+/* ───────── Byte, the chat robot (ChatWidget.js) ───────── */
+
+/* The 3D Byte animates itself (fx/robot3d.js). These are its drawn twin's
+   moods (Robot.js) and the chat's typing dots: predetermined loops, so CSS
+   runs them off the main thread, and the reduced-motion rule above ends
+   them. Each wrapper owns one transform: lift, hop, float. */
+.robot,
+.robot-launcher {
+  --r-ease: cubic-bezier(0.23, 1, 0.32, 1);
+}
+.robot {
+  overflow: visible;
+}
+.robot :is(.robot-eye, .robot-mouth, .robot-bulb) {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.robot :is(.robot-eyes, .robot-joy, .robot-smile, .robot-mouth, .robot-arm-up, .robot-arm-rest) {
+  transition: opacity 150ms ease, transform 200ms var(--r-ease);
+}
+.robot :is(.robot-joy, .robot-mouth, .robot-arm-up) {
+  opacity: 0;
+}
+.robot-eye {
+  animation: robot-blink 4.8s infinite;
+}
+.robot-bulb {
+  animation: robot-glow 2.4s ease-in-out infinite;
+}
+@keyframes robot-blink {
+  0%, 92%, 100% { transform: scaleY(1); }
+  95% { transform: scaleY(0.1); }
+}
+@keyframes robot-glow {
+  50% { opacity: 0.45; }
+}
+
+.robot-arm-up {
+  transform-box: view-box;
+  transform-origin: 45px 51px;
+}
+.robot[data-mood='wave'] .robot-arm-up {
+  opacity: 1;
+  animation: robot-wave 1.2s ease-in-out 2;
+}
+.robot[data-mood='wave'] .robot-arm-rest {
+  opacity: 0;
+}
+@keyframes robot-wave {
+  0%, 100% { transform: rotate(0deg); }
+  25%, 75% { transform: rotate(-18deg); }
+  50% { transform: rotate(8deg); }
+}
+
+.robot[data-mood='think'] .robot-eyes {
+  transform: translate(2px, -2.5px);
+}
+.robot[data-mood='think'] .robot-bulb {
+  animation-duration: 0.7s;
+}
+.robot[data-mood='talk'] .robot-smile {
+  opacity: 0;
+}
+.robot[data-mood='talk'] .robot-mouth {
+  opacity: 1;
+  animation: robot-talk 0.32s ease-in-out infinite alternate;
+}
+@keyframes robot-talk {
+  from { transform: scaleY(0.35); }
+  to { transform: scaleY(1); }
+}
+.robot[data-mood='happy'] .robot-eyes {
+  opacity: 0;
+}
+.robot[data-mood='happy'] .robot-joy {
+  opacity: 1;
+}
+
+.robot-float {
+  animation: robot-float 3.2s ease-in-out infinite;
+}
+.robot-shadow {
+  animation: robot-shadow 3.2s ease-in-out infinite;
+}
+@keyframes robot-float {
+  50% { transform: translateY(-4px); }
+}
+@keyframes robot-shadow {
+  50% { transform: scaleX(0.78); opacity: 0.55; }
+}
+
+.robot-hop {
+  transform-origin: 50% 100%;
+}
+.robot-hop[data-hop] {
+  animation: robot-hop 0.7s ease-in-out;
+}
+@keyframes robot-hop {
+  30% { transform: translateY(-12px) scale(0.95, 1.05); }
+  60% { transform: translateY(0) scale(1.06, 0.94); }
+  80% { transform: scale(0.98, 1.02); }
+}
+
+.robot-lift {
+  transition: transform 160ms var(--r-ease);
+}
+.robot-launcher:active .robot-lift {
+  transform: scale(0.94);
+  transition-duration: 100ms;
+}
+@media (hover: hover) and (pointer: fine) {
+  .robot-launcher:hover .robot-lift {
+    transform: translateY(-3px);
+  }
+  .robot-launcher:hover .robot :is(.robot-eyes) {
+    opacity: 0;
+  }
+  .robot-launcher:hover .robot :is(.robot-joy) {
+    opacity: 1;
+  }
+}
+
+.robot-dots > span {
+  animation: robot-dot 1s ease-in-out infinite;
+}
+.robot-dots > span:nth-child(2) {
+  animation-delay: 0.15s;
+}
+.robot-dots > span:nth-child(3) {
+  animation-delay: 0.3s;
+}
+@keyframes robot-dot {
+  0%, 60%, 100% { opacity: 0.3; transform: translateY(0); }
+  30% { opacity: 1; transform: translateY(-3px); }
+}
+
+/* the chat's streaming caret, and the drawn Byte asleep */
+.byte-caret {
+  display: inline-block;
+  width: 2px;
+  height: 1em;
+  margin-left: 2px;
+  vertical-align: -0.15em;
+  border-radius: 1px;
+  background: currentColor;
+  animation: byte-caret 1s steps(2, jump-none) infinite;
+}
+@keyframes byte-caret {
+  50% { opacity: 0; }
+}
+.robot[data-mood='sleep'] .robot-eye {
+  animation: none;
+  transform: scaleY(0.15);
+}
+.robot[data-mood='sleep'] .robot-bulb {
+  animation: none;
+  opacity: 0.35;
+}

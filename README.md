@@ -47,8 +47,8 @@ B.Tech Computer Science graduate (2026) skilled in Python, Java, Machine Learnin
 | Project | Description | Link |
 |---------|-------------|------|
 | **Vocaly AI** (AI Pronunciation Coach) | Marks every mispronounced sound and shows how to fix it. Whisper on Groq plus a wav2vec 2.0 phoneme model on ONNX Runtime, a FastAPI backend and a React + TypeScript app; flags slips at 0.94 AUC against expert ratings (speechocean762) | [GitHub](https://github.com/alimehdikhan/A.I-Pronunciation-Coach) · [Live](https://alimehdi973-ai-pronunciation-coach.hf.space) |
-| **Cancer Detection System** | Keras binary classification on medical datasets (90%+ accuracy) | [GitHub](https://github.com/alimehdikhan/Cancer-Detection-Model) |
-| **Portfolio Website** | This site: Next.js, Tailwind CSS, shadcn/ui, Aceternity UI, Motion, GSAP, Canvas 2D | [Live](https://alimehdikhan.github.io) |
+| **Skin Lesion Classifier** | Sorts dermoscopic images into the seven HAM10000 lesion types, melanoma included. A PyTorch EfficientNet-B2 trained on HAM10000's 10,015 images with leak-free, lesion-grouped splits and calibrated, then served from ONNX by a FastAPI API (about 20 ms per image on CPU) behind a React + TypeScript app, all in Docker | [GitHub](https://github.com/alimehdikhan/Cancer-Detection-Model) |
+| **Portfolio Website** | This site: Next.js, Tailwind CSS, shadcn/ui, Aceternity UI, Motion, GSAP, Canvas 2D. Byte, its 3D robot assistant (three.js), answers recruiters' questions about me through a Cloudflare Worker and Groq (gpt-oss-120b), and can match me against a pasted job description | [Live](https://alimehdikhan.github.io) |
 
 ---
 

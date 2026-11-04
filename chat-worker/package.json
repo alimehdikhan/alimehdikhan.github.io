@@ -1,0 +1,16 @@
+{
+  "name": "portfolio-chat",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy"
+  },
+  "devDependencies": {
+    "wrangler": "^4.157.0"
+  },
+  "allowScripts": {
+    "workerd@1.20261103.1": true,
+    "esbuild@0.28.2": true
+  }
+}

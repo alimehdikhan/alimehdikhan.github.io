@@ -7,6 +7,7 @@ import {
   ArrowUpRight,
   BadgeCheck,
   Briefcase,
+  Chat,
   Check,
   Code,
   Copy,
@@ -102,6 +103,7 @@ export function CommandMenu({ open, onOpenChange }) {
           try {
             await navigator.clipboard.writeText(RESUME.email);
             setCopied(true);
+            window.dispatchEvent(new Event('byte:copied'));
             closing.current = setTimeout(() => onOpenChange(false), 900);
           } catch {
             window.location.href = `mailto:${RESUME.email}`;
@@ -109,6 +111,14 @@ export function CommandMenu({ open, onOpenChange }) {
         },
       },
       { id: 'resume', label: 'Download résumé', hint: 'PDF', Icon: Download, keys: 'cv resume pdf', run: download },
+      {
+        id: 'byte',
+        label: 'Ask Byte, the AI assistant',
+        Icon: Chat,
+        keys: 'ai chat bot robot question assistant byte',
+        after: true,
+        run: () => window.dispatchEvent(new Event('byte:open')),
+      },
       {
         id: 'theme',
         label: isDark ? 'Switch to light theme' : 'Switch to dark theme',

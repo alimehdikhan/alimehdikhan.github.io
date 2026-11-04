@@ -46,6 +46,7 @@ export const LoaderCircle = make(P.SpinnerGap, { weight: 'bold', hook: 'ico-spin
 export const BadgeCheck = make(P.SealCheck);
 export const GraduationCap = make(P.GraduationCap);
 export const RotateCcw = make(P.ArrowCounterClockwise, { hook: 'ico-ccw' });
+export const Stop = make(P.Stop, { weight: 'fill' });
 
 /* glyphs for skills that have no brand mark (SQL, REST, RAG, soft skills) */
 export const Database = make(P.Database);

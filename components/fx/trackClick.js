@@ -8,7 +8,18 @@
      https://abacus.jasoncameron.dev/get/alimehdikhan-github-io/star-project
      https://abacus.jasoncameron.dev/get/alimehdikhan-github-io/star-section
      https://abacus.jasoncameron.dev/get/alimehdikhan-github-io/star-tutorial
-     https://abacus.jasoncameron.dev/get/alimehdikhan-github-io/follow-section */
+     https://abacus.jasoncameron.dev/get/alimehdikhan-github-io/follow-section
+
+   Byte, the chat robot (ChatWidget.js), counts the same way:
+     chat-open      the chat was opened
+     chat-ask       a first question was asked
+     chat-jd        a job description was pasted
+     chat-lead      a recruiter left their email for Ali
+     nudge-<name>   a speech bubble was tapped (hello, welcome, skills,
+                    experience, projects, idle, speed, leaving, resume,
+                    copied, pet, tickle)
+     byte-pet       somebody patted Byte; byte-tickle, tickled it
+   e.g. https://abacus.jasoncameron.dev/get/alimehdikhan-github-io/chat-lead */
 export function trackClick(counter) {
   try {
     const seen = `amk-click-${counter}`;

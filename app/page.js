@@ -1,6 +1,7 @@
 import { MotionProvider } from '../components/fx/MotionProvider';
 import { ScrollProgress } from '../components/fx/ScrollProgress';
 import { BackToTop } from '../components/fx/BackToTop';
+import { ChatWidget } from '../components/ChatWidget';
 import { ConsoleHello } from '../components/fx/ConsoleHello';
 import { Ticker } from '../components/fx/Ticker';
 import { Navbar } from '../components/Navbar';
@@ -32,6 +33,7 @@ export default async function Home() {
 
       <ScrollProgress />
       <BackToTop />
+      <ChatWidget />
       <ConsoleHello />
       <Navbar />
 

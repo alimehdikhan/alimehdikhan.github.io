@@ -40,3 +40,8 @@ next-env.d.ts
 # Local visual verification artifacts
 /.playwright-mcp/
 /baseline-*.png
+
+# chat worker: local secrets and Wrangler state
+.dev.vars*
+.wrangler/
+/chat-worker/node_modules/
