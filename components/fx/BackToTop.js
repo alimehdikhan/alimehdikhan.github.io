@@ -67,7 +67,7 @@ export function BackToTop() {
           exit={{ opacity: 0, scale: 0.6, y: 12 }}
           transition={{ type: 'spring', ...SPRING.ui }}
           whileTap={{ scale: 0.92 }}
-          className="group fixed right-[92px] bottom-7 z-40 grid size-12 place-items-center rounded-full bg-card/85 text-foreground shadow-lift backdrop-blur-xl outline-none select-none focus-visible:ring-[3px] focus-visible:ring-ring/40 md:right-[108px] md:bottom-10"
+          className="group fixed right-[92px] bottom-7 z-40 grid size-12 place-items-center rounded-full bg-card/85 text-foreground shadow-lift backdrop-blur-xl outline-none select-none focus-visible:ring-[3px] focus-visible:ring-ring/40 md:right-[120px] md:bottom-12"
         >
           <svg viewBox="0 0 48 48" aria-hidden="true" className="absolute inset-0 size-full -rotate-90">
             <circle cx="24" cy="24" r="22.5" fill="none" strokeWidth="2" className="stroke-border-strong" />

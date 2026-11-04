@@ -152,7 +152,7 @@ export default {
           reasoning_effort: long ? 'medium' : 'low',
           include_reasoning: false,
           temperature: 0.3,
-          max_completion_tokens: long ? 1200 : 450,
+          max_completion_tokens: long ? 1600 : 600,
           messages: [{ role: 'system', content: instructions(facts, section) }, ...messages],
         }),
       });

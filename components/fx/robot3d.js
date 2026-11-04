@@ -45,8 +45,9 @@ import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
      talk   mouth moves, head nods
      happy  eyes turn to arcs, little bounces (also on hover)
    On top of a mood, for a moment: express('wink' | 'love' | 'surprised'),
-   emit('heart' | 'z' | 'spark'), pointAt(dx, dy), spin(), hop(); and
-   setSleep(true) dozes off, eyes shut and z's rising, until it is woken.
+   emit('heart' | 'z' | 'spark'), pointAt(dx, dy), spin(), hop(); a little
+   show to catch an eye, act(name) with a name from ACTS; and setSleep(true)
+   dozes off, eyes shut and z's rising, until it is woken.
    Reduced motion: still poses only, drawn on demand, no particles. */
 
 const LIME = '#d5f66b';
@@ -58,6 +59,21 @@ const HEAD_Y = 0.62; // the neck joint, which the head turns about
 const EYES_Y = 0.6;
 const FRONT = 0.566; // just proud of the face screen
 const EYE_X = 0.25;
+const SINK = 2.2; // how far Byte ducks to hide below the canvas edge
+
+/* the shows Byte puts on to catch a visitor's eye, and how long each runs:
+     dance    bobs and sways, arms swinging, sparkles
+     peek     ducks below the edge, peeps over it looking about, pops up
+     stretch  arms up, a yawn
+     idea     the antenna flares, a hop, sparkles
+     wave     a wave
+     scan     a good look left, then right
+     love     heart eyes and hearts
+     spin     a full turn, sparkles
+     jump     a hop */
+export const ACTS = { dance: 2.6, peek: 2.8, stretch: 2.2, idea: 1.6, wave: 2.2, scan: 2.4, love: 1.8, spin: 1.2, jump: 0.8 };
+
+const smooth = (x) => x * x * (3 - 2 * x);
 
 /* a soft round spot, for glows and the floor shadow */
 function spot(rgb, alpha) {
@@ -373,17 +389,72 @@ export function createRobot({ width, height, fit, foot, dark = true, reduce = fa
     pointUntil: -1,
     pointAngle: 0,
     pointAim: { x: 0, y: 0 },
+    act: null,
+    actAt: 0,
   };
   /* touch screens draw every other frame: the motion is slow, the battery isn't */
   const lowPower = window.matchMedia('(pointer: coarse)').matches;
+
+  /* the act in progress, as nudges to the pose: extra height and sway,
+     arm angles, a face, the antenna's flare, where to look, how far to sink */
+  function acting(t) {
+    const A = { y: 0, sway: 0, tilt: 0, armL: null, armR: null, stretch: 0, face: null, bulb: 0, aim: null, wave: 0, sink: 0 };
+    if (!s.act) return A;
+    const p = (t - s.actAt) / ACTS[s.act];
+    if (p >= 1 || p < 0) {
+      s.act = null;
+      return A;
+    }
+    const env = Math.sin(p * Math.PI);
+    const beat = t * 9;
+    switch (s.act) {
+      case 'dance':
+        A.y = Math.abs(Math.sin(beat)) * 0.09 * env;
+        A.sway = Math.sin(beat) * 0.15 * env;
+        A.tilt = Math.sin(beat + 1) * 0.18 * env;
+        A.armL = -REST - (0.6 + 0.6 * Math.sin(beat)) * env;
+        A.armR = REST + (0.6 + 0.6 * Math.sin(beat + Math.PI)) * env;
+        A.face = 'joy';
+        break;
+      case 'peek':
+        /* down out of sight, up just enough for the eyes, a look round, then pop */
+        A.sink =
+          p < 0.2 ? smooth(p / 0.2) : p < 0.36 ? 1 : p < 0.48 ? 1 - 0.48 * smooth((p - 0.36) / 0.12) : p < 0.76 ? 0.52 : 0.52 * (1 - smooth((p - 0.76) / 0.24));
+        if (p > 0.48 && p < 0.76) A.aim = { x: Math.sin((p - 0.48) * 22) * 0.8, y: -0.1 };
+        if (p >= 0.76) A.face = 'surprised';
+        break;
+      case 'stretch':
+        A.armL = -REST - 2.35 * env;
+        A.armR = REST + 2.35 * env;
+        A.stretch = env;
+        if (p > 0.2 && p < 0.8) A.face = 'yawn';
+        break;
+      case 'idea':
+        A.bulb = env;
+        A.face = 'joy';
+        A.aim = { x: 0, y: -0.7 };
+        break;
+      case 'wave':
+        A.wave = Math.min(1, env * 4);
+        A.face = 'joy';
+        break;
+      case 'scan':
+        A.aim = { x: p < 0.33 ? -0.9 : p < 0.66 ? 0.9 : 0, y: -0.1 };
+        break;
+      default:
+        break;
+    }
+    return A;
+  }
 
   function pose(t, dt) {
     const { mood } = s;
     const still = s.reduce;
     const ease = (from, to, lambda) => (still ? to : MathUtils.damp(from, to, lambda, dt));
+    const A = acting(t);
 
-    /* where to look: up and aside while thinking, at the reader while
-       talking, at a moving mouse, or a glance about now and then */
+    /* where to look: at the act's spot, up and aside while thinking, at the
+       reader while talking, at a moving mouse, or a glance about now and then */
     const pointing = t < s.pointUntil;
     if (pointing) {
       aim.x = s.pointAim.x;
@@ -391,6 +462,9 @@ export function createRobot({ width, height, fit, foot, dark = true, reduce = fa
     } else if (s.sleep) {
       aim.x = 0;
       aim.y = 0.3;
+    } else if (A.aim) {
+      aim.x = A.aim.x;
+      aim.y = A.aim.y;
     } else if (mood === 'think') {
       aim.x = 0.45;
       aim.y = -0.6;
@@ -404,7 +478,7 @@ export function createRobot({ width, height, fit, foot, dark = true, reduce = fa
     }
     look.x = ease(look.x, aim.x, 5);
     look.y = ease(look.y, aim.y, 5);
-    s.wave = ease(s.wave, mood === 'wave' ? 1 : 0, 9);
+    s.wave = ease(s.wave, Math.max(mood === 'wave' ? 1 : 0, A.wave), 9);
     s.hover = ease(s.hover, s.hoverTo, 12);
     s.doze = ease(s.doze, s.sleep ? 1 : 0, s.sleep ? 1.5 : 10);
     s.point = ease(s.point, pointing ? 1 : 0, 8);
@@ -412,9 +486,9 @@ export function createRobot({ width, height, fit, foot, dark = true, reduce = fa
 
     /* asleep, the float slows and sinks */
     const bob = still ? 0 : Math.sin(t * (1.8 - 0.9 * s.doze));
-    let y = bob * (0.06 - 0.03 * s.doze) + s.hover * 0.05 - 0.04 * s.doze;
+    let y = bob * (0.06 - 0.03 * s.doze) + s.hover * 0.05 - 0.04 * s.doze + A.y - A.sink * SINK;
     let sx = 1;
-    let sy = 1;
+    let sy = 1 + 0.06 * A.stretch;
     let spin = 0;
 
     if (s.hop >= 0) {
@@ -437,7 +511,7 @@ export function createRobot({ width, height, fit, foot, dark = true, reduce = fa
         sx *= 1 + 0.07 * k;
       }
     }
-    /* one full turn on arrival, overshooting a touch (ease-out-back) */
+    /* one full turn on arrival or a spin, overshooting a touch (ease-out-back) */
     if (s.arrive >= 0) {
       const p = Math.min(1, (t - s.arrive) / 1.1);
       const q = p - 1;
@@ -447,21 +521,22 @@ export function createRobot({ width, height, fit, foot, dark = true, reduce = fa
     if (mood === 'happy' && !still) y += Math.abs(Math.sin(t * 9)) * 0.05;
 
     rig.position.y = y;
-    rig.rotation.set(0, look.x * 0.12 + spin, still ? 0 : Math.sin(t * 1.25) * 0.03);
+    rig.rotation.set(0, look.x * 0.12 + spin, (still ? 0 : Math.sin(t * 1.25) * 0.03) + A.sway);
     const grow = 1 + s.hover * 0.05;
     squash.scale.set(sx * grow, sy * grow, sx * grow);
-    shadow.scale.setScalar(1 - y * 0.7);
-    shadow.material.opacity = Math.min(1, 1 - y * 1.2);
-    /* the jet burns brighter as it lifts */
-    jet.material.opacity = 0.45 + 0.3 * (still ? 0.5 : (bob + 1) / 2) + (s.hop >= 0 ? 0.25 : 0);
+    /* the floor shadow and the jet follow the robot up, and fade as it ducks out of sight */
+    const lift = Math.max(0, y);
+    shadow.scale.setScalar(1 - lift * 0.7);
+    shadow.material.opacity = Math.min(1, 1 - lift * 1.2) * (1 - A.sink);
+    jet.material.opacity = (0.45 + 0.3 * (still ? 0.5 : (bob + 1) / 2) + (s.hop >= 0 ? 0.25 : 0)) * (1 - A.sink);
     jet.scale.setScalar(0.38 + 0.06 * (still ? 0.5 : (bob + 1) / 2));
 
     const wag = still ? 0 : Math.sin(t * 12) * 0.38;
-    armR.rotation.z = MathUtils.lerp(REST, 2.55 + wag, s.wave);
-    armL.rotation.z = MathUtils.lerp(-REST - (still ? 0 : Math.sin(t * 1.8 + 1) * 0.05), s.pointAngle, s.point);
+    armR.rotation.z = A.armR ?? MathUtils.lerp(REST, 2.55 + wag, s.wave);
+    armL.rotation.z = A.armL ?? MathUtils.lerp(-REST - (still ? 0 : Math.sin(t * 1.8 + 1) * 0.05), s.pointAngle, s.point);
 
     const nod = mood === 'talk' && !still ? Math.sin(t * 7) * 0.035 : 0;
-    const tilt = (mood === 'think' ? 0.12 : 0) + (still ? 0 : s.wave * Math.sin(t * 6) * 0.06);
+    const tilt = (mood === 'think' ? 0.12 : 0) + (still ? 0 : s.wave * Math.sin(t * 6) * 0.06) + A.tilt;
     head.rotation.set(look.y * 0.3 + nod + 0.22 * s.doze, look.x * 0.5, tilt + 0.1 * s.doze);
     eyes.position.x = look.x * 0.05;
     eyes.position.y = EYES_Y - look.y * 0.035;
@@ -474,16 +549,16 @@ export function createRobot({ width, height, fit, foot, dark = true, reduce = fa
     const b = s.blink >= 0 ? (t - s.blink) / 0.15 : 1;
     const lid = b < 1 ? 1 - 0.88 * Math.sin(b * Math.PI) : 1;
 
-    /* which face: a passing expression, then sleep, then the mood's own
-       (a press's wink gives way to a happy mood) */
+    /* which face: a passing expression, the act's, sleep, then the mood's
+       own (a press's wink gives way to a happy mood) */
     const expr = t < s.exprUntil && !(s.expr === 'wink' && mood === 'happy') ? s.expr : null;
-    const face = expr || (s.doze > 0.5 ? 'sleep' : mood === 'happy' || (mood === 'idle' && s.hover > 0.5) ? 'joy' : 'open');
+    const face = expr || A.face || (s.doze > 0.5 ? 'sleep' : mood === 'happy' || (mood === 'idle' && s.hover > 0.5) ? 'joy' : 'open');
     pills.forEach((m, i) => {
       m.scale.y = lid;
       m.visible = face === 'open' || (face === 'wink' && i === 1);
     });
     arcs.forEach((m, i) => (m.visible = face === 'joy' || (face === 'wink' && i === 0)));
-    sleepy.forEach((m) => (m.visible = face === 'sleep'));
+    sleepy.forEach((m) => (m.visible = face === 'sleep' || face === 'yawn'));
     rounds.forEach((m) => {
       m.scale.y = lid;
       m.visible = face === 'surprised';
@@ -492,7 +567,8 @@ export function createRobot({ width, height, fit, foot, dark = true, reduce = fa
       m.visible = face === 'love';
       m.scale.setScalar(1 + (still ? 0 : 0.12 * Math.max(0, Math.sin(t * 9))));
     });
-    gasp.visible = face === 'surprised';
+    gasp.visible = face === 'surprised' || face === 'yawn';
+    gasp.scale.set(face === 'yawn' ? 1.3 : 1, face === 'yawn' ? 1.5 : 1, 0.5);
     mouth.visible = mood === 'talk' && face !== 'sleep' && !gasp.visible;
     smile.visible = !mouth.visible && !gasp.visible;
     const small = face === 'sleep' ? 0.6 : 1;
@@ -521,8 +597,9 @@ export function createRobot({ width, height, fit, foot, dark = true, reduce = fa
     }
 
     const pulse = still ? 0.6 : 0.5 + 0.5 * Math.sin(s.phase);
-    bulbGlow.material.opacity = (0.3 + 0.5 * pulse) * (1 - 0.7 * s.doze);
-    bulb.scale.setScalar(1 + 0.08 * pulse);
+    bulbGlow.material.opacity = Math.max((0.3 + 0.5 * pulse) * (1 - 0.7 * s.doze), A.bulb);
+    bulb.scale.setScalar(1 + 0.08 * pulse + 0.6 * A.bulb);
+    bulbGlow.scale.setScalar(0.55 * (1 + 0.8 * A.bulb));
     /* lub-dub: two quick beats a second */
     const beat = still ? 0 : Math.max(0, Math.sin(t * 6.3)) ** 12 + 0.6 * Math.max(0, Math.sin(t * 6.3 - 0.9)) ** 12;
     chest.scale.setScalar(1 + 0.22 * beat);
@@ -644,6 +721,29 @@ export function createRobot({ width, height, fit, foot, dark = true, reduce = fa
     },
     spin() {
       if (!s.reduce) s.arrive = now();
+    },
+    /* one of ACTS; skipped under reduced motion or while another plays */
+    act(name) {
+      if (s.reduce || !ACTS[name] || s.act || s.sleep) return false;
+      const at = now();
+      s.act = name;
+      s.actAt = at;
+      if (name === 'spin') {
+        s.arrive = at;
+        emit('spark', 3);
+      }
+      if (name === 'jump') s.hop = at;
+      if (name === 'idea') {
+        s.hop = at;
+        emit('spark', 4);
+      }
+      if (name === 'love') {
+        s.expr = 'love';
+        s.exprUntil = at + ACTS.love;
+        emit('heart', 4);
+      }
+      if (name === 'dance') emit('spark', 2);
+      return true;
     },
     hop() {
       if (!s.reduce) s.hop = now();

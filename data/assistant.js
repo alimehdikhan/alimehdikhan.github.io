@@ -38,6 +38,7 @@ export const ASSISTANT = {
       points: [
         'In the SvelteKit 5 migration he kept the backend API contract unchanged and checked every migrated route, with no regressions in the booking and data flows.',
         'He built responsive layouts and shared UI components so the app behaves the same on mobile and desktop.',
+        'His stack at IMAPRO is SvelteKit 5, Hono and SQLite. His FastAPI and machine-learning work is in his own projects and his GRAStech internship.',
       ],
     },
   ],

@@ -14,9 +14,12 @@ import { cn } from '@/lib/utils';
 import { RESUME } from '../data/resume';
 
 /* Byte, the site's AI assistant: a robot in the corner that greets visitors,
-   pipes up as they reach the sections a recruiter cares about, reacts to
-   what they do (a résumé download, a copied email, a fast scroll, a pat),
-   dozes off when ignored, and opens a chat about Ali above itself. Byte is a
+   puts on a little show every few seconds (a dance, a peekaboo, a stretch,
+   an idea), drops recruiter-worthy facts in speech bubbles, pipes up as
+   visitors reach the sections a recruiter cares about, reacts to what they
+   do (a résumé download, a copied email, a fast scroll, a pat, a mouse
+   coming close), dozes off when ignored, and opens a chat about Ali above
+   itself. Byte is a
    three.js scene (fx/robot3d.js), loaded once the page is idle. Without
    WebGL or on a phone saving data, the drawn twin in Robot.js stands in;
    when the scene is just slow to arrive, the twin holds the corner and
@@ -40,11 +43,11 @@ const MAX_QUESTION = 4000; // room for a pasted job description
 const LONG = 600; // past this a message is a job description: clamped, and counted
 const WAIT_FIRST = 20000; // no first word by then and it gives up
 const WAIT_ALL = 60000;
-/* the 3D canvas overhangs the launcher (64×72, or 72×81 from md up) by
-   20px (22.5px) each side and above, so the hop, the wave, the particles
-   and the antenna's glow have room. Drawn at the larger size; phones scale
-   it down. */
-const CANVAS = { width: 117, height: 108, fit: 81, foot: 4.5 };
+/* the 3D canvas overhangs the launcher (64×72, or 84×96 from md up) by
+   about 20px (26px) each side and above, so the hop, the wave, the
+   particles and the antenna's glow have room. Drawn at the larger size;
+   phones scale it down. */
+const CANVAS = { width: 136, height: 127, fit: 96, foot: 5 };
 
 const GREETING =
   "Hi, I'm Byte, Ali's robot assistant. I've read everything on this site about him, so ask away: his projects, skills, experience, or how to hire him. You can also paste a job description and I'll tell you how he fits.";
@@ -71,10 +74,12 @@ const FAILED = {
 const PAGE_SECTIONS = ['hero', 'about', 'skills', 'experience', 'projects', 'certifications', 'opensource', 'contact'];
 
 /* What Byte says to catch a visitor's eye, what it does as it says it, and
-   the question a tap on the bubble asks for them. Nudges come once each a
-   visit, at most four, 20s apart, and stop once the chat has been opened.
-   Reactions answer something the visitor did, so they skip the queue; a
-   dismissed bubble silences both for the visit (the robot still reacts). */
+   the question a tap on the bubble asks for them. The greeting comes with
+   every page load; the rest once each a visit: up to four section nudges
+   and six facts, 15s apart, quiet while the chat is open and for the rest
+   of a page load once it has been opened. Reactions answer something the
+   visitor did, so they skip the queue. A dismissed bubble silences bubbles
+   for the visit; the robot's shows and reactions carry on. */
 const NUDGES = {
   hello: { text: "Hi, I'm Byte! Ask me anything about Ali.", first: true },
   welcome: { text: 'Welcome back! Anything I can tell you about Ali?', first: true },
@@ -89,9 +94,27 @@ const NUDGES = {
   pet: { text: 'Aww, thank you! Anything I can tell you about Ali?', face: 'love', emit: 'heart', reaction: true },
   tickle: { text: 'Hehe, that tickles!', emit: 'spark', spin: true, reaction: true },
 };
+/* things worth a recruiter's tap, one at a time while they read */
+const FACTS = [
+  { text: 'Psst! Ali can join immediately.', ask: 'Is he open to work, and how soon can he join?' },
+  { text: "Hiring? Paste a job description and I'll show you how Ali fits.", jd: true },
+  { text: 'Vocaly AI spots mispronounced sounds at 0.94 AUC. Want the story?', ask: 'Tell me about Vocaly AI.' },
+  { text: "Ali's open to roles anywhere in India or abroad.", ask: 'Where would he work, and how soon?' },
+  { text: "Ali's code is merged into a popular open-source project. Ask me which!", ask: 'Has he contributed to open source?' },
+  { text: 'Want his résumé in three lines? Tap me.', ask: 'Sum up his résumé in three lines.' },
+];
+FACTS.forEach((f, i) => (NUDGES[`fact${i}`] = { ...f, fact: true }));
+const FACT_EVERY = 35000;
+/* Byte's unprompted shows (fx/robot3d.js ACTS), one every 9-15s while the
+   corner is quiet: the main thing that catches a wandering eye. Dance and
+   peekaboo come up most. */
+const SHOWS = ['dance', 'peek', 'stretch', 'idea', 'wave', 'scan', 'love', 'spin', 'dance', 'peek', 'jump'];
+const SHOW_EVERY = 9000;
+const SHOW_JITTER = 6000;
+const NEAR = 220; // px: a mouse this close gets a wave
 const SECTIONS = ['skills', 'experience', 'projects'];
 const MAX_NUDGES = 4;
-const GAP = 20000;
+const GAP = 15000;
 const SHOW_FOR = 7000;
 const IDLE_AFTER = 35000;
 const SLEEP_AFTER = 60000;
@@ -470,18 +493,30 @@ export function ChatWidget() {
   const say = (key) => {
     const n = NUDGES[key];
     const seen = visit.get('seen') || [];
-    const { open: isOpen, shown: isShown, last = 0 } = live.current;
-    if (!n || seen.includes(key) || !isShown) return;
+    const { open: isOpen, shown: isShown, last = 0, engaged, greeted } = live.current;
+    if (!n || !isShown || (n.first ? greeted : seen.includes(key))) return false;
     if (!n.reaction) {
-      const nudges = seen.filter((k) => !NUDGES[k]?.reaction).length;
-      if (isOpen || visit.get('engaged') || nudges >= MAX_NUDGES || (!n.first && Date.now() - last < GAP)) return;
+      const same = seen.filter((k) => NUDGES[k] && !NUDGES[k].reaction && Boolean(NUDGES[k].fact) === Boolean(n.fact)).length;
+      if (isOpen || engaged || same >= (n.fact ? FACTS.length : MAX_NUDGES) || (!n.first && Date.now() - last < GAP)) return false;
     }
-    visit.set('seen', [...seen, key]);
+    if (n.first) live.current.greeted = true;
+    else visit.set('seen', [...seen, key]);
     act(n);
-    if (isOpen || visit.get('quiet')) return;
+    if (isOpen || visit.get('quiet')) return false;
     live.current.last = Date.now();
     setBubble(key);
     later('bubble', () => setBubble(null), SHOW_FOR);
+    return true;
+  };
+
+  /* one of Byte's shows; the drawn twin can only hop or wave */
+  const perform = (name) => {
+    if (bot.current) return bot.current.act(name);
+    if (name === 'wave') {
+      setMood('wave');
+      later('mood', () => setMood('idle'), 2400);
+    } else setHop((h) => h + 1);
+    return true;
   };
 
   const wake = () => {
@@ -621,7 +656,7 @@ export function ChatWidget() {
   const openChat = (question) => {
     clearTimeout(timers.current.bubble);
     setBubble(null);
-    visit.set('engaged', true);
+    live.current.engaged = true;
     trackClick('chat-open');
     if (live.current.sleeping) wake();
     setOpen(true);
@@ -637,7 +672,7 @@ export function ChatWidget() {
 
   /* the palette's "Ask Byte" row and the site's résumé and email actions */
   const latest = useRef({});
-  latest.current = { openChat, say, wake, send };
+  latest.current = { openChat, say, wake, send, perform };
   useEffect(() => {
     const on = {
       'byte:open': () => latest.current.openChat(),
@@ -757,10 +792,22 @@ export function ChatWidget() {
 
     let active = Date.now();
     let jumped = 0; // a click or key just now: the scroll that follows may be a jump, not reading
+    let lastFact = Date.now();
+    let lastNear = 0;
+    let measured = 0;
     const trail = [];
     const stir = () => {
       active = Date.now();
       if (live.current.sleeping) latest.current.wake();
+    };
+    /* a mouse coming close gets a wave, at most every 20s */
+    const onNear = (e) => {
+      stir();
+      const now = Date.now();
+      if (e.pointerType !== 'mouse' || now - measured < 150 || now - lastNear < 20000 || live.current.open || live.current.hovering) return;
+      measured = now;
+      const b = launcherRef.current?.getBoundingClientRect();
+      if (b && Math.hypot(e.clientX - (b.left + b.width / 2), e.clientY - (b.top + b.height / 2)) < NEAR && latest.current.perform('wave')) lastNear = now;
     };
     const onJump = () => {
       jumped = Date.now();
@@ -773,16 +820,24 @@ export function ChatWidget() {
       while (trail.length && now - trail[0][0] > 3000) trail.shift();
       if (now - jumped > 1500 && Math.abs(window.scrollY - trail[0][1]) > window.innerHeight * 3) latest.current.say('speed');
     };
-    const quiet = ['pointermove', 'wheel', 'touchstart'];
+    const quiet = ['wheel', 'touchstart'];
     quiet.forEach((e) => window.addEventListener(e, stir, { passive: true }));
+    window.addEventListener('pointermove', onNear, { passive: true });
     window.addEventListener('scroll', onScroll, { passive: true });
     window.addEventListener('pointerdown', onJump, { passive: true });
     window.addEventListener('keydown', onJump);
     const idle = setInterval(() => {
-      const still = Date.now() - active;
+      const now = Date.now();
+      const still = now - active;
       const { open: isOpen, shown: isShown, sleeping: asleep } = live.current;
       if (still > IDLE_AFTER) latest.current.say('idle');
       if (still > SLEEP_AFTER && !isOpen && isShown && !asleep) setSleeping(true);
+      /* the next fact, while the visitor is still about */
+      if (now - lastFact > FACT_EVERY && still < IDLE_AFTER && !document.hidden) {
+        const seen = visit.get('seen') || [];
+        const next = FACTS.findIndex((_, i) => !seen.includes(`fact${i}`));
+        if (next >= 0 && latest.current.say(`fact${next}`)) lastFact = now;
+      }
     }, 5000);
 
     const since = Date.now();
@@ -795,6 +850,7 @@ export function ChatWidget() {
     return () => {
       io.disconnect();
       quiet.forEach((e) => window.removeEventListener(e, stir));
+      window.removeEventListener('pointermove', onNear);
       window.removeEventListener('scroll', onScroll);
       window.removeEventListener('pointerdown', onJump);
       window.removeEventListener('keydown', onJump);
@@ -802,6 +858,30 @@ export function ChatWidget() {
       if (fine) document.removeEventListener('mouseout', onLeave);
     };
   }, []);
+
+  /* the shows: one every 9-15s while Byte is on screen, awake, not chatting
+     and not under the mouse, never the same twice running */
+  useEffect(() => {
+    if (!arrived) return undefined;
+    let timer = 0;
+    let last = null;
+    let first = true;
+    const next = () => {
+      const wait = first ? 5000 + Math.random() * 2000 : SHOW_EVERY + Math.random() * SHOW_JITTER;
+      first = false;
+      timer = setTimeout(() => {
+        const { open: isOpen, shown: isShown, sleeping: asleep, reduce: still, hovering } = live.current;
+        if (!isOpen && isShown && !asleep && !still && !hovering && !document.hidden) {
+          const pool = SHOWS.filter((a) => a !== last);
+          const name = pool[Math.floor(Math.random() * pool.length)];
+          if (latest.current.perform(name)) last = name;
+        }
+        next();
+      }, wait);
+    };
+    next();
+    return () => clearTimeout(timer);
+  }, [arrived]);
 
   /* a pat (the mouse rubbing back and forth over Byte) and a tickle (a
      flurry of clicks) */
@@ -959,6 +1039,7 @@ export function ChatWidget() {
                   onClick={() => {
                     trackClick(`nudge-${bubble}`);
                     openChat(nudge.ask);
+                    if (nudge.jd) pick(JD_CHIP);
                   }}
                   className="absolute right-0 bottom-full mb-6 w-max max-w-[min(250px,calc(100vw-48px))] cursor-pointer rounded-2xl rounded-br-md border border-border bg-card py-3 pr-9 pl-4 text-sm leading-snug font-medium text-card-foreground shadow-lift"
                   style={{ transformOrigin: 'bottom right' }}
@@ -987,8 +1068,14 @@ export function ChatWidget() {
               type="button"
               onClick={() => (open ? close() : openChat())}
               onKeyDown={(e) => open && e.key === 'Escape' && close()}
-              onPointerEnter={(e) => e.pointerType === 'mouse' && bot.current?.setHover(true)}
+              onPointerEnter={(e) => {
+                if (e.pointerType !== 'mouse') return;
+                live.current.hovering = true;
+                bot.current?.setHover(true);
+                if (!open && Date.now() - (live.current.hoverWave ?? 0) > 10000 && perform('wave')) live.current.hoverWave = Date.now();
+              }}
               onPointerLeave={() => {
+                live.current.hovering = false;
                 bot.current?.setHover(false);
                 pat.current.x = null;
               }}
@@ -997,7 +1084,7 @@ export function ChatWidget() {
               aria-label="Chat with Byte, Ali's AI assistant"
               aria-haspopup="dialog"
               aria-expanded={open}
-              className="robot-launcher group relative block h-[72px] w-16 rounded-3xl outline-none select-none focus-visible:ring-[3px] focus-visible:ring-ring/40 md:h-[81px] md:w-[72px]"
+              className="robot-launcher group relative block h-[72px] w-16 rounded-3xl outline-none select-none focus-visible:ring-[3px] focus-visible:ring-ring/40 md:h-24 md:w-[84px]"
             >
               {!nudge && !open && (
                 <span
@@ -1010,7 +1097,7 @@ export function ChatWidget() {
               {mode === '3d' ? (
                 <span
                   ref={mountCanvas}
-                  className="pointer-events-none absolute -top-5 -left-5 block h-24 w-[104px] md:-top-[22.5px] md:-left-[22.5px] md:h-[108px] md:w-[117px]"
+                  className="pointer-events-none absolute -top-[19.5px] -left-[19px] block h-[95.25px] w-[102px] md:-top-[26px] md:-left-[26px] md:h-[127px] md:w-[136px]"
                   aria-hidden="true"
                 />
               ) : (
@@ -1039,7 +1126,7 @@ export function ChatWidget() {
             aria-labelledby="byte-title"
             tabIndex={-1}
             onKeyDown={(e) => e.key === 'Escape' && close()}
-            className="fixed inset-x-2 top-[calc(8px_+_var(--byte-top,0px))] z-[55] flex h-[calc(var(--byte-vh,100dvh)_-_16px)] flex-col overflow-hidden rounded-3xl border border-border bg-card/95 text-card-foreground shadow-lift backdrop-blur-xl outline-none sm:inset-x-auto sm:top-auto sm:right-4 sm:bottom-[100px] sm:z-[45] sm:h-[min(620px,calc(100dvh_-_176px))] sm:w-[400px] md:right-6 md:bottom-[117px] md:h-[min(620px,calc(100dvh_-_193px))]"
+            className="fixed inset-x-2 top-[calc(8px_+_var(--byte-top,0px))] z-[55] flex h-[calc(var(--byte-vh,100dvh)_-_16px)] flex-col overflow-hidden rounded-3xl border border-border bg-card/95 text-card-foreground shadow-lift backdrop-blur-xl outline-none sm:inset-x-auto sm:top-auto sm:right-4 sm:bottom-[100px] sm:z-[45] sm:h-[min(620px,calc(100dvh_-_176px))] sm:w-[400px] md:right-6 md:bottom-[132px] md:h-[min(620px,calc(100dvh_-_208px))]"
             style={{ transformOrigin: 'bottom right' }}
             initial={reduce ? { opacity: 0 } : { opacity: 0, transform: 'translateY(16px) scale(0.96)' }}
             animate={{ opacity: 1, transform: 'translateY(0px) scale(1)' }}
