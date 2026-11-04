@@ -5,6 +5,7 @@ import { motion } from 'motion/react';
 import { useTheme } from 'next-themes';
 import {
   ArrowUpRight,
+  Article,
   BadgeCheck,
   Briefcase,
   Chat,
@@ -111,6 +112,17 @@ export function CommandMenu({ open, onOpenChange }) {
         },
       },
       { id: 'resume', label: 'Download résumé', hint: 'PDF', Icon: Download, keys: 'cv resume pdf', run: download },
+      ...[
+        ['vocaly-ai', 'Vocaly AI', 'pronunciation speech'],
+        ['skin-lesion-classifier', 'Skin Lesion Classifier', 'cancer vision medical'],
+        ['byte', 'Byte, the AI assistant', 'robot chatbot llm'],
+      ].map(([slug, name, keys]) => ({
+        id: `case-${slug}`,
+        label: `Case study: ${name}`,
+        Icon: Article,
+        keys: `case study how built ${keys}`,
+        run: () => (window.location.href = `/projects/${slug}`),
+      })),
       {
         id: 'byte',
         label: 'Ask Byte, the AI assistant',

@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ArrowUpRight, ChevronRight, Code } from '@/components/ui/icons';
+import { ArrowUpRight, Article, ChevronRight, Code } from '@/components/ui/icons';
 import { SectionHead } from './ui/SectionHead';
 import { Button } from './ui/button';
 import { Magnetic } from './ui/magnetic';
@@ -35,6 +35,23 @@ export function Projects() {
             </>
           }
           titleId="projects-title"
+          intro={
+            <>
+              Each has a case study on how I built it, how I measured it and where it still falls short:{' '}
+              <Link href="/projects/vocaly-ai" className="font-medium text-link underline underline-offset-4 decoration-current/40 hover:decoration-current">
+                Vocaly AI
+              </Link>
+              ,{' '}
+              <Link href="/projects/skin-lesion-classifier" className="font-medium text-link underline underline-offset-4 decoration-current/40 hover:decoration-current">
+                the Skin Lesion Classifier
+              </Link>{' '}
+              and{' '}
+              <Link href="/projects/byte" className="font-medium text-link underline underline-offset-4 decoration-current/40 hover:decoration-current">
+                Byte
+              </Link>
+              , the robot in the corner.
+            </>
+          }
         />
 
         <ProjectSequence />
@@ -124,18 +141,18 @@ export function Projects() {
                             </Button>
                           </Magnetic>
                         )}
+                        {proj.slug && (
+                          <Button asChild variant="outline">
+                            <Link href={`/projects/${proj.slug}`} aria-label={`Case study: how I built ${proj.title}`}>
+                              <Article aria-hidden="true" />
+                              Case study
+                              <ChevronRight aria-hidden="true" />
+                            </Link>
+                          </Button>
+                        )}
                       </div>
                       {proj.github === STAR_URL && (
                         <p className="mt-3 text-[13px] text-muted-foreground">Free and open source. A star helps more learners find it.</p>
-                      )}
-                      {proj.slug && (
-                        <Link
-                          href={`/projects/${proj.slug}`}
-                          className="group/case mt-4 inline-flex items-center gap-1.5 self-start rounded-sm text-[15px] font-medium text-link underline-offset-4 outline-none hover:underline focus-visible:ring-[3px] focus-visible:ring-ring/40"
-                        >
-                          How I built it: the case study
-                          <ChevronRight className="size-4 transition-transform group-hover/case:translate-x-0.5 motion-reduce:transition-none" />
-                        </Link>
                       )}
 
                       <div className="mt-6 border-t border-border pt-6">

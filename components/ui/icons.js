@@ -47,6 +47,8 @@ export const BadgeCheck = make(P.SealCheck);
 export const GraduationCap = make(P.GraduationCap);
 export const RotateCcw = make(P.ArrowCounterClockwise, { hook: 'ico-ccw' });
 export const Stop = make(P.Stop, { weight: 'fill' });
+/* a case study page */
+export const Article = make(P.Article);
 
 /* glyphs for skills that have no brand mark (SQL, REST, RAG, soft skills) */
 export const Database = make(P.Database);
