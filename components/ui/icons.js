@@ -24,6 +24,7 @@ export const Download = make(P.DownloadSimple, { hook: 'ico-down' });
 export const ArrowDown = make(P.ArrowDown, { hook: 'ico-down' });
 export const ArrowUp = make(P.ArrowUp, { hook: 'ico-up' });
 export const ArrowUpRight = make(P.ArrowUpRight, { hook: 'ico-ur' });
+export const ArrowRight = make(P.ArrowRight, { hook: 'ico-next' });
 export const ChevronRight = make(P.CaretRight, { hook: 'ico-next' });
 export const Code = make(P.CodeBlock);
 export const Server = make(P.HardDrives);

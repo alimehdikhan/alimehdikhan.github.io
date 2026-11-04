@@ -869,14 +869,156 @@
   opacity: 0.35;
 }
 
-/* ───────── Projects: the showcase grid (Projects.js) ───────── */
+/* ───────── Projects: the project reel (Projects.js, fx/ReelMotion.js) ───────── */
 
-/* Hovering a card (the whole card opens its case study): the demo eases a
-   little closer, the case study's arrow leans forward and Byte hops. The
-   card's own lift, spotlight and border glow come from SpotlightCard. */
-.project-demo-inner {
+/* Stacked by default: phones, short screens, reduced motion, and the moment
+   before the motion script runs, with everything visible. The reel itself
+   (wide screens with motion on) is the block further down. */
+.reel {
+  overflow-x: clip;
+}
+.reel-track {
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(96px, 14vw, 144px);
+}
+.reel-scene {
+  position: relative;
+  --tone-ink: var(--tone);
+}
+[data-theme='light'] .reel-scene {
+  --tone-ink: var(--ink-light);
+}
+.reel-inner {
+  position: relative;
+  display: grid;
+  gap: 36px;
+  width: 100%;
+  max-width: calc(1200px + 2 * 16px);
+  margin-inline: auto;
+  padding-inline: 16px;
+}
+@media (width >= 40rem) {
+  .reel-inner {
+    max-width: calc(1200px + 2 * 24px);
+    padding-inline: 24px;
+    gap: 44px;
+  }
+}
+@media (width >= 64rem) {
+  .reel-inner {
+    max-width: calc(1200px + 2 * 32px);
+    padding-inline: 32px;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    align-items: center;
+    gap: clamp(40px, 5vw, 80px);
+  }
+}
+
+/* the project's name, huge and outlined, behind its scene */
+.reel-word {
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  left: 50%;
+  translate: -50% -42%;
+  font-size: clamp(6rem, 27vw, 17rem);
+  font-weight: 800;
+  line-height: 0.8;
+  letter-spacing: -0.045em;
+  white-space: nowrap;
+  color: transparent;
+  -webkit-text-stroke: 1.5px color-mix(in oklab, var(--tone-ink) 13%, transparent);
+  pointer-events: none;
+  user-select: none;
+  transition: -webkit-text-stroke-color 0.5s ease;
+}
+
+.reel-title {
+  font-size: clamp(2.75rem, 8vw, 4.5rem);
+  font-weight: 600;
+  line-height: 0.95;
+  letter-spacing: -0.045em;
+  text-wrap: balance;
+}
+/* each word masks its letters as they rise in (ReelMotion) */
+.reel-mask {
+  display: inline-block;
+  white-space: nowrap;
+  clip-path: polygon(-10% -40%, 110% -40%, 110% calc(100% + 0.24em), -10% calc(100% + 0.24em));
+}
+.reel-char {
+  display: inline-block;
+}
+
+/* the stage holds the demo's frame, with the depth for it to turn in 3D */
+.reel-stage {
+  position: relative;
+  perspective: 1400px;
+}
+/* stacked, each stage has its own glow in the project's colour */
+.reel-stage::before {
+  content: '';
+  position: absolute;
+  inset: -14% -10%;
+  z-index: -1;
+  background: radial-gradient(closest-side, color-mix(in oklab, var(--tone) 22%, transparent), transparent);
+  pointer-events: none;
+}
+.reel-frame {
+  position: relative;
+  overflow: hidden;
+  border-radius: 24px;
+  background: #0b0d0b;
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.4), 0 44px 90px -40px color-mix(in oklab, var(--tone) 60%, transparent);
+}
+.reel-frame::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.09);
+  pointer-events: none;
+}
+[data-theme='light'] .reel-frame {
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.1), 0 44px 90px -44px color-mix(in oklab, var(--tone-ink) 55%, transparent);
+}
+@media (width >= 40rem) {
+  .reel-frame[data-fit] {
+    aspect-ratio: 16 / 11;
+  }
+}
+.reel-screen {
+  height: 100%;
   transition: transform 0.7s var(--ease-out-soft);
 }
+/* a light sweeps across the frame once as it lands (ReelMotion sets data-lit) */
+.reel-frame::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background: linear-gradient(105deg, transparent 36%, rgb(255 255 255 / 0.14) 47%, rgb(255 255 255 / 0.04) 53%, transparent 62%);
+  transform: translateX(-110%);
+  pointer-events: none;
+}
+.reel-frame[data-lit]::before {
+  animation: reel-glint 1.4s cubic-bezier(0.23, 1, 0.32, 1) 0.1s both;
+}
+@keyframes reel-glint {
+  to {
+    transform: translateX(110%);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .reel-frame::before {
+    display: none;
+  }
+}
+
+/* Hovering where a click opens the case study: the demo eases closer, the
+   outlined word brightens and Byte hops; a case study arrow leans on. */
 .case-chevron {
   transition: transform 0.2s var(--ease-out-soft);
 }
@@ -884,15 +1026,253 @@
   transform-origin: 50% 100%;
 }
 @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
-  .project-card:hover .project-demo-inner {
+  .reel-scene:has(.reel-link:hover) .reel-screen {
     transform: scale(1.025);
   }
-  .project-card:hover .case-chevron,
+  .reel-scene:has(.reel-link:hover) .reel-word {
+    -webkit-text-stroke-color: color-mix(in oklab, var(--tone-ink) 21%, transparent);
+  }
+  .reel-scene:has(.reel-link:hover) .byte-hop {
+    animation: robot-hop 0.7s ease-in-out;
+  }
   a:hover > .case-chevron {
     transform: translateX(3px);
   }
-  .project-card:hover .byte-hop {
-    animation: robot-hop 0.7s ease-in-out;
+}
+
+/* the reel's light, one layer per project, crossfaded by ReelMotion */
+.reel-glow {
+  display: none;
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(40% 60% at 74% 52%, color-mix(in oklab, var(--tone) 24%, transparent), transparent 75%);
+  opacity: 0;
+  pointer-events: none;
+}
+.reel-glow:first-child {
+  opacity: 1;
+}
+[data-theme='light'] .reel-glow {
+  background: radial-gradient(40% 60% at 74% 52%, color-mix(in oklab, var(--tone) 38%, transparent), transparent 75%);
+}
+
+/* the rail (ReelRail): a line with a stop per project, names under it */
+.reel-rail {
+  display: none;
+  position: absolute;
+  z-index: 2;
+  bottom: clamp(20px, 3.5vh, 32px);
+  /* the right end clears the floating scroll-to-top button and Byte */
+  inset-inline: max(48px, calc((100% - 1280px) / 2)) max(212px, calc((100% - 1280px) / 2));
+}
+.reel-line {
+  position: relative;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--border);
+}
+.reel-fill {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--primary);
+  box-shadow: 0 0 14px rgb(var(--glow) / 0.5);
+  transform: scaleX(0);
+  transform-origin: left center;
+}
+.reel-stop {
+  position: absolute;
+  top: 50%;
+  width: 10px;
+  height: 10px;
+  border: 2px solid var(--border-strong);
+  border-radius: 50%;
+  background: var(--background);
+  translate: -50% -50%;
+  transition: background-color 0.3s ease, border-color 0.3s ease, scale 0.35s cubic-bezier(0.23, 1, 0.32, 1);
+}
+.reel-stop[data-on] {
+  border-color: var(--primary);
+  background: var(--primary);
+  scale: 1.2;
+}
+[data-theme='light'] .reel-fill {
+  background: #b9e04a;
+  box-shadow: none;
+}
+[data-theme='light'] .reel-stop[data-on] {
+  border-color: #8fb22a;
+  background: var(--primary);
+}
+.reel-hint {
+  position: absolute;
+  right: 0;
+  bottom: 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  white-space: nowrap;
+  color: var(--muted-foreground);
+  transition: opacity 0.4s ease;
+}
+.reel-hint[data-gone] {
+  opacity: 0;
+}
+.reel-hint svg {
+  animation: reel-nudge 1.8s var(--ease-out-soft) infinite;
+}
+@keyframes reel-nudge {
+  50% {
+    transform: translateX(4px);
+  }
+}
+.reel-labels {
+  position: relative;
+  height: 24px;
+  margin-top: 14px;
+}
+.reel-labels li {
+  position: absolute;
+  top: 0;
+  translate: -50% 0;
+}
+.reel-labels li:first-child {
+  translate: 0 0;
+}
+.reel-labels li:last-child {
+  translate: -100% 0;
+}
+.reel-labels button {
+  display: inline-flex;
+  margin: -4px -6px;
+  padding: 4px 6px;
+  border-radius: 8px;
+  font-size: 13px;
+  white-space: nowrap;
+  color: var(--muted-foreground);
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+.reel-labels button:hover,
+.reel-labels button[aria-current='true'] {
+  color: var(--foreground);
+}
+.reel-labels button:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+/* The reel: wide screens with motion on. The view pins (sticky) while the
+   section's extra height scrolls by, and ReelMotion turns that scroll into
+   the slide. The layout is set here, before any script runs, so nothing
+   shifts when it does; .reel-off (the motion script failed to load) puts
+   the stack back. */
+@media (scripting: enabled) and (width >= 64rem) and (height >= 700px) and (prefers-reduced-motion: no-preference) {
+  .reel:not(.reel-off) .reel-pin {
+    height: calc(100vh + var(--reel-run));
+  }
+  .reel:not(.reel-off) .reel-view {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow: clip;
+  }
+  .reel:not(.reel-off) .reel-track {
+    flex-direction: row;
+    gap: 0;
+    height: 100%;
+    will-change: transform;
+  }
+  .reel:not(.reel-off) .reel-scene {
+    display: flex;
+    flex: 0 0 100%;
+    align-items: center;
+    padding-block: 84px 116px;
+  }
+  .reel:not(.reel-off) .reel-inner {
+    max-width: calc(1280px + 2 * 48px);
+    padding-inline: 48px;
+  }
+  .reel:not(.reel-off) .reel-title {
+    font-size: clamp(3rem, min(5.6vw, 9.5vh), 5.5rem);
+  }
+  .reel:not(.reel-off) .reel-word {
+    top: 50%;
+    left: max(24px, calc((100% - 1280px) / 2));
+    translate: 0 -50%;
+    font-size: min(23vw, 44vh);
+    will-change: transform;
+  }
+  .reel:not(.reel-off) .reel-frame {
+    will-change: transform;
+  }
+  .reel:not(.reel-off) .vocaly-demo {
+    gap: 28px;
+    padding: 32px 36px;
+  }
+  .reel:not(.reel-off) .vocaly-demo > img {
+    width: 124px;
+  }
+  .reel:not(.reel-off) .reel-stage::before {
+    display: none;
+  }
+  .reel:not(.reel-off) :is(.reel-glow, .reel-rail) {
+    display: block;
+  }
+}
+/* shorter screens: the pills go, and Vocaly's demo drops its logo (the
+   title above says Vocaly) so the frame fits between the nav and the rail */
+@media (scripting: enabled) and (width >= 64rem) and (700px <= height < 840px) and (prefers-reduced-motion: no-preference) {
+  .reel:not(.reel-off) .reel-tech,
+  .reel:not(.reel-off) .vocaly-demo > img {
+    display: none;
+  }
+  .reel:not(.reel-off) .vocaly-demo {
+    gap: 22px;
+    padding: 26px 30px;
+  }
+}
+
+/* the "View case study" tag that trails the mouse over a scene (ReelCursor),
+   in the scene's colour */
+.reel-cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 45;
+  pointer-events: none;
+}
+.reel-cursor-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px 8px 14px;
+  border-radius: 999px;
+  background: var(--tone, var(--primary));
+  color: #090a0a;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  box-shadow: 0 12px 32px -12px color-mix(in oklab, var(--tone, #d5f66b) 70%, transparent);
+  opacity: 0;
+  transform: translate(16px, 16px) scale(0.6);
+  transform-origin: 0 0;
+  transition: opacity 0.18s ease, transform 0.28s cubic-bezier(0.23, 1, 0.32, 1), background-color 0.3s ease;
+}
+.reel-cursor-tag .icon-duo {
+  --icon-accent: #090a0a;
+}
+.reel-cursor[data-show='true'] .reel-cursor-tag {
+  opacity: 1;
+  transform: translate(16px, 16px) scale(1);
+}
+@media (prefers-reduced-motion: reduce) {
+  .reel-cursor-tag,
+  .reel-cursor[data-show='true'] .reel-cursor-tag {
+    transform: translate(16px, 16px);
+    transition: opacity 0.15s ease;
   }
 }
 
